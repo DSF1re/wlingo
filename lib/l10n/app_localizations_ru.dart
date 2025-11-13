@@ -1,0 +1,58 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Russian (`ru`).
+class AppLocalizationsRu extends AppLocalizations {
+  AppLocalizationsRu([String locale = 'ru']) : super(locale);
+
+  @override
+  String get onboardingTitle1 => 'Уверенность в своих словах';
+
+  @override
+  String get onboardingDesc1 => 'С разговорным обучением вы будете говорить с первого урока';
+
+  @override
+  String get onboardingBtn1 => 'Далее';
+
+  @override
+  String get onboardingTitle2 => 'Учитесь в своём темпе';
+
+  @override
+  String get onboardingDesc2 => 'Вырабатывайте привычку учиться и делайте это частью ежедневной рутины';
+
+  @override
+  String get onboardingBtn2 => 'Больше';
+
+  @override
+  String get onboardingTitle3 => 'Уроки, которые вам нужны';
+
+  @override
+  String get onboardingDesc3 => 'Используйте разнообразные стили обучения для лучшего усвоения';
+
+  @override
+  String get onboardingBtn3 => 'Выбрать язык';
+
+  @override
+  String get skipOnboarding => 'Пропустить обучение';
+
+  @override
+  String get login => 'Войти';
+
+  @override
+  String get promo_auth => 'Бесплатно, присоединись сейчас и начинай изучать';
+
+  @override
+  String get email_address => 'Адрес электронной почты';
+
+  @override
+  String get email => 'Электронная почта';
+
+  @override
+  String get password => 'Пароль';
+
+  @override
+  String get forgot_pass => 'Забыли пароль';
+}

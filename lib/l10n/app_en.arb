@@ -1,0 +1,23 @@
+{
+  "onboardingTitle1": "Confidence in your words",
+  "onboardingDesc1": "With conversation-based learning you'll be talking from lesson one",
+  "onboardingBtn1": "Next",
+
+  "onboardingTitle2": "Take your time to learn",
+  "onboardingDesc2": "Develop a habit of learning and make it a part of your daily routine",
+  "onboardingBtn2": "More",
+
+  "onboardingTitle3": "The lessons you need to learn",
+  "onboardingDesc3": "Using a variety of learning styles to learn and retain",
+  "onboardingBtn3": "Choose a language",
+
+  "skipOnboarding": "Skip onboarding",
+
+  "login": "Login",
+
+  "promo_auth": "For free, join now and start learning",
+  "email_address": "Email Address",
+  "email": "Email",
+  "password": "Password",
+  "forgot_pass": "Forgot password"
+}
