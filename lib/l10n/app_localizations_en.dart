@@ -55,4 +55,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgot_pass => 'Forgot password';
+
+  @override
+  String get fill_email => 'Please enter your email';
+
+  @override
+  String get fill_password => 'Please enter your password';
+
+  @override
+  String get invalid_email => 'Invalid email format';
 }

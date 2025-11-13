@@ -190,6 +190,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forgot password'**
   String get forgot_pass;
+
+  /// No description provided for @fill_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get fill_email;
+
+  /// No description provided for @fill_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get fill_password;
+
+  /// No description provided for @invalid_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get invalid_email;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

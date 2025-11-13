@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/screens/onboarding_screen.dart';
@@ -66,6 +68,46 @@ class _AuthScreenState extends State<AuthScreen> {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    String? validateEmail(String? value) {
+      if (value == null || value.isEmpty) {
+        return AppLocalizations.of(context)!.fill_email;
+      }
+      // Регулярное выражение для проверки email
+      final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+      if (!emailRegex.hasMatch(value)) {
+        return AppLocalizations.of(context)!.invalid_email;
+      }
+      return null;
+    }
+
+    String? validatePassword(String? value) {
+      if (value == null || value.isEmpty) {
+        return AppLocalizations.of(context)!.fill_password;
+      }
+      return null;
+    }
+
+    void showErrorSnackBar(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message, style: theme.textTheme.displaySmall),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+
+    // @override
+    // void dispose() {
+    //   emailController.dispose();
+    //   passwordController.dispose();
+    // }
+
+    final formKey = GlobalKey<FormState>();
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -88,128 +130,158 @@ class _AuthScreenState extends State<AuthScreen> {
             icon: const Icon(Icons.keyboard_arrow_left),
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Верхняя часть с логотипом
-                SizedBox(
-                  height: screenHeight * 0.25,
-                  child: Center(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(
-                        'assets/images/splash.png',
-                        fit: BoxFit.contain,
+        body: Form(
+          key: formKey,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Верхняя часть с логотипом
+                  SizedBox(
+                    height: screenHeight * 0.25,
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset(
+                          'assets/images/splash.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Заголовок
-                Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.promo_auth,
-                      style: theme.textTheme.labelLarge,
-                      textAlign: TextAlign.center,
-                    ),
-
-                    SizedBox(height: screenHeight * 0.04),
-
-                    // Поле Email
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.email_address,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                  // Заголовок
+                  Column(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.promo_auth,
+                        style: theme.textTheme.labelLarge,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.email,
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                          horizontal: 16,
-                        ),
-                      ),
-                    ),
 
-                    const SizedBox(height: 20),
+                      SizedBox(height: screenHeight * 0.04),
 
-                    // Поле Password
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.password,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.password,
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: const Color(0x65687280),
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-
-                    // Forgot Password
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {},
+                      // Поле Email
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          AppLocalizations.of(context)!.forgot_pass,
+                          AppLocalizations.of(context)!.email_address,
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(233, 214, 24, 94),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.email,
+                          hintStyle: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 18,
+                            horizontal: 16,
+                          ),
+                        ),
+                        inputFormatters: [LengthLimitingTextInputFormatter(25)],
+                        validator: validateEmail,
+                      ),
 
-                    // Кнопка входа
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
+                      const SizedBox(height: 20),
+
+                      // Поле Password
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          AppLocalizations.of(context)!.login,
-                          style: theme.textTheme.bodyMedium,
+                          AppLocalizations.of(context)!.password,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        obscureText: _obscurePassword,
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.password,
+                          hintStyle: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: const Color(0x65687280),
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                        ),
+                        inputFormatters: [LengthLimitingTextInputFormatter(25)],
+                        validator: validatePassword,
+                      ),
+
+                      // Forgot Password
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            AppLocalizations.of(context)!.forgot_pass,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(233, 214, 24, 94),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Кнопка входа
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              //TODO
+                              Supabase.instance.client.auth.signInWithPassword(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                            } else {
+                              if (validateEmail(emailController.text) != null) {
+                                showErrorSnackBar(
+                                  validateEmail(emailController.text)!,
+                                );
+                              } else if (validatePassword(
+                                    passwordController.text,
+                                  ) !=
+                                  null) {
+                                showErrorSnackBar(
+                                  validatePassword(passwordController.text)!,
+                                );
+                              }
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.login,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

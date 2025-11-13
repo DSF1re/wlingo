@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wlingo/main.dart';
+
 import 'package:wlingo/models/onboarding.dart';
 import 'package:wlingo/screens/auth_screen.dart';
 import 'package:wlingo/widgets/dots_indicator.dart';
+
 import '../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -16,64 +17,6 @@ class OnboardingScreen extends StatefulWidget {
 class OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  bool _isLoading = true;
-
-  // Ключи для SharedPreferences
-  static const String _currentPageKey = 'onboarding_current_page';
-  static const String _languageKey = 'app_language';
-  static const String _themeModeKey = 'app_theme_mode';
-  static const String _onboardingCompletedKey = 'onboarding_completed';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedState();
-  }
-
-  // Загрузка сохраненного состояния
-  Future<void> _loadSavedState() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Загрузить текущую страницу
-    final savedPage = prefs.getInt(_currentPageKey) ?? 0;
-
-    setState(() {
-      _currentPage = savedPage;
-      _isLoading = false;
-    });
-
-    // Перейти на сохраненную страницу
-    if (savedPage > 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _pageController.jumpToPage(savedPage);
-      });
-    }
-  }
-
-  // Сохранить текущую страницу
-  Future<void> _saveCurrentPage(int page) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_currentPageKey, page);
-  }
-
-  // Сохранить язык
-  Future<void> _saveLanguage(String languageCode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageKey, languageCode);
-  }
-
-  // Сохранить тему
-  Future<void> _saveThemeMode(String themeMode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_themeModeKey, themeMode);
-  }
-
-  // Очистить состояние онбординга и отметить как завершенный
-  Future<void> _completeOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_currentPageKey);
-    await prefs.setBool(_onboardingCompletedKey, true);
-  }
 
   List<OnboardingData> get _onboardingData {
     final loc = AppLocalizations.of(context)!;
@@ -99,30 +42,14 @@ class OnboardingScreenState extends State<OnboardingScreen> {
     ];
   }
 
-  void _toggleLanguage() async {
-    final newLocale = localeNotifier.value.languageCode == 'ru'
+  void _toggleLanguage() {
+    localeNotifier.value = localeNotifier.value.languageCode == 'ru'
         ? const Locale('en')
         : const Locale('ru');
-
-    localeNotifier.value = newLocale;
-    await _saveLanguage(newLocale.languageCode);
-  }
-
-  void _toggleTheme() async {
-    final newThemeMode = themeModeNotifier.value == ThemeMode.light
-        ? ThemeMode.dark
-        : ThemeMode.light;
-
-    themeModeNotifier.value = newThemeMode;
-    await _saveThemeMode(newThemeMode == ThemeMode.dark ? 'dark' : 'light');
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -139,9 +66,8 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                   child: PageView.builder(
                     controller: _pageController,
                     physics: const BouncingScrollPhysics(),
-                    onPageChanged: (index) async {
+                    onPageChanged: (index) {
                       setState(() => _currentPage = index);
-                      await _saveCurrentPage(index);
                     },
                     itemCount: _onboardingData.length,
                     itemBuilder: (context, index) {
@@ -201,9 +127,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                         onPressed: _skipOnboarding,
                         child: Text(
                           AppLocalizations.of(context)!.skipOnboarding,
-                          style: theme.textTheme.displaySmall?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: theme.textTheme.displaySmall,
                         ),
                       ),
                     ],
@@ -225,11 +149,16 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                 onPressed: _toggleLanguage,
                 child: const Icon(Icons.language),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               FloatingActionButton(
                 mini: true,
                 heroTag: 2,
-                onPressed: _toggleTheme,
+                onPressed: () {
+                  themeModeNotifier.value =
+                      themeModeNotifier.value == ThemeMode.light
+                      ? ThemeMode.dark
+                      : ThemeMode.light;
+                },
                 child: const Icon(Icons.brightness_6),
               ),
             ],
@@ -255,13 +184,10 @@ class OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  void _skipOnboarding() async {
-    await _completeOnboarding(); // Отметить онбординг как завершенный
-    if (mounted) {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
-    }
+  void _skipOnboarding() {
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
   }
 
   @override

@@ -55,4 +55,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get forgot_pass => 'Забыли пароль';
+
+  @override
+  String get fill_email => 'Пожалуйста заполните email';
+
+  @override
+  String get fill_password => 'Пожалуйста заполните пароль';
+
+  @override
+  String get invalid_email => 'Неверный формат электронной почты';
 }
