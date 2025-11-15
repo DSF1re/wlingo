@@ -47,28 +47,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? validateName(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Field required';
-    if (value.trim().length > 30) return 'Max 30 symbols';
+    if (value == null || value.trim().isEmpty) {
+      return AppLocalizations.of(context)!.fill_field;
+    }
     return null;
   }
 
   String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) return 'Enter email';
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.fill_email;
+    }
     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value)) return 'Invalid email';
+    if (!emailRegex.hasMatch(value)) {
+      return AppLocalizations.of(context)!.invalid_email;
+    }
     return null;
   }
 
   String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) return 'Enter password';
-    if (value.length < 6) return 'Min 6 symbols';
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.fill_password;
+    }
+    if (value.length < 6) return AppLocalizations.of(context)!.min_lenght;
     return null;
   }
 
-  String? validateLanguage(int? value) {
-    if (value == null) return 'Select native language';
-    return null;
-  }
+  // String? validateLanguage(int? value) {
+  //   if (value == null) return 'Select native language';
+  //   return null;
+  // }
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
@@ -91,10 +98,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'mother_language': _selectedLanguageId,
       });
 
-      // Success logic...
+      // Показать snackbar и назад
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.reg_success,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        await Future.delayed(const Duration(milliseconds: 700));
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      }
     } catch (e) {
       log(e.toString());
-      // show error (e.toString())
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.reg_fail,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } finally {
       setState(() => _loading = false);
     }
@@ -143,7 +177,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -172,18 +205,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: _formKey,
             child: ListView(
               children: [
-                SizedBox(
-                  height: screenHeight * 0.25,
-                  child: Center(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(
-                        'assets/images/splash.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
+                // SizedBox(
+                //   height: screenHeight * 0.2,
+                //   child: Center(
+                //     child: AspectRatio(
+                //       aspectRatio: 1,
+                //       child: Image.asset(
+                //         'assets/images/select.png',
+                //         fit: BoxFit.contain,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 16),
+                Text(
+                  AppLocalizations.of(context)!.reg_promo,
+                  style: theme.textTheme.labelLarge,
+                  textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 16),
+
                 TextFormField(
                   controller: _firstNameController,
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],

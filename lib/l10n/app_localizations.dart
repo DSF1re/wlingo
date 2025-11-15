@@ -227,6 +227,18 @@ abstract class AppLocalizations {
   /// **'Sign up'**
   String get sign_up;
 
+  /// No description provided for @fill_field.
+  ///
+  /// In en, this message translates to:
+  /// **'Field required'**
+  String get fill_field;
+
+  /// No description provided for @min_lenght.
+  ///
+  /// In en, this message translates to:
+  /// **'6 symbols required'**
+  String get min_lenght;
+
   /// No description provided for @create_account.
   ///
   /// In en, this message translates to:
@@ -256,6 +268,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Native language'**
   String get native_lang;
+
+  /// No description provided for @reg_promo.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get reg_promo;
+
+  /// No description provided for @reg_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration successful'**
+  String get reg_success;
+
+  /// No description provided for @reg_fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed'**
+  String get reg_fail;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

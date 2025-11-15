@@ -27,11 +27,16 @@
   "email_not_confirmed": "Email isn't confirmed",
   "user_not_found": "User isn't found",
   "sign_up": "Sign up",
+  "fill_field": "Field required",
+  "min_lenght": "6 symbols required",
 
   "create_account": "Don't have an account? Create one",
 
   "registration": "Registration",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "native_lang": "Native language"
+  "native_lang": "Native language",
+  "reg_promo": "Create an account",
+  "reg_success": "Registration successful",
+  "reg_fail": "Registration failed"
 }

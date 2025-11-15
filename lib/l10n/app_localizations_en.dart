@@ -75,6 +75,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sign_up => 'Sign up';
 
   @override
+  String get fill_field => 'Field required';
+
+  @override
+  String get min_lenght => '6 symbols required';
+
+  @override
   String get create_account => 'Don\'t have an account? Create one';
 
   @override
@@ -88,4 +94,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get native_lang => 'Native language';
+
+  @override
+  String get reg_promo => 'Create an account';
+
+  @override
+  String get reg_success => 'Registration successful';
+
+  @override
+  String get reg_fail => 'Registration failed';
 }

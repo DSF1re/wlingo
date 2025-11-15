@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,6 +75,9 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      return const AuthScreen();
+    }
     return FutureBuilder<bool>(
       future: _checkOnboardingCompleted(),
       builder: (context, snapshot) {

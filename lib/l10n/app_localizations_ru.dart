@@ -42,7 +42,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get login => 'Войти';
 
   @override
-  String get promo_auth => 'Бесплатно, присоединись сейчас и начинай изучать';
+  String get promo_auth => 'Присоединись сейчас и начинай изучать';
 
   @override
   String get email_address => 'Адрес электронной почты';
@@ -75,6 +75,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sign_up => 'Зарегистрироваться';
 
   @override
+  String get fill_field => 'Заполните поле';
+
+  @override
+  String get min_lenght => 'Минимум 6 символов';
+
+  @override
   String get create_account => 'Ещё нет аккаунта? Зарегистрироваться';
 
   @override
@@ -88,4 +94,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get native_lang => 'Родной язык';
+
+  @override
+  String get reg_promo => 'Создайте аккаунт';
+
+  @override
+  String get reg_success => 'Вы успешно зарегистрировались!';
+
+  @override
+  String get reg_fail => 'Ошибка регистрации, пожалуйста проверьте данные';
 }
