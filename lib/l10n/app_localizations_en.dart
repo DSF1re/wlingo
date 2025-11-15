@@ -42,7 +42,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login => 'Login';
 
   @override
-  String get promo_auth => 'For free, join now and start learning';
+  String get promo_auth => 'Join and start learning now';
 
   @override
   String get email_address => 'Email Address';

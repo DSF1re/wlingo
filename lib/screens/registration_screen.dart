@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,10 +16,13 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  // Текстовые контроллеры как финальные поля (инициализация один раз!)
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   int? _selectedLanguageId;
   List<Map<String, dynamic>> _languages = [];
   bool _loading = false;
@@ -31,12 +33,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _fetchLanguages();
   }
 
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchLanguages() async {
     final response = await Supabase.instance.client
         .from('languages')
         .select('id, name')
         .order('name');
-
     final List data = response.toList() as List? ?? [];
     setState(() {
       _languages = [
@@ -68,21 +78,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (value == null || value.isEmpty) {
       return AppLocalizations.of(context)!.fill_password;
     }
-    if (value.length < 6) return AppLocalizations.of(context)!.min_lenght;
+    if (value.length < 6) {
+      return AppLocalizations.of(context)!.min_lenght;
+    }
     return null;
   }
 
   // String? validateLanguage(int? value) {
-  //   if (value == null) return 'Select native language';
+  //   if (value == null) return AppLocalizations.of(context)!.fill_field;
   //   return null;
   // }
 
   Future<void> _register() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate() || _selectedLanguageId == null) {
+      return;
+    }
 
     setState(() => _loading = true);
     try {
-      // 1. Create user in auth
       final signUpResponse = await Supabase.instance.client.auth.signUp(
         email: _emailController.text.trim(),
         password: _passwordController.text,
@@ -90,7 +103,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final user = signUpResponse.user;
       if (user == null) throw Exception('Registration failed');
 
-      // 2. Save profile
       await Supabase.instance.client.from('profiles').insert({
         'id': user.id,
         'first_name': _firstNameController.text.trim(),
@@ -98,7 +110,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'mother_language': _selectedLanguageId,
       });
 
-      // Показать snackbar и назад
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -142,7 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await prefs.setString(_languageKey, languageCode);
   }
 
-  // Сохранить тему
   Future<void> _saveThemeMode(String themeMode) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_themeModeKey, themeMode);
@@ -152,7 +162,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final newLocale = localeNotifier.value.languageCode == 'ru'
         ? const Locale('en')
         : const Locale('ru');
-
     localeNotifier.value = newLocale;
     await _saveLanguage(newLocale.languageCode);
   }
@@ -161,18 +170,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final newThemeMode = themeModeNotifier.value == ThemeMode.light
         ? ThemeMode.dark
         : ThemeMode.light;
-
     themeModeNotifier.value = newThemeMode;
     await _saveThemeMode(newThemeMode == ThemeMode.dark ? 'dark' : 'light');
-  }
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -185,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.keyboard_arrow_left),
+          icon: const Icon(Icons.keyboard_arrow_left),
         ),
         actions: [
           IconButton(
@@ -205,26 +204,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: _formKey,
             child: ListView(
               children: [
-                // SizedBox(
-                //   height: screenHeight * 0.2,
-                //   child: Center(
-                //     child: AspectRatio(
-                //       aspectRatio: 1,
-                //       child: Image.asset(
-                //         'assets/images/select.png',
-                //         fit: BoxFit.contain,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.reg_promo,
                   style: theme.textTheme.labelLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-
                 TextFormField(
                   controller: _firstNameController,
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],

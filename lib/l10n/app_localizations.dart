@@ -164,7 +164,7 @@ abstract class AppLocalizations {
   /// No description provided for @promo_auth.
   ///
   /// In en, this message translates to:
-  /// **'For free, join now and start learning'**
+  /// **'Join and start learning now'**
   String get promo_auth;
 
   /// No description provided for @email_address.

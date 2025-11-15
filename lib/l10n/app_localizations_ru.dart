@@ -42,7 +42,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get login => 'Войти';
 
   @override
-  String get promo_auth => 'Присоединись сейчас и начинай изучать';
+  String get promo_auth => 'Присоединяйся сейчас и начинай изучать';
 
   @override
   String get email_address => 'Адрес электронной почты';
@@ -81,7 +81,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get min_lenght => 'Минимум 6 символов';
 
   @override
-  String get create_account => 'Ещё нет аккаунта? Зарегистрироваться';
+  String get create_account => 'Нет аккаунта? Зарегистрироваться';
 
   @override
   String get registration => 'Регистрация';
