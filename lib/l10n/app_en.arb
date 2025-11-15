@@ -23,5 +23,15 @@
 
   "fill_email": "Please enter your email",
   "fill_password": "Please enter your password",
-  "invalid_email": "Invalid email format"
+  "invalid_email": "Invalid email format",
+  "email_not_confirmed": "Email isn't confirmed",
+  "user_not_found": "User isn't found",
+  "sign_up": "Sign up",
+
+  "create_account": "Don't have an account? Create one",
+
+  "registration": "Registration",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "native_lang": "Native language"
 }

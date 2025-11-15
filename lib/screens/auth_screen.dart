@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/screens/onboarding_screen.dart';
+import 'package:wlingo/screens/registration_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -52,7 +55,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _goBackToOnboarding() async {
-    // Сбросить флаг завершения онбординга
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_onboardingCompletedKey, false);
 
@@ -75,7 +77,6 @@ class _AuthScreenState extends State<AuthScreen> {
       if (value == null || value.isEmpty) {
         return AppLocalizations.of(context)!.fill_email;
       }
-      // Регулярное выражение для проверки email
       final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
       if (!emailRegex.hasMatch(value)) {
         return AppLocalizations.of(context)!.invalid_email;
@@ -113,8 +114,6 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.login),
-          automaticallyImplyLeading: false,
-          iconTheme: const IconThemeData(color: Colors.white),
           actions: [
             IconButton(
               onPressed: _toggleLanguage,
@@ -181,16 +180,12 @@ class _AuthScreenState extends State<AuthScreen> {
                           hintStyle: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                            horizontal: 16,
-                          ),
                         ),
                         inputFormatters: [LengthLimitingTextInputFormatter(25)],
                         validator: validateEmail,
                       ),
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Поле Password
                       Align(
@@ -250,13 +245,55 @@ class _AuthScreenState extends State<AuthScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              //TODO
-                              Supabase.instance.client.auth.signInWithPassword(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
+                              try {
+                                final response = await Supabase
+                                    .instance
+                                    .client
+                                    .auth
+                                    .signInWithPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    );
+
+                                if (response.user != null) {
+                                  log(
+                                    'User signed in: ${response.user?.email}',
+                                  );
+                                }
+                              } on AuthException catch (error) {
+                                if (context.mounted) {
+                                  if (error.message ==
+                                      'Invalid login credentials') {
+                                    showErrorSnackBar(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.user_not_found,
+                                    );
+                                  } else if (error.message.contains(
+                                    'Email not confirmed',
+                                  )) {
+                                    showErrorSnackBar(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.email_not_confirmed,
+                                    );
+                                  } else if (error.message.contains(
+                                    'User not found',
+                                  )) {
+                                    showErrorSnackBar(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.user_not_found,
+                                    );
+                                  } else {
+                                    log('Error: ${error.message}');
+                                  }
+                                }
+                              } catch (error) {
+                                showErrorSnackBar('Произошла ошибка!');
+                              }
                             } else {
                               if (validateEmail(emailController.text) != null) {
                                 showErrorSnackBar(
@@ -275,6 +312,23 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: Text(
                             AppLocalizations.of(context)!.login,
                             style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const RegisterScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.create_account,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: const Color.fromARGB(233, 24, 119, 214),
                           ),
                         ),
                       ),

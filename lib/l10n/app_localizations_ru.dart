@@ -64,4 +64,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get invalid_email => 'Неверный формат электронной почты';
+
+  @override
+  String get email_not_confirmed => 'Подтвердите электронную почту';
+
+  @override
+  String get user_not_found => 'Пользователь с таким email не найден';
+
+  @override
+  String get sign_up => 'Зарегистрироваться';
+
+  @override
+  String get create_account => 'Ещё нет аккаунта? Зарегистрироваться';
+
+  @override
+  String get registration => 'Регистрация';
+
+  @override
+  String get first_name => 'Имя';
+
+  @override
+  String get last_name => 'Фамилия';
+
+  @override
+  String get native_lang => 'Родной язык';
 }

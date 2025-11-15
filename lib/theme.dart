@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
   appBarTheme: AppBarThemeData(
+    foregroundColor: Colors.white,
+    iconTheme: const IconThemeData(color: Colors.white),
     backgroundColor: Color.fromARGB(255, 72, 99, 210),
     centerTitle: true,
     titleTextStyle: TextStyle(
@@ -9,7 +11,9 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w500,
     ),
   ),
+
   brightness: Brightness.light,
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
@@ -25,6 +29,26 @@ ThemeData lightTheme = ThemeData(
       elevation: 2,
     ),
   ),
+
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: lightText().titleSmall!.copyWith(
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
+    ),
+    inputDecorationTheme: InputDecorationThemeData(
+      hintStyle: lightText().titleSmall!.copyWith(fontWeight: FontWeight.w500),
+      filled: true,
+      fillColor: const Color.fromARGB(16, 16, 16, 16),
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(Color.fromARGB(255, 31, 31, 31)),
+    ),
+  ),
+
   inputDecorationTheme: InputDecorationThemeData(
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
@@ -32,8 +56,9 @@ ThemeData lightTheme = ThemeData(
     ),
     contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
     filled: true,
-    fillColor: const Color.fromARGB(8, 16, 16, 16),
+    fillColor: const Color.fromARGB(16, 16, 16, 16),
   ),
+
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
@@ -109,11 +134,35 @@ ThemeData darkTheme = lightTheme.copyWith(
     filled: true,
     fillColor: const Color.fromARGB(7, 241, 241, 241),
   ),
+
   brightness: Brightness.dark,
+
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: const Color.fromARGB(255, 42, 42, 42),
     foregroundColor: const Color.fromARGB(255, 195, 195, 195),
   ),
+
   textTheme: darkTextTheme(lightText()),
+
   scaffoldBackgroundColor: Color.fromARGB(255, 27, 27, 27),
+
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: darkTextTheme(
+      lightText(),
+    ).titleSmall!.copyWith(fontWeight: FontWeight.w500, color: Colors.white),
+    inputDecorationTheme: InputDecorationThemeData(
+      hintStyle: darkTextTheme(
+        lightText(),
+      ).titleSmall!.copyWith(fontWeight: FontWeight.w500),
+      filled: true,
+      fillColor: const Color.fromARGB(7, 241, 241, 241),
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(Color.fromARGB(255, 31, 31, 31)),
+    ),
+  ),
 );

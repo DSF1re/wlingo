@@ -64,4 +64,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalid_email => 'Invalid email format';
+
+  @override
+  String get email_not_confirmed => 'Email isn\'t confirmed';
+
+  @override
+  String get user_not_found => 'User isn\'t found';
+
+  @override
+  String get sign_up => 'Sign up';
+
+  @override
+  String get create_account => 'Don\'t have an account? Create one';
+
+  @override
+  String get registration => 'Registration';
+
+  @override
+  String get first_name => 'First Name';
+
+  @override
+  String get last_name => 'Last Name';
+
+  @override
+  String get native_lang => 'Native language';
 }
