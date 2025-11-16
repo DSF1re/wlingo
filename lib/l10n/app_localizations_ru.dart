@@ -12,7 +12,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingTitle1 => 'Уверенность в своих словах';
 
   @override
-  String get onboardingDesc1 => 'С разговорным обучением вы будете говорить с первого урока';
+  String get onboardingDesc1 =>
+      'С разговорным обучением вы будете говорить с первого урока';
 
   @override
   String get onboardingBtn1 => 'Далее';
@@ -21,7 +22,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingTitle2 => 'Учитесь в своём темпе';
 
   @override
-  String get onboardingDesc2 => 'Вырабатывайте привычку учиться и делайте это частью ежедневной рутины';
+  String get onboardingDesc2 =>
+      'Вырабатывайте привычку учиться и делайте это частью ежедневной рутины';
 
   @override
   String get onboardingBtn2 => 'Больше';
@@ -30,7 +32,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingTitle3 => 'Уроки, которые вам нужны';
 
   @override
-  String get onboardingDesc3 => 'Используйте разнообразные стили обучения для лучшего усвоения';
+  String get onboardingDesc3 =>
+      'Используйте разнообразные стили обучения для лучшего усвоения';
 
   @override
   String get onboardingBtn3 => 'Выбрать язык';
@@ -42,7 +45,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get login => 'Войти';
 
   @override
-  String get promo_auth => 'Присоединись сейчас и начинай изучать';
+  String get promo_auth => 'Присоединяйся сейчас и начинай изучать';
 
   @override
   String get email_address => 'Адрес электронной почты';
@@ -81,7 +84,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get min_lenght => 'Минимум 6 символов';
 
   @override
-  String get create_account => 'Ещё нет аккаунта? Зарегистрироваться';
+  String get create_account => 'Нет аккаунта? Зарегистрироваться';
 
   @override
   String get registration => 'Регистрация';

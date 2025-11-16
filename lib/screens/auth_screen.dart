@@ -19,10 +19,22 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool _obscurePassword = true;
 
-  // Ключи для SharedPreferences
+  // Финальные поля-контроллеры!
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // SharedPreferences ключи
   static const String _languageKey = 'app_language';
   static const String _themeModeKey = 'app_theme_mode';
   static const String _onboardingCompletedKey = 'onboarding_completed';
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   // Сохранить язык
   Future<void> _saveLanguage(String languageCode) async {
@@ -40,7 +52,6 @@ class _AuthScreenState extends State<AuthScreen> {
     final newLocale = localeNotifier.value.languageCode == 'ru'
         ? const Locale('en')
         : const Locale('ru');
-
     localeNotifier.value = newLocale;
     await _saveLanguage(newLocale.languageCode);
   }
@@ -49,7 +60,6 @@ class _AuthScreenState extends State<AuthScreen> {
     final newThemeMode = themeModeNotifier.value == ThemeMode.light
         ? ThemeMode.dark
         : ThemeMode.light;
-
     themeModeNotifier.value = newThemeMode;
     await _saveThemeMode(newThemeMode == ThemeMode.dark ? 'dark' : 'light');
   }
@@ -65,72 +75,61 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.fill_email;
+    }
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+    if (!emailRegex.hasMatch(value)) {
+      return AppLocalizations.of(context)!.invalid_email;
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.fill_password;
+    }
+    return null;
+  }
+
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: Theme.of(context).textTheme.displaySmall),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.redAccent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
-    String? validateEmail(String? value) {
-      if (value == null || value.isEmpty) {
-        return AppLocalizations.of(context)!.fill_email;
-      }
-      final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-      if (!emailRegex.hasMatch(value)) {
-        return AppLocalizations.of(context)!.invalid_email;
-      }
-      return null;
-    }
-
-    String? validatePassword(String? value) {
-      if (value == null || value.isEmpty) {
-        return AppLocalizations.of(context)!.fill_password;
-      }
-      return null;
-    }
-
-    void showErrorSnackBar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message, style: theme.textTheme.displaySmall),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
-    }
-
-    // @override
-    // void dispose() {
-    //   emailController.dispose();
-    //   passwordController.dispose();
-    // }
-
-    final formKey = GlobalKey<FormState>();
-
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.login),
-          actions: [
-            IconButton(
-              onPressed: _toggleLanguage,
-              icon: const Icon(Icons.language),
-            ),
-            IconButton(
-              onPressed: _toggleTheme,
-              icon: const Icon(Icons.brightness_6),
-            ),
-          ],
-          leading: IconButton(
-            onPressed: _goBackToOnboarding,
-            icon: const Icon(Icons.keyboard_arrow_left),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.login),
+        actions: [
+          IconButton(
+            onPressed: _toggleLanguage,
+            icon: const Icon(Icons.language),
           ),
+          IconButton(
+            onPressed: _toggleTheme,
+            icon: const Icon(Icons.brightness_6),
+          ),
+        ],
+        leading: IconButton(
+          onPressed: _goBackToOnboarding,
+          icon: const Icon(Icons.keyboard_arrow_left),
         ),
-        body: Form(
-          key: formKey,
+      ),
+      body: PopScope(
+        canPop: false,
+        child: Form(
+          key: _formKey,
           child: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -150,8 +149,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                   ),
-
-                  // Заголовок
                   Column(
                     children: [
                       Text(
@@ -160,7 +157,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         textAlign: TextAlign.center,
                       ),
 
-                      SizedBox(height: screenHeight * 0.03),
+                      SizedBox(height: screenHeight * 0.04),
 
                       // Поле Email
                       Align(
@@ -174,7 +171,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                       const SizedBox(height: 6),
                       TextFormField(
-                        controller: emailController,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)!.email,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(
@@ -184,9 +181,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         inputFormatters: [LengthLimitingTextInputFormatter(25)],
                         validator: validateEmail,
                       ),
-
-                      const SizedBox(height: 16),
-
+                      const SizedBox(height: 8),
                       // Поле Password
                       Align(
                         alignment: Alignment.centerLeft,
@@ -200,7 +195,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(height: 6),
                       TextFormField(
                         obscureText: _obscurePassword,
-                        controller: passwordController,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)!.password,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(
@@ -224,7 +219,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         inputFormatters: [LengthLimitingTextInputFormatter(25)],
                         validator: validatePassword,
                       ),
-
                       // Forgot Password
                       Align(
                         alignment: Alignment.centerLeft,
@@ -239,24 +233,23 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 20),
 
                       // Кнопка входа
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               try {
                                 final response = await Supabase
                                     .instance
                                     .client
                                     .auth
                                     .signInWithPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
                                     );
-
                                 if (response.user != null) {
                                   log(
                                     'User signed in: ${response.user?.email}',
@@ -295,16 +288,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                 showErrorSnackBar('Произошла ошибка!');
                               }
                             } else {
-                              if (validateEmail(emailController.text) != null) {
+                              if (validateEmail(_emailController.text) !=
+                                  null) {
                                 showErrorSnackBar(
-                                  validateEmail(emailController.text)!,
+                                  validateEmail(_emailController.text)!,
                                 );
                               } else if (validatePassword(
-                                    passwordController.text,
+                                    _passwordController.text,
                                   ) !=
                                   null) {
                                 showErrorSnackBar(
-                                  validatePassword(passwordController.text)!,
+                                  validatePassword(_passwordController.text)!,
                                 );
                               }
                             }
@@ -315,7 +309,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
