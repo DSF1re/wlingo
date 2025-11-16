@@ -75,9 +75,9 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    //   return const AuthScreen();
-    // }
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      return const AuthScreen();
+    }
     return FutureBuilder<bool>(
       future: _checkOnboardingCompleted(),
       builder: (context, snapshot) {
