@@ -9,6 +9,7 @@ ThemeData lightTheme = ThemeData(
     titleTextStyle: TextStyle(
       fontFamily: 'Fredoka',
       fontWeight: FontWeight.w500,
+      color: Colors.white,
     ),
   ),
 
@@ -63,7 +64,9 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
   ),
+
   scaffoldBackgroundColor: Colors.white,
+
   textTheme: lightText(),
 );
 
@@ -121,6 +124,7 @@ TextTheme darkTextTheme(TextTheme base) {
     labelSmall: base.labelSmall!.copyWith(color: Colors.grey[400]),
     labelLarge: base.labelLarge!.copyWith(color: Colors.white70),
     titleSmall: base.titleSmall!.copyWith(color: Colors.white54),
+    displaySmall: base.displaySmall!.copyWith(color: Colors.white54),
   );
 }
 

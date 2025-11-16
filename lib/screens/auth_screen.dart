@@ -139,7 +139,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   // Верхняя часть с логотипом
                   SizedBox(
-                    height: screenHeight * 0.25,
+                    height: screenHeight * 0.21,
                     child: Center(
                       child: AspectRatio(
                         aspectRatio: 1,
@@ -160,7 +160,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         textAlign: TextAlign.center,
                       ),
 
-                      SizedBox(height: screenHeight * 0.04),
+                      SizedBox(height: screenHeight * 0.03),
 
                       // Поле Email
                       Align(
@@ -239,7 +239,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 8),
 
                       // Кнопка входа
                       SizedBox(

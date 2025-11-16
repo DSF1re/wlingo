@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wlingo/main.dart';
 
 import 'package:wlingo/models/onboarding.dart';
@@ -184,10 +185,15 @@ class OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  void _skipOnboarding() {
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
+  Future<void> _skipOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', true);
+
+    if (mounted) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
+    }
   }
 
   @override
