@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:wlingo/main.dart';
-
+import 'package:wlingo/services/preferences_service.dart';
 import 'package:wlingo/models/onboarding.dart';
 import 'package:wlingo/screens/auth_screen.dart';
 import 'package:wlingo/widgets/dots_indicator.dart';
@@ -40,6 +41,14 @@ class OnboardingScreenState extends State<OnboardingScreen> {
         buttonText: loc.onboardingBtn3,
       ),
     ];
+  }
+
+  late PreferencesService _preferencesService;
+
+  @override
+  void initState() {
+    super.initState();
+    _preferencesService = GetIt.I<PreferencesService>();
   }
 
   void _toggleLanguage() {
@@ -184,10 +193,13 @@ class OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  void _skipOnboarding() {
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
+  Future<void> _skipOnboarding() async {
+    await _preferencesService.saveOnboardingCompleted(true);
+    if (mounted) {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen()));
+    }
   }
 
   @override

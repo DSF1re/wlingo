@@ -1,8 +1,12 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wlingo/core/service_locator.dart';
+import 'package:wlingo/data/repositories/auth_repository.dart';
+import 'package:wlingo/data/repositories/language_repository.dart';
+import 'package:wlingo/models/language.dart';
+import 'package:wlingo/services/preferences_service.dart';
+import 'package:wlingo/utils/validators.dart';
 
 import '../l10n/app_localizations.dart';
 import '../main.dart';
@@ -16,78 +20,40 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  // Текстовые контроллеры как финальные поля (инициализация один раз!)
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late AuthRepository _authRepository;
+  late LanguageRepository _languageRepository;
+  late PreferencesService _preferencesService;
 
   int? _selectedLanguageId;
-  List<Map<String, dynamic>> _languages = [];
+  List<Language> _languages = [];
   bool _loading = false;
 
   @override
   void initState() {
     super.initState();
+    _initializeRepositories();
     _fetchLanguages();
   }
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  void _initializeRepositories() {
+    _authRepository = getIt<AuthRepository>();
+    _languageRepository = getIt<LanguageRepository>();
+    _preferencesService = getIt<PreferencesService>();
   }
 
   Future<void> _fetchLanguages() async {
-    final response = await Supabase.instance.client
-        .from('languages')
-        .select('id, name')
-        .order('name');
-    final List data = response.toList() as List? ?? [];
-    setState(() {
-      _languages = [
-        for (var lang in data)
-          {'id': lang['id'] as int, 'name': lang['name'] as String},
-      ];
-    });
+    try {
+      final languages = await _languageRepository.fetchLanguages();
+      setState(() => _languages = languages);
+    } catch (e) {
+      log(e.toString());
+    }
   }
-
-  String? validateName(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return AppLocalizations.of(context)!.fill_field;
-    }
-    return null;
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.fill_email;
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value)) {
-      return AppLocalizations.of(context)!.invalid_email;
-    }
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.fill_password;
-    }
-    if (value.length < 6) {
-      return AppLocalizations.of(context)!.min_lenght;
-    }
-    return null;
-  }
-
-  // String? validateLanguage(int? value) {
-  //   if (value == null) return AppLocalizations.of(context)!.fill_field;
-  //   return null;
-  // }
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate() || _selectedLanguageId == null) {
@@ -96,66 +62,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => _loading = true);
     try {
-      final signUpResponse = await Supabase.instance.client.auth.signUp(
-        email: _emailController.text.trim(),
+      await _authRepository.signUp(
+        email: _emailController.text,
         password: _passwordController.text,
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        motherLanguageId: _selectedLanguageId!,
       );
-      final user = signUpResponse.user;
-      if (user == null) throw Exception('Registration failed');
-
-      await Supabase.instance.client.from('profiles').insert({
-        'id': user.id,
-        'first_name': _firstNameController.text.trim(),
-        'last_name': _lastNameController.text.trim(),
-        'mother_language': _selectedLanguageId,
-      });
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.reg_success,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            backgroundColor: Colors.green,
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        _showSuccessSnackBar();
         await Future.delayed(const Duration(milliseconds: 700));
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
+        if (mounted) Navigator.of(context).pop();
       }
     } catch (e) {
       log(e.toString());
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.reg_fail,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
+      if (mounted) _showErrorSnackBar();
     } finally {
       setState(() => _loading = false);
     }
   }
 
-  static const String _languageKey = 'app_language';
-  static const String _themeModeKey = 'app_theme_mode';
-
-  Future<void> _saveLanguage(String languageCode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageKey, languageCode);
+  void _showSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.reg_success),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
-  Future<void> _saveThemeMode(String themeMode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_themeModeKey, themeMode);
+  void _showErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.reg_fail),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   void _toggleLanguage() async {
@@ -163,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ? const Locale('en')
         : const Locale('ru');
     localeNotifier.value = newLocale;
-    await _saveLanguage(newLocale.languageCode);
+    await _preferencesService.saveLanguage(newLocale.languageCode);
   }
 
   void _toggleTheme() async {
@@ -171,19 +116,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ? ThemeMode.dark
         : ThemeMode.light;
     themeModeNotifier.value = newThemeMode;
-    await _saveThemeMode(newThemeMode == ThemeMode.dark ? 'dark' : 'light');
+    await _preferencesService.saveThemeMode(
+      newThemeMode == ThemeMode.dark ? 'dark' : 'light',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.registration),
         leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.keyboard_arrow_left),
         ),
         actions: [
@@ -199,14 +143,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: ListView(
               children: [
                 Text(
                   AppLocalizations.of(context)!.reg_promo,
-                  style: theme.textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.labelLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -215,11 +159,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.first_name,
-                    hintStyle: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
-                  validator: validateName,
+                  validator: (val) => FormValidators.validateName(val, context),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -227,22 +168,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.last_name,
-                    hintStyle: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
-                  validator: validateName,
+                  validator: (val) => FormValidators.validateName(val, context),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.email,
-                    hintStyle: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
-                  validator: validateEmail,
+                  validator: (val) =>
+                      FormValidators.validateEmail(val, context),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -250,11 +186,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.password,
-                    hintStyle: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
-                  validator: validatePassword,
+                  validator: (val) =>
+                      FormValidators.validatePassword(val, context),
                 ),
                 const SizedBox(height: 16),
                 DropdownMenu<int>(
@@ -263,20 +197,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   initialSelection: _selectedLanguageId,
                   dropdownMenuEntries: _languages
                       .map(
-                        (lang) => DropdownMenuEntry(
-                          value: lang['id'] as int,
-                          label: lang['name'] as String,
-                          style: MenuItemButton.styleFrom(
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
+                        (lang) =>
+                            DropdownMenuEntry(value: lang.id, label: lang.name),
                       )
                       .toList(),
-                  onSelected: (val) {
-                    setState(() {
-                      _selectedLanguageId = val;
-                    });
-                  },
+                  onSelected: (val) =>
+                      setState(() => _selectedLanguageId = val),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -291,5 +217,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

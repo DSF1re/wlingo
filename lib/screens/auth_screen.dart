@@ -1,9 +1,11 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wlingo/data/repositories/auth_repository.dart';
+import 'package:wlingo/services/preferences_service.dart';
+import 'package:wlingo/utils/validators.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/screens/onboarding_screen.dart';
@@ -17,17 +19,20 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
 
-  // Финальные поля-контроллеры!
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late AuthRepository _authRepository;
+  late PreferencesService _preferencesService;
 
-  // SharedPreferences ключи
-  static const String _languageKey = 'app_language';
-  static const String _themeModeKey = 'app_theme_mode';
-  static const String _onboardingCompletedKey = 'onboarding_completed';
+  @override
+  void initState() {
+    super.initState();
+    _authRepository = GetIt.I<AuthRepository>();
+    _preferencesService = GetIt.I<PreferencesService>();
+  }
 
   @override
   void dispose() {
@@ -36,24 +41,12 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  // Сохранить язык
-  Future<void> _saveLanguage(String languageCode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageKey, languageCode);
-  }
-
-  // Сохранить тему
-  Future<void> _saveThemeMode(String themeMode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_themeModeKey, themeMode);
-  }
-
   void _toggleLanguage() async {
     final newLocale = localeNotifier.value.languageCode == 'ru'
         ? const Locale('en')
         : const Locale('ru');
     localeNotifier.value = newLocale;
-    await _saveLanguage(newLocale.languageCode);
+    await _preferencesService.saveLanguage(newLocale.languageCode);
   }
 
   void _toggleTheme() async {
@@ -61,13 +54,13 @@ class _AuthScreenState extends State<AuthScreen> {
         ? ThemeMode.dark
         : ThemeMode.light;
     themeModeNotifier.value = newThemeMode;
-    await _saveThemeMode(newThemeMode == ThemeMode.dark ? 'dark' : 'light');
+    await _preferencesService.saveThemeMode(
+      newThemeMode == ThemeMode.dark ? 'dark' : 'light',
+    );
   }
 
-  void _goBackToOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_onboardingCompletedKey, false);
-
+  Future<void> _goBackToOnboarding() async {
+    await _preferencesService.saveOnboardingCompleted(false);
     if (mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const OnboardingScreen()),
@@ -75,25 +68,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.fill_email;
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value)) {
-      return AppLocalizations.of(context)!.invalid_email;
-    }
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.fill_password;
-    }
-    return null;
-  }
-
-  void showErrorSnackBar(String message) {
+  void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: Theme.of(context).textTheme.displaySmall),
@@ -101,6 +76,37 @@ class _AuthScreenState extends State<AuthScreen> {
         backgroundColor: Colors.redAccent,
       ),
     );
+  }
+
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      final response = await _authRepository.signIn(
+        _emailController.text,
+        _passwordController.text,
+      );
+      if (response.user != null) {
+        log('User signed in: ${response.user?.email}');
+        // TODO: навигация дальше после успешного входа.
+      }
+    } on AuthException catch (error) {
+      if (context.mounted) {
+        if (error.message == 'Invalid login credentials' && mounted) {
+          _showErrorSnackBar(AppLocalizations.of(context)!.user_not_found);
+        } else if (error.message.contains('Email not confirmed') && mounted) {
+          _showErrorSnackBar(AppLocalizations.of(context)!.email_not_confirmed);
+        } else if (error.message.contains('User not found') && mounted) {
+          _showErrorSnackBar(AppLocalizations.of(context)!.user_not_found);
+        } else {
+          log('Error: ${error.message}');
+          _showErrorSnackBar('Произошла ошибка!');
+        }
+      }
+    } catch (_) {
+      _showErrorSnackBar('Произошла ошибка!');
+    }
   }
 
   @override
@@ -136,7 +142,6 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // Верхняя часть с логотипом
                   SizedBox(
                     height: screenHeight * 0.22,
                     child: Center(
@@ -157,7 +162,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      // Поле Email
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -177,10 +181,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         inputFormatters: [LengthLimitingTextInputFormatter(25)],
-                        validator: validateEmail,
+                        validator: (val) =>
+                            FormValidators.validateEmail(val, context),
                       ),
                       const SizedBox(height: 8),
-                      // Поле Password
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -215,9 +219,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         inputFormatters: [LengthLimitingTextInputFormatter(25)],
-                        validator: validatePassword,
+                        validator: (val) =>
+                            FormValidators.validatePassword(val, context),
                       ),
-                      // Forgot Password
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
@@ -232,74 +236,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      // Кнопка входа
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                final response = await Supabase
-                                    .instance
-                                    .client
-                                    .auth
-                                    .signInWithPassword(
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                    );
-                                if (response.user != null) {
-                                  log(
-                                    'User signed in: ${response.user?.email}',
-                                  );
-                                }
-                              } on AuthException catch (error) {
-                                if (context.mounted) {
-                                  if (error.message ==
-                                      'Invalid login credentials') {
-                                    showErrorSnackBar(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.user_not_found,
-                                    );
-                                  } else if (error.message.contains(
-                                    'Email not confirmed',
-                                  )) {
-                                    showErrorSnackBar(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.email_not_confirmed,
-                                    );
-                                  } else if (error.message.contains(
-                                    'User not found',
-                                  )) {
-                                    showErrorSnackBar(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.user_not_found,
-                                    );
-                                  } else {
-                                    log('Error: ${error.message}');
-                                  }
-                                }
-                              } catch (error) {
-                                showErrorSnackBar('Произошла ошибка!');
-                              }
-                            } else {
-                              if (validateEmail(_emailController.text) !=
-                                  null) {
-                                showErrorSnackBar(
-                                  validateEmail(_emailController.text)!,
-                                );
-                              } else if (validatePassword(
-                                    _passwordController.text,
-                                  ) !=
-                                  null) {
-                                showErrorSnackBar(
-                                  validatePassword(_passwordController.text)!,
-                                );
-                              }
-                            }
-                          },
+                          onPressed: _login,
                           child: Text(
                             AppLocalizations.of(context)!.login,
                             style: theme.textTheme.bodyMedium,

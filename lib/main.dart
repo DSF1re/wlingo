@@ -1,20 +1,22 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wlingo/screens/auth_screen.dart';
 import 'package:wlingo/screens/onboarding_screen.dart';
-import 'package:wlingo/theme.dart';
+import 'package:wlingo/theme/app_theme.dart';
 import 'l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/service_locator.dart';
 
 final localeNotifier = ValueNotifier(const Locale('ru'));
 final themeModeNotifier = ValueNotifier(ThemeMode.light);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  supInit();
+
+  await supInit();
+
+  await setupServiceLocator();
 
   final prefs = await SharedPreferences.getInstance();
   final savedLanguage = prefs.getString('app_language') ?? 'ru';
@@ -59,9 +61,9 @@ class MyApp extends StatelessWidget {
               supportedLocales: AppLocalizations.supportedLocales,
               home: const InitialScreen(),
               debugShowCheckedModeBanner: false,
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode: themeMode,
+              theme: buildAppTheme(brightness: Brightness.light),
+              darkTheme: buildAppTheme(brightness: Brightness.dark),
+              themeMode: themeModeNotifier.value,
             );
           },
         );
@@ -75,7 +77,7 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    if (MediaQuery.of(context).size.width > 600) {
       return const AuthScreen();
     }
     return FutureBuilder<bool>(
