@@ -56,10 +56,17 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  bool _isLoading = false;
+
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final response = await _authRepository.signIn(
         _emailController.text,
@@ -86,6 +93,12 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } catch (_) {
       _showErrorSnackBar('Произошла ошибка!');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -93,6 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login),
@@ -111,141 +125,163 @@ class _AuthScreenState extends State<AuthScreen> {
           icon: const Icon(Icons.keyboard_arrow_left),
         ),
       ),
-      body: PopScope(
-        canPop: false,
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: screenHeight * 0.22,
-                  child: Center(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(
-                        'assets/images/splash.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-                Column(
+      body: Stack(
+        children: [
+          // ТВОЙ ТЕКУЩИЙ КОНТЕНТ
+          PopScope(
+            canPop: false,
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.promo_auth,
-                      style: theme.textTheme.labelLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.email_address,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.email,
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      inputFormatters: [LengthLimitingTextInputFormatter(25)],
-                      validator: (val) =>
-                          FormValidators.validateEmail(val, context),
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!.password,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextFormField(
-                      obscureText: _obscurePassword,
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.password,
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: const Color(0x65687280),
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                        ),
-                      ),
-                      inputFormatters: [LengthLimitingTextInputFormatter(25)],
-                      validator: (val) =>
-                          FormValidators.validatePassword(val, context),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          AppLocalizations.of(context)!.forgot_pass,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(233, 214, 24, 94),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
                     SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _login,
-                        child: Text(
-                          AppLocalizations.of(context)!.login,
-                          style: theme.textTheme.bodyMedium,
+                      height: screenHeight * 0.22,
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset(
+                            'assets/images/splash.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.create_account,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromARGB(233, 24, 119, 214),
+                    Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.promo_auth,
+                          style: theme.textTheme.labelLarge,
+                          textAlign: TextAlign.center,
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!.email_address,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.email,
+                            hintStyle: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(25),
+                          ],
+                          validator: (val) =>
+                              FormValidators.validateEmail(val, context),
+                        ),
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!.password,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        TextFormField(
+                          obscureText: _obscurePassword,
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.password,
+                            hintStyle: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: const Color(0x65687280),
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(25),
+                          ],
+                          validator: (val) =>
+                              FormValidators.validatePassword(val, context),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              AppLocalizations.of(context)!.forgot_pass,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromARGB(233, 214, 24, 94),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _login,
+                            child: Text(
+                              AppLocalizations.of(context)!.login,
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        TextButton(
+                          onPressed: _isLoading
+                              ? null
+                              : () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => const RegisterScreen(),
+                                    ),
+                                  );
+                                },
+                          child: Text(
+                            AppLocalizations.of(context)!.create_account,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(233, 24, 119, 214),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+
+          if (_isLoading)
+            Positioned.fill(
+              child: AbsorbPointer(
+                absorbing: true,
+                child: Container(
+                  color: Colors.black54,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

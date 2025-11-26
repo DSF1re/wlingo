@@ -124,4 +124,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listening => 'Listening...';
+
+  @override
+  String get study_materials => 'Study materials';
+
+  @override
+  String get options => 'Options';
 }

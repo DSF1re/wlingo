@@ -15,6 +15,10 @@ class OptionsRepository {
     await _preferencesService.saveLanguage(newLocale.languageCode);
   }
 
+  String getCurrentLanguageCode() {
+    return localeNotifier.value.languageCode;
+  }
+
   Future<void> toggleTheme() async {
     final newThemeMode = themeModeNotifier.value == ThemeMode.light
         ? ThemeMode.dark

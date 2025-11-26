@@ -328,6 +328,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Listening...'**
   String get listening;
+
+  /// No description provided for @study_materials.
+  ///
+  /// In en, this message translates to:
+  /// **'Study materials'**
+  String get study_materials;
+
+  /// No description provided for @options.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get options;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

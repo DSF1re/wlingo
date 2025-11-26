@@ -124,4 +124,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get listening => 'Слушаю';
+
+  @override
+  String get study_materials => 'Учебные материалы';
+
+  @override
+  String get options => 'Настройки';
 }

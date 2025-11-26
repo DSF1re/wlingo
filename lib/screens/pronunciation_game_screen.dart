@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/core/repositories/options_repository.dart';
 import 'package:wlingo/core/repositories/words_repository.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/widgets/microphone_indicator.dart';
 import '../services/speech_service.dart';
 import '../models/word.dart';
 
@@ -17,12 +19,12 @@ class PronunciationGameScreen extends StatefulWidget {
 class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
   late WordsRepository _wordsRepository;
   late OptionsRepository _optionsRepository;
-  final speechService = SpeechService();
 
   Word? currentWord;
   String userSaid = '';
   bool isLoading = false;
   bool? isCorrect;
+  bool isMicActive = false;
 
   @override
   void initState() {
@@ -44,11 +46,12 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
     });
   }
 
-  Future<void> _checkPronunciation() async {
-    userSaid = await speechService.recordAndRecognize();
-    isCorrect =
-        userSaid.trim().toLowerCase() == currentWord?.word.trim().toLowerCase();
-    setState(() {});
+  String getTargetWord(String langCode) {
+    if (langCode == 'ru') {
+      return currentWord?.russian ?? '';
+    } else {
+      return currentWord?.word ?? '';
+    }
   }
 
   Color getResultColor() {
@@ -83,9 +86,25 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
                     const SizedBox(height: 24),
                     if (currentWord != null) ...[
                       Text(
-                        currentWord!.word,
-                        style: theme.textTheme.titleLarge,
+                        getTargetWord(
+                          _optionsRepository.getCurrentLanguageCode(),
+                        ),
+                        style: theme.textTheme.titleLarge!.copyWith(
+                          color: Colors.green,
+                          fontSize: 36,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
+                      if (_optionsRepository.getCurrentLanguageCode() == 'ru')
+                        Text(
+                          currentWord!.word,
+                          style: theme.textTheme.titleSmall,
+                        )
+                      else
+                        Text(
+                          currentWord!.russian,
+                          style: theme.textTheme.titleSmall,
+                        ),
                       Text(
                         currentWord!.transcription,
                         style: const TextStyle(
@@ -93,21 +112,57 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
                           color: Colors.blueAccent,
                         ),
                       ),
-                      Text(
-                        currentWord!.russian,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.green,
-                        ),
-                      ),
                     ],
                     const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: _checkPronunciation,
-                      child: Text(
-                        AppLocalizations.of(context)!.check_pronunciation,
-                      ),
+                    MicrophoneIndicatorButton(
+                      isActive: isMicActive,
+                      onRecordAndCheck: () async {
+                        final langCode = _optionsRepository
+                            .getCurrentLanguageCode();
+                        final speechService = SpeechService(langCode);
+                        final userSpeech = await speechService
+                            .recordAndRecognize();
+                        final bool correct =
+                            userSpeech.trim().toLowerCase() ==
+                            getTargetWord(langCode).trim().toLowerCase();
+
+                        setState(() {
+                          userSaid = userSpeech;
+                          isCorrect = correct;
+                        });
+
+                        final userId =
+                            GetIt.I<SupabaseClient>().auth.currentUser?.id;
+                        if (userId == null) {
+                          return userSpeech;
+                        }
+
+                        await _wordsRepository.saveWordPractice(
+                          correctWordId: currentWord!.id,
+                          userAnswer: userSpeech,
+                          userId: userId,
+                          isCorrect: correct,
+                        );
+
+                        if (correct) {
+                          await _wordsRepository.addOrUpdateRating(userId, 10);
+                        }
+
+                        return userSpeech;
+                      },
+                      onStopListen: () async {
+                        final langCode = _optionsRepository
+                            .getCurrentLanguageCode();
+                        final speechService = SpeechService(langCode);
+                        await speechService.stop();
+                      },
+                      onStateChanged: (active) {
+                        setState(() {
+                          isMicActive = active;
+                        });
+                      },
                     ),
+
                     const SizedBox(height: 24),
                     if (userSaid.isNotEmpty)
                       Column(
