@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/service_locator.dart';
 import 'package:wlingo/services/preferences_service.dart';
 
 class OptionsRepository {

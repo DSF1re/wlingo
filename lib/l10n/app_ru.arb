@@ -47,5 +47,7 @@
   "you_pronounced": "Вы произнесли:",
   "listening": "Слушаю",
   "study_materials": "Учебные материалы",
-  "options": "Настройки"
+  "options": "Настройки",
+  "select_course": "Выбранный курс",
+  "no_materials": "Нет материалов для данного курса"
 }

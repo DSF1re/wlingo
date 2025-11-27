@@ -152,7 +152,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                 mini: true,
                 heroTag: 1,
                 onPressed: _optionsRepository.toggleLanguage,
-                child: const Icon(Icons.language),
+                child: const Icon(Icons.translate),
               ),
               SizedBox(width: 8),
               FloatingActionButton(

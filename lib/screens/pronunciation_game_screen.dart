@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/core/repositories/options_repository.dart';
 import 'package:wlingo/core/repositories/words_repository.dart';
+import 'package:wlingo/core/service_locator.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/widgets/microphone_indicator.dart';
 import '../services/speech_service.dart';
@@ -46,13 +47,7 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
     });
   }
 
-  String getTargetWord(String langCode) {
-    if (langCode == 'ru') {
-      return currentWord?.russian ?? '';
-    } else {
-      return currentWord?.word ?? '';
-    }
-  }
+  String get targetWord => currentWord?.word ?? '';
 
   Color getResultColor() {
     if (isCorrect == null) return Colors.black;
@@ -68,7 +63,7 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
         actions: [
           IconButton(
             onPressed: _optionsRepository.toggleLanguage,
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.translate),
           ),
           IconButton(
             onPressed: _optionsRepository.toggleTheme,
@@ -86,25 +81,17 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
                     const SizedBox(height: 24),
                     if (currentWord != null) ...[
                       Text(
-                        getTargetWord(
-                          _optionsRepository.getCurrentLanguageCode(),
-                        ),
+                        targetWord,
                         style: theme.textTheme.titleLarge!.copyWith(
                           color: Colors.green,
                           fontSize: 36,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      if (_optionsRepository.getCurrentLanguageCode() == 'ru')
-                        Text(
-                          currentWord!.word,
-                          style: theme.textTheme.titleSmall,
-                        )
-                      else
-                        Text(
-                          currentWord!.russian,
-                          style: theme.textTheme.titleSmall,
-                        ),
+                      Text(
+                        currentWord!.russian,
+                        style: theme.textTheme.titleSmall,
+                      ),
                       Text(
                         currentWord!.transcription,
                         style: const TextStyle(
@@ -113,18 +100,16 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
                         ),
                       ),
                     ],
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 48),
                     MicrophoneIndicatorButton(
                       isActive: isMicActive,
                       onRecordAndCheck: () async {
-                        final langCode = _optionsRepository
-                            .getCurrentLanguageCode();
-                        final speechService = SpeechService(langCode);
+                        final speechService = SpeechService(languageNotifier);
                         final userSpeech = await speechService
                             .recordAndRecognize();
                         final bool correct =
                             userSpeech.trim().toLowerCase() ==
-                            getTargetWord(langCode).trim().toLowerCase();
+                            targetWord.trim().toLowerCase();
 
                         setState(() {
                           userSaid = userSpeech;
@@ -151,9 +136,7 @@ class _PronunciationGameScreenState extends State<PronunciationGameScreen> {
                         return userSpeech;
                       },
                       onStopListen: () async {
-                        final langCode = _optionsRepository
-                            .getCurrentLanguageCode();
-                        final speechService = SpeechService(langCode);
+                        final speechService = SpeechService(languageNotifier);
                         await speechService.stop();
                       },
                       onStateChanged: (active) {

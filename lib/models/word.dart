@@ -3,7 +3,7 @@ class Word {
   final String word;
   final String transcription;
   final String russian;
-  final int wordTypeId;
+  final int languageId;
   final String? image;
 
   Word({
@@ -11,7 +11,7 @@ class Word {
     required this.word,
     required this.transcription,
     required this.russian,
-    required this.wordTypeId,
+    required this.languageId,
     this.image,
   });
 
@@ -21,9 +21,9 @@ class Word {
       word: json['word'],
       transcription: json['transcription'],
       russian: json['russian'],
-      wordTypeId: json['word_type_id'] is int
-          ? json['word_type_id']
-          : int.parse(json['word_type_id'].toString()),
+      languageId: json['language_id'] is int
+          ? json['language_id']
+          : int.parse(json['language_id'].toString()),
       image: json['image'],
     );
   }

@@ -47,5 +47,7 @@
   "you_pronounced": "You pronounced:",
   "listening": "Listening...",
   "study_materials": "Study materials",
-  "options": "Options"
+  "options": "Options",
+  "select_course": "Selected course",
+  "no_materials": "No materials for this course"
 }

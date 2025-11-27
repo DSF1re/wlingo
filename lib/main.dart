@@ -8,9 +8,6 @@ import 'l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/service_locator.dart';
 
-final localeNotifier = ValueNotifier(const Locale('ru'));
-final themeModeNotifier = ValueNotifier(ThemeMode.light);
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

@@ -1,19 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class SpeechService {
-  final String langCode; // "ru" или "en"
+  final ValueNotifier<String> languageNotifier;
   final SpeechToText _speech = SpeechToText();
   bool _isInitialized = false;
 
-  SpeechService(this.langCode);
+  SpeechService(this.languageNotifier);
 
   String getLocaleId() {
-    switch (langCode) {
-      case "ru":
-        return "ru_RU";
-      case "en":
+    switch (languageNotifier.value) {
+      case 'ru':
+        return 'ru_RU'; // Russian
+      case 'en':
+        return 'en_US'; // English (US)
+      case 'de':
+        return 'de_DE'; // German (Germany)
+      case 'fr':
+        return 'fr_FR'; // French (France)
+      case 'es':
+        return 'es_ES'; // Spanish (Spain)
       default:
-        return "en_US";
+        return 'en_US';
     }
   }
 

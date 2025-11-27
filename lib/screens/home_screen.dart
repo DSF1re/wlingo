@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wlingo/core/repositories/options_repository.dart';
+import 'package:wlingo/core/service_locator.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/screens/books_screen.dart';
 import 'package:wlingo/screens/pronunciation_game_screen.dart';
+import 'package:wlingo/widgets/language_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: _optionsRepository.toggleLanguage,
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.translate),
           ),
           IconButton(
             onPressed: _optionsRepository.toggleTheme,
@@ -53,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
             tileColor: theme.colorScheme.primary.withValues(alpha: 0.1),
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => PronunciationGameScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const PronunciationGameScreen(),
+                ),
               );
             },
           ),
@@ -69,7 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             tileColor: theme.colorScheme.primary.withValues(alpha: 0.1),
             onTap: () {
-              //TODO
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => const BooksScreen()));
+            },
+          ),
+          const SizedBox(height: 12),
+          ValueListenableBuilder<String>(
+            valueListenable:
+                languageNotifier, // глобальный ValueNotifier<String>
+            builder: (context, value, _) {
+              return LanguagePickerListTile(
+                currentLanguageCode: value,
+                onLanguageChanged: (newLang) {
+                  languageNotifier.value = newLang;
+                },
+              );
             },
           ),
           const SizedBox(height: 12),
@@ -84,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             tileColor: theme.colorScheme.primary.withValues(alpha: 0.1),
             onTap: () {
-              //TODO
+              // TODO
             },
           ),
         ],

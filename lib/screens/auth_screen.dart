@@ -113,7 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
         actions: [
           IconButton(
             onPressed: _optionsRepository.toggleLanguage,
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.translate),
           ),
           IconButton(
             onPressed: _optionsRepository.toggleTheme,

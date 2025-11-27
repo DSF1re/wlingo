@@ -340,6 +340,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Options'**
   String get options;
+
+  /// No description provided for @select_course.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected course'**
+  String get select_course;
+
+  /// No description provided for @no_materials.
+  ///
+  /// In en, this message translates to:
+  /// **'No materials for this course'**
+  String get no_materials;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -130,4 +130,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get options => 'Настройки';
+
+  @override
+  String get select_course => 'Выбранный курс';
+
+  @override
+  String get no_materials => 'Нет материалов для данного курса';
 }

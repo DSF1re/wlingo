@@ -130,4 +130,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get options => 'Options';
+
+  @override
+  String get select_course => 'Selected course';
+
+  @override
+  String get no_materials => 'No materials for this course';
 }
