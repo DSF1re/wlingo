@@ -352,6 +352,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No materials for this course'**
   String get no_materials;
+
+  /// No description provided for @zoom_reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset zoom'**
+  String get zoom_reset;
+
+  /// No description provided for @page.
+  ///
+  /// In en, this message translates to:
+  /// **'Page'**
+  String get page;
+
+  /// No description provided for @of_total.
+  ///
+  /// In en, this message translates to:
+  /// **'of'**
+  String get of_total;
+
+  /// No description provided for @ask_somethink.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask something...'**
+  String get ask_somethink;
+
+  /// No description provided for @ai_chat.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get ai_chat;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

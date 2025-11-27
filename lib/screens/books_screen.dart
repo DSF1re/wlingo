@@ -39,8 +39,11 @@ class BooksScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) =>
-                          PdfViewerScreen(url: book.url, title: book.title),
+                      builder: (_) => PdfViewerScreen(
+                        url: book.url,
+                        title: book.title,
+                        bookId: book.id.toString(),
+                      ),
                     ),
                   );
                 },

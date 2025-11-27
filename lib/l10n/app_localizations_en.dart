@@ -136,4 +136,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get no_materials => 'No materials for this course';
+
+  @override
+  String get zoom_reset => 'Reset zoom';
+
+  @override
+  String get page => 'Page';
+
+  @override
+  String get of_total => 'of';
+
+  @override
+  String get ask_somethink => 'Ask something...';
+
+  @override
+  String get ai_chat => 'AI Chat';
 }

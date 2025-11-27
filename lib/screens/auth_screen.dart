@@ -238,10 +238,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _login,
-                            child: Text(
-                              AppLocalizations.of(context)!.login,
-                              style: theme.textTheme.bodyMedium,
-                            ),
+                            child: Text(AppLocalizations.of(context)!.login),
                           ),
                         ),
                         const SizedBox(height: 6),

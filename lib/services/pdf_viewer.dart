@@ -1,89 +1,144 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:get_it/get_it.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/services/preferences_service.dart';
 
 class PdfViewerScreen extends StatefulWidget {
-  const PdfViewerScreen({super.key, required this.url, required this.title});
+  const PdfViewerScreen({
+    super.key,
+    required this.url,
+    required this.title,
+    required this.bookId,
+  });
 
-  final String url; // прямой URL на файл в Supabase Storage
+  final String url;
   final String title;
+  final String bookId;
 
   @override
   State<PdfViewerScreen> createState() => _PdfViewerScreenState();
 }
 
 class _PdfViewerScreenState extends State<PdfViewerScreen> {
-  String? _localPath;
-  bool _isLoading = true;
-  int _pages = 0;
-  int _currentPage = 0;
+  final PdfViewerController _controller = PdfViewerController();
+  int _totalPages = 0;
+  bool _isLoaded = false;
+  bool _initialPageApplied = false; // <- важно
+  late final PreferencesService prefs;
 
   @override
   void initState() {
     super.initState();
-    _downloadPdf();
-  }
-
-  Future<void> _downloadPdf() async {
-    try {
-      final res = await http.get(Uri.parse(widget.url));
-      final bytes = res.bodyBytes;
-
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/temp_book.pdf');
-      await file.writeAsBytes(bytes, flush: true);
-
-      if (!mounted) return;
-      setState(() {
-        _localPath = file.path;
-        _isLoading = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Не удалось загрузить PDF')));
-    }
+    prefs = GetIt.I<PreferencesService>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: _isLoading || _localPath == null
-          ? const Center(child: CircularProgressIndicator())
-          : PDFView(
-              filePath: _localPath!,
-              enableSwipe: true,
-              swipeHorizontal: true,
-              autoSpacing: true,
-              pageFling: true,
-              onRender: (pages) {
-                setState(() {
-                  _pages = pages ?? 0;
-                });
-              },
-              onViewCreated: (controller) {},
-              onPageChanged: (page, total) {
-                setState(() {
-                  _currentPage = page ?? 0;
-                });
-              },
-            ),
-      bottomNavigationBar: _pages > 0
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Страница ${_currentPage + 1} из $_pages',
-                textAlign: TextAlign.center,
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.zoom_out),
+            onPressed: () {
+              _controller.zoomLevel = (_controller.zoomLevel - 0.25).clamp(
+                1.0,
+                4.0,
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.zoom_in),
+            onPressed: () {
+              _controller.zoomLevel = (_controller.zoomLevel + 0.25).clamp(
+                1.0,
+                4.0,
+              );
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 585),
+                child: SfPdfViewer.network(
+                  widget.url,
+                  controller: _controller,
+                  canShowScrollHead: true,
+                  canShowScrollStatus: true,
+                  enableDoubleTapZooming: true,
+                  onDocumentLoaded: (details) async {
+                    setState(() {
+                      _totalPages = details.document.pages.count;
+                      _isLoaded = true;
+                    });
+
+                    if (_initialPageApplied) return;
+
+                    final savedPage = prefs.getBookPage(widget.bookId);
+                    if (savedPage > 1 && savedPage <= _totalPages) {
+                      // даём вьюверу дорендериться кадр и только потом прыгаем
+                      await Future.delayed(const Duration(milliseconds: 50));
+                      _controller.jumpToPage(savedPage);
+                    }
+
+                    _initialPageApplied = true;
+                  },
+                  onPageChanged: (details) {
+                    // сохраняем ТОЛЬКО номер, без setState
+                    prefs.saveBookPage(widget.bookId, details.newPageNumber);
+                    setState(() {});
+                  },
+                ),
               ),
-            )
-          : null,
+            ),
+          ),
+          if (_isLoaded)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              color: Colors.black.withValues(alpha: 0.05),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left),
+                    onPressed: () {
+                      if (_controller.pageNumber > 1) {
+                        _controller.previousPage();
+                      }
+                    },
+                  ),
+                  Text(
+                    '${AppLocalizations.of(context)!.page} '
+                    '${_controller.pageNumber} '
+                    '${AppLocalizations.of(context)!.of_total} '
+                    '$_totalPages',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right),
+                    onPressed: () {
+                      if (_controller.pageNumber < _totalPages) {
+                        _controller.nextPage();
+                      }
+                    },
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.fit_screen),
+                    tooltip: AppLocalizations.of(context)!.zoom_reset,
+                    onPressed: () {
+                      _controller.zoomLevel = 1.0;
+                    },
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

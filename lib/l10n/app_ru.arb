@@ -49,5 +49,10 @@
   "study_materials": "Учебные материалы",
   "options": "Настройки",
   "select_course": "Выбранный курс",
-  "no_materials": "Нет материалов для данного курса"
+  "no_materials": "Нет материалов для данного курса",
+  "zoom_reset": "Сбросить зум",
+  "page": "Страница",
+  "of_total": "из",
+  "ask_somethink": "Спросите что нибудь...",
+  "ai_chat": "Папа DeepSeek"
 }

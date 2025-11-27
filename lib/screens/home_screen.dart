@@ -4,6 +4,7 @@ import 'package:wlingo/core/repositories/options_repository.dart';
 import 'package:wlingo/core/service_locator.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/screens/books_screen.dart';
+import 'package:wlingo/screens/ollama_chat_screen.dart';
 import 'package:wlingo/screens/pronunciation_game_screen.dart';
 import 'package:wlingo/widgets/language_picker.dart';
 
@@ -81,8 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 12),
           ValueListenableBuilder<String>(
-            valueListenable:
-                languageNotifier, // глобальный ValueNotifier<String>
+            valueListenable: languageNotifier,
             builder: (context, value, _) {
               return LanguagePickerListTile(
                 currentLanguageCode: value,
@@ -94,9 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 12),
           ListTile(
-            leading: const Icon(Icons.settings, size: 32),
+            leading: const Icon(Icons.smart_toy, size: 32),
             title: Text(
-              AppLocalizations.of(context)!.options,
+              AppLocalizations.of(context)!.ai_chat,
               style: theme.textTheme.titleLarge,
             ),
             shape: RoundedRectangleBorder(
@@ -104,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             tileColor: theme.colorScheme.primary.withValues(alpha: 0.1),
             onTap: () {
-              // TODO
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const OllamaChatScreen()),
+              );
             },
           ),
         ],

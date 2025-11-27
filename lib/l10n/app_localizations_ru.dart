@@ -136,4 +136,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get no_materials => 'Нет материалов для данного курса';
+
+  @override
+  String get zoom_reset => 'Сбросить зум';
+
+  @override
+  String get page => 'Страница';
+
+  @override
+  String get of_total => 'из';
+
+  @override
+  String get ask_somethink => 'Спросите что нибудь...';
+
+  @override
+  String get ai_chat => 'Папа DeepSeek';
 }

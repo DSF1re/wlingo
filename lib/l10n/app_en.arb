@@ -49,5 +49,10 @@
   "study_materials": "Study materials",
   "options": "Options",
   "select_course": "Selected course",
-  "no_materials": "No materials for this course"
+  "no_materials": "No materials for this course",
+  "zoom_reset": "Reset zoom",
+  "page": "Page",
+  "of_total": "of",
+  "ask_somethink": "Ask something...",
+  "ai_chat": "AI Chat"
 }

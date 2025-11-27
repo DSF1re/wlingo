@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 TextTheme appTextTheme(Brightness brightness) {
   final base = TextTheme(
     titleLarge: TextStyle(
-      fontSize: 26,
+      fontSize: 16,
       fontFamily: 'Fredoka',
       fontWeight: FontWeight.w500,
       color: brightness == Brightness.light ? Colors.black87 : Colors.white70,
@@ -12,19 +12,19 @@ TextTheme appTextTheme(Brightness brightness) {
       fontFamily: 'Fredoka',
       fontSize: 13,
       fontWeight: FontWeight.w400,
-      color: brightness == Brightness.light ? Colors.black : Colors.white60,
+      color: brightness == Brightness.light ? Colors.black87 : Colors.white60,
     ),
     displaySmall: TextStyle(
       fontFamily: 'Fredoka',
       fontSize: 13,
       fontWeight: FontWeight.w400,
-      color: brightness == Brightness.light ? Colors.black : Colors.white60,
+      color: brightness == Brightness.light ? Colors.black87 : Colors.white60,
     ),
     bodyMedium: TextStyle(
       fontFamily: 'Fredoka',
       fontSize: 20,
       fontWeight: FontWeight.w500,
-      color: brightness == Brightness.light ? Colors.white : Colors.white,
+      color: brightness == Brightness.light ? Colors.black87 : Colors.white,
     ),
     labelSmall: TextStyle(
       fontSize: 15,

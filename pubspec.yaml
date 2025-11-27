@@ -15,8 +15,8 @@ dependencies:
   flutter_localization: ^0.3.3
   flutter_localizations:
     sdk: flutter
+  flutter_markdown: ^0.7.7+1
   flutter_native_splash: ^2.4.7
-  flutter_pdfview: ^1.4.3
   get_it: ^9.1.0
   http: ^1.6.0
   path_provider: ^2.1.5
@@ -24,6 +24,7 @@ dependencies:
   shared_preferences: ^2.5.3
   speech_to_text: ^7.3.0
   supabase_flutter: ^2.10.3
+  syncfusion_flutter_pdfviewer: ^31.2.15
 
 dev_dependencies:
   flutter_test:

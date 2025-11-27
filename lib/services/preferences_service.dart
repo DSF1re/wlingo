@@ -16,4 +16,14 @@ class PreferencesService {
 
   Future<void> saveOnboardingCompleted(bool value) =>
       _prefs.setBool('onboarding_completed', value);
+
+  String _bookPageKey(String bookId) => 'book_${bookId}_page';
+
+  Future<void> saveBookPage(String bookId, int page) async {
+    await _prefs.setInt(_bookPageKey(bookId), page);
+  }
+
+  int getBookPage(String bookId) {
+    return _prefs.getInt(_bookPageKey(bookId)) ?? 1;
+  }
 }

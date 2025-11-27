@@ -121,10 +121,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                               _skipOnboarding();
                             }
                           },
-                          child: Text(
-                            _onboardingData[_currentPage].buttonText,
-                            style: theme.textTheme.bodyMedium,
-                          ),
+                          child: Text(_onboardingData[_currentPage].buttonText),
                         ),
                       ),
                       const SizedBox(height: 8),
