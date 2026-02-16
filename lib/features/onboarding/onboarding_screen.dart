@@ -21,13 +21,15 @@ class OnboardingScreen extends HookConsumerWidget {
     final onboardingData = OnboardingData.getOnboardingData(loc);
     final currentPage = ref.watch(pageProvider);
     final pageController = usePageController(initialPage: currentPage);
+    final isDark = Theme.of(context).brightness == Brightness.dark
+        ? true
+        : false;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        actions: [AppbarActions(isDark: false)],
+        actions: [AppbarActions(isDark: isDark)],
       ),
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Center(
@@ -63,6 +65,7 @@ class OnboardingScreen extends HookConsumerWidget {
                       child: Text(
                         loc.skipOnboarding,
                         style: ThemeTextStyles.custom(
+                          isDark: isDark,
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
                         ),

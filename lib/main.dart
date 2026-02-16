@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wlingo/core/public_vars.dart';
 import 'package:wlingo/core/router.dart';
 import 'package:wlingo/features/onboarding/domain/providers/locale/locale_provider.dart';
+import 'package:wlingo/features/onboarding/domain/providers/theme/theme_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/theme/colors.dart';
 
 late final SharedPreferences shared;
 void main() async {
@@ -24,11 +24,14 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
+    final thememode = ref.watch(themeProvider);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorSchemeSeed: ThemeColors.purple),
+        darkTheme: ThemeData.dark(),
+        theme: ThemeData.light(),
+        themeMode: thememode,
         scaffoldMessengerKey: scaffoldMessengerKey,
         routerConfig: ref.read(routerProvider),
         locale: locale,
