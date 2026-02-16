@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/core/routes.dart';
 import 'package:wlingo/features/onboarding/domain/providers/page/page_provider.dart';
 import 'package:wlingo/main.dart';
 
@@ -29,6 +30,6 @@ void onNextPressed(
 void skipOnboarding(BuildContext context, WidgetRef ref) {
   shared.setBool('onboarding_completed', true);
   if (context.mounted) {
-    context.go('/auth');
+    context.go(Routes.login);
   }
 }

@@ -12,7 +12,6 @@ class SplashScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(splashProvider);
-
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(

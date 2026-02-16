@@ -9,16 +9,21 @@ class Button extends StatelessWidget {
   final double height;
   final FutureOr<void> Function()? onClicked;
   final Color color;
+  final bool isLoading;
   const Button({
     super.key,
     required this.text,
     this.onClicked,
     this.height = 40,
     this.color = ThemeColors.blue,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // final isDark = Theme.of(context).brightness == Brightness.dark
+    //     ? true
+    //     : false;
     return SizedBox(
       height: height,
       width: double.infinity,
@@ -30,9 +35,18 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: Text(
-          text,
-          style: ThemeTextStyles.title3SemiBold(color: Colors.white),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: !isLoading
+              ? Text(
+                  text,
+                  style: ThemeTextStyles.custom(
+                    isDark: true,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              : CircularProgressIndicator(),
         ),
       ),
     );

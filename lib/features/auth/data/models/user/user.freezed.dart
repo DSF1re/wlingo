@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$User {
 
- String get id; String get firstName; String get lastName; String get middleName; int get nativeLang; bool get isAdmin;
+ String get id;@JsonKey(name: 'first_name') String get firstName;@JsonKey(name: 'last_name') String get lastName;@JsonKey(name: 'mid_name') String get middleName;@JsonKey(name: 'mother_language') int get nativeLang;@JsonKey(name: 'isAdmin') bool get isAdmin;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- String id, String firstName, String lastName, String middleName, int nativeLang, bool isAdmin
+ String id,@JsonKey(name: 'first_name') String firstName,@JsonKey(name: 'last_name') String lastName,@JsonKey(name: 'mid_name') String middleName,@JsonKey(name: 'mother_language') int nativeLang,@JsonKey(name: 'isAdmin') bool isAdmin
 });
 
 
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String firstName,  String lastName,  String middleName,  int nativeLang,  bool isAdmin)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'first_name')  String firstName, @JsonKey(name: 'last_name')  String lastName, @JsonKey(name: 'mid_name')  String middleName, @JsonKey(name: 'mother_language')  int nativeLang, @JsonKey(name: 'isAdmin')  bool isAdmin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
 return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.nativeLang,_that.isAdmin);case _:
@@ -176,7 +176,7 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String firstName,  String lastName,  String middleName,  int nativeLang,  bool isAdmin)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'first_name')  String firstName, @JsonKey(name: 'last_name')  String lastName, @JsonKey(name: 'mid_name')  String middleName, @JsonKey(name: 'mother_language')  int nativeLang, @JsonKey(name: 'isAdmin')  bool isAdmin)  $default,) {final _that = this;
 switch (_that) {
 case _User():
 return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.nativeLang,_that.isAdmin);}
@@ -193,7 +193,7 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String firstName,  String lastName,  String middleName,  int nativeLang,  bool isAdmin)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'first_name')  String firstName, @JsonKey(name: 'last_name')  String lastName, @JsonKey(name: 'mid_name')  String middleName, @JsonKey(name: 'mother_language')  int nativeLang, @JsonKey(name: 'isAdmin')  bool isAdmin)?  $default,) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
 return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.nativeLang,_that.isAdmin);case _:
@@ -208,15 +208,15 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.middleName,_that.n
 @JsonSerializable()
 
 class _User implements User {
-  const _User({required this.id, required this.firstName, required this.lastName, required this.middleName, required this.nativeLang, required this.isAdmin});
+  const _User({required this.id, @JsonKey(name: 'first_name') required this.firstName, @JsonKey(name: 'last_name') required this.lastName, @JsonKey(name: 'mid_name') required this.middleName, @JsonKey(name: 'mother_language') required this.nativeLang, @JsonKey(name: 'isAdmin') required this.isAdmin});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  String id;
-@override final  String firstName;
-@override final  String lastName;
-@override final  String middleName;
-@override final  int nativeLang;
-@override final  bool isAdmin;
+@override@JsonKey(name: 'first_name') final  String firstName;
+@override@JsonKey(name: 'last_name') final  String lastName;
+@override@JsonKey(name: 'mid_name') final  String middleName;
+@override@JsonKey(name: 'mother_language') final  int nativeLang;
+@override@JsonKey(name: 'isAdmin') final  bool isAdmin;
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
@@ -251,7 +251,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String firstName, String lastName, String middleName, int nativeLang, bool isAdmin
+ String id,@JsonKey(name: 'first_name') String firstName,@JsonKey(name: 'last_name') String lastName,@JsonKey(name: 'mid_name') String middleName,@JsonKey(name: 'mother_language') int nativeLang,@JsonKey(name: 'isAdmin') bool isAdmin
 });
 
 
