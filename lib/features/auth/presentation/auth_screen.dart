@@ -38,7 +38,11 @@ class AuthScreen extends HookConsumerWidget {
         }
       } catch (e) {
         scaffoldMessengerKey.currentState?.showSnackBar(
-          SnackBar(content: Text('Ошибка: $e')),
+          SnackBar(
+            content: Text(
+              'Пользователь не найден или проверьте подключение к сети',
+            ),
+          ),
         );
       } finally {
         isLoading.value = false;

@@ -26,6 +26,9 @@ dependencies:
   freezed_annotation: ^3.1.0
   build_runner: ^2.11.1
   json_serializable: ^6.12.0
+  talker: ^5.1.13
+  talker_riverpod_logger: ^5.1.13
+  talker_flutter: ^5.1.13
 
 dev_dependencies:
   flutter_test:

@@ -14,7 +14,7 @@ class Button extends StatelessWidget {
     super.key,
     required this.text,
     this.onClicked,
-    this.height = 40,
+    this.height = 50,
     this.color = ThemeColors.blue,
     this.isLoading = false,
   });
@@ -46,7 +46,7 @@ class Button extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 )
-              : CircularProgressIndicator(),
+              : CircularProgressIndicator(color: Colors.white),
         ),
       ),
     );

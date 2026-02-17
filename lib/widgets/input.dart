@@ -19,7 +19,7 @@ class Input extends ConsumerWidget {
     this.hint,
     this.borderRadius = 10,
     this.controller,
-    this.height = 40,
+    this.height = 50,
     this.width = double.infinity,
     this.isObscured = false,
   });

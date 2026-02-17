@@ -11,7 +11,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w600,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 24,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -23,7 +23,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w300,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 17,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -35,7 +35,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w700,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 24,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -47,7 +47,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w800,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 20,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -59,7 +59,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w800,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 24,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -71,7 +71,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w800,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 20,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -83,7 +83,7 @@ abstract class ThemeTextStyles {
     FontWeight? fontWeight = FontWeight.w400,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: 15,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),
@@ -96,7 +96,7 @@ abstract class ThemeTextStyles {
     double? fontSize = 16,
     bool? isDark,
   }) {
-    return GoogleFonts.finlandica(
+    return GoogleFonts.manrope(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color ?? _getDefaultColor(isDark: isDark),

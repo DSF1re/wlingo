@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:talker_riverpod_logger/talker_riverpod_logger_observer.dart';
 import 'package:wlingo/core/public_vars.dart';
 import 'package:wlingo/core/router.dart';
 import 'package:wlingo/core/supa_init.dart';
@@ -16,7 +18,13 @@ void main() async {
   shared = await SharedPreferences.getInstance();
   supabaseInitialize();
   Intl.defaultLocale = 'ru_RU';
-  runApp(const ProviderScope(child: MainApp()));
+  final talker = TalkerFlutter.init();
+  runApp(
+    ProviderScope(
+      observers: [TalkerRiverpodObserver(talker: talker)],
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends ConsumerWidget {

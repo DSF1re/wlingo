@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
+import 'package:wlingo/core/public_vars.dart';
 import 'package:wlingo/features/auth/data/auth_repository.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart';
 
@@ -38,6 +40,9 @@ class SupabaseAuthRepository implements AuthRepository {
 
     final supaUser = authResponse.user;
     if (supaUser == null) {
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Registration failed')),
+      );
       throw Exception('Registration failed');
     }
 
@@ -66,6 +71,9 @@ class SupabaseAuthRepository implements AuthRepository {
 
     final supaUser = authResponse.user;
     if (supaUser == null) {
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Login failed')),
+      );
       throw Exception('Login failed');
     }
 
