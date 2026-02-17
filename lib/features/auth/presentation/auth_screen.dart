@@ -52,45 +52,48 @@ class AuthScreen extends HookConsumerWidget {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 450),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 32,
-            children: [
-              Image.asset(AppImages.icon, fit: BoxFit.contain, width: 200),
-              Text(
-                loc.promo_auth,
-                style: ThemeTextStyles.custom(fontSize: 24, isDark: isDark),
-              ),
-              Column(
-                spacing: 16,
-                children: [
-                  Input(controller: email, labelText: loc.email),
-                  Input(
-                    controller: password,
-                    isObscured: true,
-                    labelText: loc.password,
-                  ),
-                ],
-              ),
-              Column(
-                spacing: 12,
-                children: [
-                  Button(
-                    isLoading: isLoading.value,
-                    text: loc.login,
-                    onClicked: login,
-                  ),
-                  TextButton(
-                    onPressed: () => context.go(Routes.register),
-                    child: Text(
-                      loc.sign_up,
-                      style: ThemeTextStyles.regular(isDark: isDark),
+          constraints: BoxConstraints(maxWidth: 500),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 32,
+              children: [
+                Image.asset(AppImages.icon, fit: BoxFit.contain, width: 200),
+                Text(
+                  loc.promo_auth,
+                  style: ThemeTextStyles.custom(fontSize: 24, isDark: isDark),
+                ),
+                Column(
+                  spacing: 16,
+                  children: [
+                    Input(controller: email, labelText: loc.email),
+                    Input(
+                      controller: password,
+                      isObscured: true,
+                      labelText: loc.password,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                Column(
+                  spacing: 12,
+                  children: [
+                    Button(
+                      isLoading: isLoading.value,
+                      text: loc.login,
+                      onClicked: login,
+                    ),
+                    TextButton(
+                      onPressed: () => context.go(Routes.register),
+                      child: Text(
+                        loc.sign_up,
+                        style: ThemeTextStyles.regular(isDark: isDark),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
