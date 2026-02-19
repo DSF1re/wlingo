@@ -44,16 +44,21 @@ class RegisterScreen extends HookConsumerWidget {
     final isLoading = ref.watch(registerControllerProvider).isLoading;
 
     return Scaffold(
-      appBar: AppBar(actions: [AppbarActions(isDark: isDark)]),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => context.go(Routes.login),
+          icon: Icon(Icons.arrow_back),
+        ),
+        actions: [AppbarActions(isDark: isDark)],
+      ),
       body: Center(
-        // Добавляем ScrollView, так как полей много и они могут не влезть с клавиатурой
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 500),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                spacing: 24, // Увеличим отступ между заголовком и формой
+                spacing: 24,
                 children: [
                   Text(
                     loc.sign_up,

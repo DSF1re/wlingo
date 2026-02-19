@@ -13,10 +13,7 @@ class AuthController extends _$AuthController {
 
     state = await AsyncValue.guard(() async {
       final result = await authRepo.signIn(email: email, password: password);
-      return result.fold(
-        (failure) => throw failure, // Пробрасываем ошибку в AsyncValue
-        (user) => null,
-      );
+      return result.fold((failure) => throw failure, (user) => null);
     });
   }
 }

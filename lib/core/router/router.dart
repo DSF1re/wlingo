@@ -5,10 +5,13 @@ import 'package:wlingo/features/auth/presentation/auth_screen.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:wlingo/features/register/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
+import 'package:wlingo/main.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: Routes.splash,
+    initialLocation: shared.getBool('onboarding_completed') == true
+        ? Routes.login
+        : Routes.splash,
     routes: [
       GoRoute(
         path: Routes.splash,

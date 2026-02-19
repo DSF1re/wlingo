@@ -15,7 +15,7 @@ class SupabaseAuthRepository implements AuthRepository {
       if (supaUser == null) return Left(AuthFailure.nullUser());
 
       final response = await _client
-          .from('users')
+          .from('profiles')
           .select()
           .eq('id', supaUser.id)
           .maybeSingle();

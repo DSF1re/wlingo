@@ -23,13 +23,11 @@ void onNextPressed(
       curve: Curves.easeInOut,
     );
   } else {
-    skipOnboarding(context, ref);
+    skipOnboarding(context);
   }
 }
 
-void skipOnboarding(BuildContext context, WidgetRef ref) {
+void skipOnboarding(BuildContext context) {
   shared.setBool('onboarding_completed', true);
-  if (context.mounted) {
-    context.go(Routes.login);
-  }
+  context.go(Routes.login);
 }
