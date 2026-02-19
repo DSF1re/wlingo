@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wlingo/core/routes.dart';
+import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:wlingo/features/register/presentation/reg_screen.dart';

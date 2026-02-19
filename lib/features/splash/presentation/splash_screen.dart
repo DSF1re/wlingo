@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wlingo/features/splash/domain/splash_provider.dart';
+import 'package:wlingo/features/splash/domain/providers/splash_provider.dart';
 import 'package:wlingo/theme/colors.dart';
 import 'package:wlingo/theme/images.dart';
 import 'package:wlingo/theme/text_styles.dart';

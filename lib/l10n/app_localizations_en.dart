@@ -175,4 +175,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error => 'Error';
+
+  @override
+  String get invalid_credentials => 'Invalid credentials';
+
+  @override
+  String get email_already_in_use => 'Email already in use';
+
+  @override
+  String get network_error => 'Network error';
 }

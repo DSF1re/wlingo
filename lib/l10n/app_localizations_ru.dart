@@ -175,4 +175,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get error => 'Ошибка';
+
+  @override
+  String get invalid_credentials => 'Проверьте данные';
+
+  @override
+  String get email_already_in_use => 'Почта занята';
+
+  @override
+  String get network_error => 'Ошибка подключения';
 }
