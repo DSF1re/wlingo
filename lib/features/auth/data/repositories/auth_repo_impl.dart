@@ -38,6 +38,12 @@ class SupabaseAuthRepository implements AuthRepository {
     required int nativeLang,
   }) async {
     try {
+      if (email.isEmpty ||
+          password.isEmpty ||
+          firstName.isEmpty ||
+          lastName.isEmpty) {
+        return Left(AuthFailure.fillForm());
+      }
       final authResponse = await _client.auth.signUp(
         email: email,
         password: password,
@@ -79,6 +85,9 @@ class SupabaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
+      if (email.isEmpty && password.isEmpty) {
+        return Left(AuthFailure.fillAuth());
+      }
       final authResponse = await _client.auth.signInWithPassword(
         email: email,
         password: password,
@@ -86,7 +95,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
       final supaUser = authResponse.user;
       if (supaUser == null) {
-        return Left(AuthFailure.invalidCredentials());
+        return Left(AuthFailure.nullUser());
       }
 
       final response = await _client
@@ -98,7 +107,7 @@ class SupabaseAuthRepository implements AuthRepository {
       return Right(User.fromJson(response));
     } on AuthException catch (e) {
       return switch (e.message) {
-        'Invalid login credentials' => Left(AuthFailure.invalidCredentials()),
+        'Invalid login credentials' => Left(AuthFailure.nullUser()),
         'Email not confirmed' => Left(AuthFailure.emailNotConfirmed()),
         _ => Left(AuthFailure.unexpected(e.message)),
       };

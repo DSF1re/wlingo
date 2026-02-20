@@ -6,6 +6,7 @@ import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/domain/providers/auth_provider.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
+import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/text_styles.dart';
@@ -35,7 +36,10 @@ class HomeScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(loc.home, style: ThemeTextStyles.regular(isDark: isDark)),
+        title: Text(
+          loc.home,
+          style: ThemeTextStyles.title3SemiBold(isDark: isDark),
+        ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () async {
@@ -47,9 +51,21 @@ class HomeScreen extends HookConsumerWidget {
         actions: [AppbarActions(isDark: isDark)],
       ),
       body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: ListView(children: [langList]),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: ListView(
+              children: [
+                langList,
+                MenuTile(
+                  icon: Icons.book,
+                  title: loc.study_materials,
+                  onTap: () => context.go(Routes.books),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

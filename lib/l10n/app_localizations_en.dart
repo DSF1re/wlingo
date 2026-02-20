@@ -66,10 +66,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalid_email => 'Invalid email format';
 
   @override
-  String get email_not_confirmed => 'Email isn\'t confirmed';
+  String get email_not_confirmed => 'Email not confirmed';
 
   @override
-  String get user_not_found => 'User isn\'t found';
+  String get user_not_found => 'User not found';
 
   @override
   String get sign_up => 'Sign up';
@@ -190,4 +190,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get materials => 'Materials';
+
+  @override
+  String get fill_form => 'Fill all required fields';
+
+  @override
+  String get fill_auth => 'Fill email and password fields';
+
+  @override
+  String get retry => 'Retry';
 }

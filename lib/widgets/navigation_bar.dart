@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const BottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(items: navBarItems(context));
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: onTap,
+      type: BottomNavigationBarType.fixed,
+      items: navBarItems(context),
+    );
   }
 }
 

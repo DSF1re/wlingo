@@ -13,12 +13,13 @@ import 'package:wlingo/features/onboarding/domain/providers/theme/theme_provider
 import 'package:wlingo/l10n/app_localizations.dart';
 
 late final SharedPreferences shared;
+final talker = TalkerFlutter.init();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   shared = await SharedPreferences.getInstance();
   supabaseInitialize();
   Intl.defaultLocale = 'ru_RU';
-  final talker = TalkerFlutter.init();
   runApp(
     ProviderScope(
       observers: [TalkerRiverpodObserver(talker: talker)],

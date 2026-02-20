@@ -190,4 +190,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get materials => 'Материалы';
+
+  @override
+  String get fill_form => 'Заполните все обязательные поля';
+
+  @override
+  String get fill_auth => 'Заполните электронную почту и пароль';
+
+  @override
+  String get retry => 'Повторить';
 }

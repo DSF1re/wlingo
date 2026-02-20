@@ -212,13 +212,13 @@ abstract class AppLocalizations {
   /// No description provided for @email_not_confirmed.
   ///
   /// In en, this message translates to:
-  /// **'Email isn\'t confirmed'**
+  /// **'Email not confirmed'**
   String get email_not_confirmed;
 
   /// No description provided for @user_not_found.
   ///
   /// In en, this message translates to:
-  /// **'User isn\'t found'**
+  /// **'User not found'**
   String get user_not_found;
 
   /// No description provided for @sign_up.
@@ -460,6 +460,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Materials'**
   String get materials;
+
+  /// No description provided for @fill_form.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill all required fields'**
+  String get fill_form;
+
+  /// No description provided for @fill_auth.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill email and password fields'**
+  String get fill_auth;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

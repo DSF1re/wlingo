@@ -32,6 +32,8 @@ dependencies:
   either_dart: ^1.0.0
   riverpod_annotation: ^4.0.2
   json_annotation: ^4.10.0
+  syncfusion_flutter_pdfviewer: ^32.2.5
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,10 @@ sealed class AuthFailure {
   factory AuthFailure.emailNotConfirmed() => EmailNotConfirmedFailure();
   factory AuthFailure.emailAlreadyInUse() => EmailAlredyInUse();
   factory AuthFailure.invalidEmail() => InvalidEmail();
+  factory AuthFailure.fillForm() => FillForm();
+  factory AuthFailure.fillAuth() => FillAuth();
+  factory AuthFailure.fillEmail() => FillEmail();
+  factory AuthFailure.fillPassword() => FillPassword();
   const AuthFailure();
 }
 
@@ -20,6 +24,10 @@ extension AuthFailureStrings on AuthFailure {
       EmailAlredyInUse() => loc.email_already_in_use,
       InvalidEmail() => loc.invalid_email,
       NetworkAuthFailure() => loc.network_error,
+      FillForm() => loc.fill_form,
+      FillAuth() => loc.fill_auth,
+      FillEmail() => loc.fill_email,
+      FillPassword() => loc.fill_password,
       _ => loc.error,
     };
   }
@@ -41,3 +49,11 @@ class EmailNotConfirmedFailure extends AuthFailure {}
 class EmailAlredyInUse extends AuthFailure {}
 
 class InvalidEmail extends AuthFailure {}
+
+class FillForm extends AuthFailure {}
+
+class FillEmail extends AuthFailure {}
+
+class FillPassword extends AuthFailure {}
+
+class FillAuth extends AuthFailure {}
