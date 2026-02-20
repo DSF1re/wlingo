@@ -61,7 +61,7 @@ class OnboardingScreen extends HookConsumerWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => skipOnboarding,
+                      onPressed: () => skipOnboarding(context),
                       child: Text(
                         loc.skipOnboarding,
                         style: ThemeTextStyles.custom(

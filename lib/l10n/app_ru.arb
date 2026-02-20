@@ -57,5 +57,7 @@
   "error": "Ошибка",
   "invalid_credentials": "Проверьте данные",
   "email_already_in_use": "Почта занята",
-  "network_error": "Ошибка подключения"
+  "network_error": "Ошибка подключения",
+  "profile": "Профиль",
+  "materials": "Материалы"
 }

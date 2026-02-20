@@ -2,10 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
+import 'package:wlingo/features/home/presentation/home_screen.dart';
+import 'package:wlingo/features/main/presentation/main_layout.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:wlingo/features/register/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/main.dart';
+import 'package:wlingo/widgets/navigation_bar.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -28,6 +31,16 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.register,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) =>
+            MainLayout(bnb: BottomNavBar(), child: child),
+        routes: [
+          GoRoute(
+            path: Routes.home,
+            builder: (context, state) => const HomeScreen(),
+          ),
+        ],
       ),
     ],
   );

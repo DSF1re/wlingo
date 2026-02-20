@@ -57,5 +57,7 @@
   "error": "Error",
   "invalid_credentials": "Invalid credentials",
   "email_already_in_use": "Email already in use",
-  "network_error": "Network error"
+  "network_error": "Network error",
+  "profile": "Profile",
+  "materials": "Materials"
 }

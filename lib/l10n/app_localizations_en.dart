@@ -184,4 +184,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get network_error => 'Network error';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get materials => 'Materials';
 }

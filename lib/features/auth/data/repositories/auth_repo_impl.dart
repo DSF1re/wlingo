@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/features/auth/data/repositories/auth_repository.dart';
+import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
@@ -56,7 +56,7 @@ class SupabaseAuthRepository implements AuthRepository {
             'last_name': lastName,
             'mid_name': middleName,
             'mother_language': nativeLang,
-            'is_admin': false,
+            'isAdmin': false,
           })
           .select()
           .single();

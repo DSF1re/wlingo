@@ -184,4 +184,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get network_error => 'Ошибка подключения';
+
+  @override
+  String get profile => 'Профиль';
+
+  @override
+  String get materials => 'Материалы';
 }
