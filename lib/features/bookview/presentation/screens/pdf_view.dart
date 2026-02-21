@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:wlingo/shared/shared_provider.dart';
+import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
 class PdfViewerScreen extends HookConsumerWidget {
