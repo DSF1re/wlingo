@@ -7,6 +7,7 @@ import 'package:wlingo/features/bookview/presentation/screens/pdf_view.dart';
 import 'package:wlingo/features/home/presentation/home_screen.dart';
 import 'package:wlingo/features/main/presentation/main_layout.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:wlingo/features/profile/presentation/profile_screen.dart';
 import 'package:wlingo/features/register/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/main.dart';
@@ -51,12 +52,13 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
             onTap: (index) {
               switch (index) {
                 case 0:
-                  context.go('/home');
+                  context.go(Routes.home);
                   break;
                 case 1:
-                  context.go('/books');
+                  context.go(Routes.books);
                   break;
                 case 2:
+                  context.go(Routes.profile);
                   break;
               }
             },
@@ -71,6 +73,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: Routes.books,
             builder: (context, state) => const BooksScreen(),
+          ),
+          GoRoute(
+            path: Routes.profile,
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),

@@ -199,4 +199,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get retry => 'Повторить';
+
+  @override
+  String get usr_not_found => 'Пользователь не найден';
+
+  @override
+  String get admin => 'Администратор';
+
+  @override
+  String get user => 'Пользователь';
 }

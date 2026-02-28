@@ -48,7 +48,6 @@ class AuthScreen extends HookConsumerWidget {
       ),
       body: Center(
         child: SingleChildScrollView(
-          // Важно, чтобы не было overflow при появлении клавиатуры
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 500),
             child: Padding(

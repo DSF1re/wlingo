@@ -478,6 +478,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @usr_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get usr_not_found;
+
+  /// No description provided for @admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator'**
+  String get admin;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

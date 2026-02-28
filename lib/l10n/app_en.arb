@@ -62,5 +62,8 @@
   "materials": "Materials",
   "fill_form": "Fill all required fields",
   "fill_auth": "Fill email and password fields",
-  "retry": "Retry"
+  "retry": "Retry",
+  "usr_not_found": "User not found",
+  "admin": "Administrator", 
+  "user": "User"
 }

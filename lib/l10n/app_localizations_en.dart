@@ -199,4 +199,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get usr_not_found => 'User not found';
+
+  @override
+  String get admin => 'Administrator';
+
+  @override
+  String get user => 'User';
 }
