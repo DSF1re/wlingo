@@ -24,6 +24,10 @@ class BooksScreen extends HookConsumerWidget {
           loc.study_materials,
           style: ThemeTextStyles.title3SemiBold(isDark: isDark),
         ),
+        leading: IconButton(
+          onPressed: () => context.go(Routes.home),
+          icon: const Icon(Icons.arrow_back),
+        ),
         centerTitle: true,
         actions: [AppbarActions(isDark: isDark)],
       ),

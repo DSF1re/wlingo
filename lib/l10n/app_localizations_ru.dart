@@ -208,4 +208,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get user => 'Пользователь';
+
+  @override
+  String get rating => 'Рейтинг';
 }

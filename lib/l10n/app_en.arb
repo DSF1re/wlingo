@@ -65,5 +65,6 @@
   "retry": "Retry",
   "usr_not_found": "User not found",
   "admin": "Administrator", 
-  "user": "User"
+  "user": "User",
+  "rating": "Rating"
 }
