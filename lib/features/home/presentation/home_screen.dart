@@ -52,16 +52,22 @@ class HomeScreen extends HookConsumerWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 500),
             child: ListView(
               children: [
                 langList,
+
                 MenuTile(
                   icon: Icons.book,
                   title: loc.study_materials,
                   onTap: () => context.go(Routes.books),
+                ),
+                MenuTile(
+                  icon: Icons.mic,
+                  title: loc.ex_pronunce,
+                  onTap: () => context.go(Routes.pronounceGame),
                 ),
               ],
             ),

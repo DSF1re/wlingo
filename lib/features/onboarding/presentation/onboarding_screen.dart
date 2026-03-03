@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,6 +43,9 @@ class OnboardingScreen extends HookConsumerWidget {
                 OnboardinPageview(
                   controller: pageController,
                   items: onboardingData,
+                  onPageChanged: (index) {
+                    ref.read(pageProvider.notifier).state = index;
+                  },
                 ),
                 DotsW(onboardingData: onboardingData, currentPage: currentPage),
                 BottomOnboarding(

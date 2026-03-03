@@ -7,4 +7,5 @@ abstract class Routes {
   static const String books = '/books';
   static const String pdf = '/pdf';
   static const String profile = '/profile';
+  static const String pronounceGame = '/pronounce';
 }

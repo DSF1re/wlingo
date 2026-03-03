@@ -42,10 +42,7 @@ class AuthScreen extends HookConsumerWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        actions: [AppbarActions(isDark: isDark)],
-      ),
+      appBar: AppBar(actions: [AppbarActions(isDark: isDark)]),
       body: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(

@@ -10,6 +10,7 @@ import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:wlingo/features/profile/presentation/profile_screen.dart';
 import 'package:wlingo/features/register/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
+import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/widgets/navigation_bar.dart';
 
@@ -34,6 +35,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.register,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: Routes.pronounceGame,
+        builder: (context, state) => const PronunciationGameScreen(),
       ),
       GoRoute(
         path: Routes.pdf,
