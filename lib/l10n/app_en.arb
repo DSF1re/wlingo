@@ -66,5 +66,6 @@
   "usr_not_found": "User not found",
   "admin": "Administrator", 
   "user": "User",
-  "rating": "Rating"
+  "rating": "Rating",
+  "history": "History"
 }

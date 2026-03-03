@@ -502,6 +502,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rating'**
   String get rating;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

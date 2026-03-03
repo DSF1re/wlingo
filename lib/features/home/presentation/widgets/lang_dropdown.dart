@@ -18,6 +18,8 @@ class LanguageDropdown extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loc = AppLocalizations.of(context)!;
     return DropdownButton<int>(
+      borderRadius: BorderRadius.circular(24),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       value: languages.any((w) => w.id == selectedId.value)
           ? selectedId.value
           : null,

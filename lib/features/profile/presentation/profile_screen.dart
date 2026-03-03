@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart';
+import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
+import 'package:wlingo/features/profile/presentation/widgets/history_tile.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -30,45 +32,86 @@ class ProfileScreen extends HookConsumerWidget {
         ),
         actions: [AppbarActions(isDark: isDark)],
       ),
-      body: Center(
-        child: userAsync.when(
-          loading: () => const CircularProgressIndicator(),
-          error: (err, _) => Text('${loc.error}: $err'),
-          data: (either) =>
-              either.fold((failure) => Text('${loc.error}: $failure'), (user) {
-                if (user == null) return Text(loc.usr_not_found);
-                final ratingAsync = ref.watch(userRatingProvider(user.id));
-                return Column(
-                  spacing: 12,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${user.firstName} ${user.lastName}',
-                      style: ThemeTextStyles.title1SemiBold(isDark: isDark),
-                    ),
-                    Text(
-                      'ID: ${user.id}',
-                      style: ThemeTextStyles.regular(isDark: isDark),
-                    ),
-                    ratingAsync.when(
-                      data: (points) => Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${loc.rating}: $points',
-                            style: ThemeTextStyles.regular(isDark: isDark),
-                          ),
-                        ],
+      body: userAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('${loc.error}: $err')),
+        data: (either) => either.fold(
+          (failure) => Center(child: Text('${loc.error}: $failure')),
+          (user) {
+            if (user == null) return Center(child: Text(loc.usr_not_found));
+
+            final ratingAsync = ref.watch(userRatingProvider(user.id));
+            final historyAsync = ref.watch(userHistoryProvider(user.id));
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 20,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 6,
+                    children: [
+                      Text(
+                        '${user.firstName} ${user.lastName}',
+                        style: ThemeTextStyles.title1SemiBold(isDark: isDark),
                       ),
-                      loading: () => const CircularProgressIndicator(),
-                      error: (_, _) => const Text('—'),
+                      Text(
+                        'ID: ${user.id}',
+                        style: ThemeTextStyles.regular(isDark: isDark),
+                      ),
+                      ratingAsync.when(
+                        data: (points) => Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star, color: Colors.amber),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${loc.rating}: $points',
+                              style: ThemeTextStyles.regular(isDark: isDark),
+                            ),
+                          ],
+                        ),
+                        loading: () => const CircularProgressIndicator(),
+                        error: (_, _) => const Text('—'),
+                      ),
+                      if (user.isAdmin) Chip(label: Text(loc.admin)),
+                    ],
+                  ),
+
+                  Text(
+                    loc.history,
+                    style: ThemeTextStyles.regular(isDark: isDark),
+                  ),
+
+                  Expanded(
+                    child: historyAsync.when(
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      error: (err, _) =>
+                          Center(child: Text('${loc.error}: $err')),
+                      data: (history) {
+                        if (history.isEmpty) {
+                          return Center(child: Text(loc.admin));
+                        }
+                        return ListView.separated(
+                          itemCount: history.length,
+                          separatorBuilder: (context, index) => const Divider(),
+                          itemBuilder: (context, index) {
+                            return HistoryTile(
+                              record: history[index],
+                              isDark: isDark,
+                            );
+                          },
+                        );
+                      },
                     ),
-                    if (user.isAdmin) Chip(label: Text(loc.admin)),
-                  ],
-                );
-              }),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
