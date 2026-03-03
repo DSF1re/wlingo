@@ -49,35 +49,52 @@ class ProfileScreen extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 20,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 6,
-                    children: [
-                      Text(
-                        '${user.firstName} ${user.lastName}',
-                        style: ThemeTextStyles.title1SemiBold(isDark: isDark),
-                      ),
-                      Text(
-                        'ID: ${user.id}',
-                        style: ThemeTextStyles.regular(isDark: isDark),
-                      ),
-                      ratingAsync.when(
-                        data: (points) => Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star, color: Colors.amber),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${loc.rating}: $points',
-                              style: ThemeTextStyles.regular(isDark: isDark),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.05)
+                          : Colors.black.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: 8,
+                        children: [
+                          Text(
+                            '${user.firstName} ${user.lastName}',
+                            style: ThemeTextStyles.title1SemiBold(
+                              isDark: isDark,
                             ),
-                          ],
-                        ),
-                        loading: () => const CircularProgressIndicator(),
-                        error: (_, _) => const Text('—'),
+                          ),
+                          ratingAsync.when(
+                            data: (points) => Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.star, color: Colors.amber),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${loc.rating}: $points',
+                                  style: ThemeTextStyles.regular(
+                                    isDark: isDark,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            loading: () => const CircularProgressIndicator(),
+                            error: (_, _) => const Text('—'),
+                          ),
+                          if (user.isAdmin)
+                            Chip(
+                              label: Text(
+                                loc.admin,
+                                style: ThemeTextStyles.regular(isDark: isDark),
+                              ),
+                            ),
+                        ],
                       ),
-                      if (user.isAdmin) Chip(label: Text(loc.admin)),
-                    ],
+                    ),
                   ),
 
                   Text(
