@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
+import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
+import 'package:wlingo/theme/text_styles.dart';
+
+class ProfileHeaderSection extends ConsumerWidget {
+  final dynamic user;
+  final bool isDark;
+  final dynamic loc;
+
+  const ProfileHeaderSection({
+    super.key,
+    required this.user,
+    required this.isDark,
+    required this.loc,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ratingAsync = ref.watch(userRatingProvider(user.id));
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProfileCard(
+              user: user,
+              ratingAsync: ratingAsync,
+              isDark: isDark,
+              loc: loc,
+            ),
+            const SizedBox(height: 20),
+            Text(loc.history, style: ThemeTextStyles.regular(isDark: isDark)),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}

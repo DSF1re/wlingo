@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
@@ -6,8 +7,8 @@ import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/error_placeholder.dart';
-import 'package:wlingo/features/profile/presentation/widgets/history_tile.dart';
-import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
+import 'package:wlingo/features/profile/presentation/widgets/history.dart';
+import 'package:wlingo/features/profile/presentation/widgets/profile_header.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -17,18 +18,21 @@ class ProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final loc = AppLocalizations.of(context)!;
+
     final userAsync = ref.watch(currentUserProvider);
 
-    Future<void> refreshAll() async {
+    final refreshAll = useCallback(() async {
       ref.invalidate(currentUserProvider);
-      final user = userAsync.value?.fold((_) => null, (u) => u);
-      if (user != null) {
-        ref.invalidate(userRatingProvider(user.id));
-        ref.invalidate(userHistoryProvider(user.id));
-      }
-    }
+      userAsync.value?.fold((_) => null, (user) {
+        if (user != null) {
+          ref.invalidate(userRatingProvider(user.id));
+          ref.invalidate(userHistoryProvider(user.id));
+        }
+      });
+    }, [userAsync.value]);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,67 +60,14 @@ class ProfileScreen extends HookConsumerWidget {
           ),
           (user) {
             if (user == null) return Center(child: Text(loc.usr_not_found));
-            final ratingAsync = ref.watch(userRatingProvider(user.id));
-            final historyAsync = ref.watch(userHistoryProvider(user.id));
+
             return RefreshIndicator(
               onRefresh: refreshAll,
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                    sliver: SliverToBoxAdapter(
-                      child: ProfileCard(
-                        user: user,
-                        ratingAsync: ratingAsync,
-                        isDark: isDark,
-                        loc: loc,
-                      ),
-                    ),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        loc.history,
-                        style: ThemeTextStyles.regular(isDark: isDark),
-                      ),
-                    ),
-                  ),
-                  historyAsync.when(
-                    loading: () => const SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                    error: (err, _) => SliverToBoxAdapter(
-                      child: Center(child: Text('${loc.error}: $err')),
-                    ),
-                    data: (history) {
-                      if (history.isEmpty) {
-                        return SliverToBoxAdapter(
-                          child: Center(child: Text(loc.admin)),
-                        );
-                      }
-                      return SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate((
-                            context,
-                            index,
-                          ) {
-                            final record = history[index];
-                            return Column(
-                              children: [
-                                HistoryTile(record: record, isDark: isDark),
-                                if (index != history.length - 1)
-                                  const Divider(),
-                              ],
-                            );
-                          }, childCount: history.length),
-                        ),
-                      );
-                    },
-                  ),
+                  ProfileHeaderSection(user: user, isDark: isDark, loc: loc),
+                  HistorySection(userId: user.id, isDark: isDark, loc: loc),
                   const SliverToBoxAdapter(child: SizedBox(height: 40)),
                 ],
               ),

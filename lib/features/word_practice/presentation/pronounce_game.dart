@@ -6,7 +6,10 @@ import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/home/data/models/word.dart';
 import 'package:wlingo/features/word_practice/domain/providers/speech/speech_provider.dart';
 import 'package:wlingo/features/word_practice/domain/providers/words/word_provider.dart';
+import 'package:wlingo/features/word_practice/presentation/widgets/action_button.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/mic_indicator.dart';
+import 'package:wlingo/features/word_practice/presentation/widgets/result_display.dart';
+import 'package:wlingo/features/word_practice/presentation/widgets/word_display.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -36,22 +39,29 @@ class PronunciationGameScreen extends HookConsumerWidget {
       if (wordsState.value?.isNotEmpty == true && currentWord.value == null) {
         pickWord();
       }
-      return null;
+      return () {
+        ref.read(speechNotifierProvider.notifier).stop();
+      };
     }, [wordsState.value]);
 
     Future<String> onRecord() async {
       isCorrect.value = null;
       await ref.read(speechNotifierProvider.notifier).startRecording();
 
+      if (!context.mounted) return '';
       final recognized = ref.read(speechNotifierProvider).value ?? '';
 
       if (recognized.isNotEmpty && currentWord.value != null) {
-        isCorrect.value = await ref
+        final result = await ref
             .read(wordsNotifierProvider.notifier)
             .checkAndSaveResult(
               word: currentWord.value!,
               recognizedText: recognized,
             );
+
+        if (context.mounted) {
+          isCorrect.value = result;
+        }
       }
       return recognized;
     }
@@ -78,11 +88,11 @@ class PronunciationGameScreen extends HookConsumerWidget {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    _WordDisplay(word: currentWord.value!, isDark: isDark),
+                    WordDisplay(word: currentWord.value!, isDark: isDark),
                     const Spacer(),
                     if (speechState.value?.isNotEmpty == true &&
                         !speechState.isLoading)
-                      _ResultDisplay(
+                      ResultDisplay(
                         text: speechState.value!,
                         isCorrect: isCorrect.value,
                         label: loc.you_pronounced,
@@ -90,111 +100,27 @@ class PronunciationGameScreen extends HookConsumerWidget {
                     const SizedBox(height: 32),
                     MicrophoneIndicatorButton(
                       isActive: speechState.isLoading,
-                      onRecordAndCheck: () async => (await onRecord(), "").$1,
+                      onRecordAndCheck: () async {
+                        if (speechState.isLoading) {
+                          await ref
+                              .read(speechNotifierProvider.notifier)
+                              .stop();
+                          return "";
+                        }
+                        return await onRecord();
+                      },
                       onStopListen: () =>
                           ref.read(speechNotifierProvider.notifier).stop(),
                       onStateChanged: (_) {},
                     ),
                     const Spacer(),
-                    _ActionButton(
+                    ActionButton(
                       label: loc.new_word,
                       onPressed: speechState.isLoading ? null : pickWord,
                     ),
                   ],
                 ),
               ),
-      ),
-    );
-  }
-}
-
-class _WordDisplay extends StatelessWidget {
-  final Word word;
-  final bool isDark;
-  const _WordDisplay({required this.word, required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 40),
-        Text(
-          word.word,
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          '[ ${word.transcription} ]',
-          style: TextStyle(
-            fontFamily: 'monospace',
-            color: Colors.blueAccent.withValues(alpha: 0.5),
-            fontSize: 20,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          word.russian,
-          style: TextStyle(
-            color: isDark ? Colors.white70 : Colors.black54,
-            fontSize: 18,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ResultDisplay extends StatelessWidget {
-  final String text;
-  final bool? isCorrect;
-  final String label;
-  const _ResultDisplay({
-    required this.text,
-    required this.isCorrect,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isCorrect == null
-        ? null
-        : (isCorrect! ? Colors.green : Colors.red);
-    return Column(
-      children: [
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-        Text(
-          text,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: color,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  final String label;
-  final VoidCallback? onPressed;
-  const _ActionButton({required this.label, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(label, style: const TextStyle(fontSize: 18)),
       ),
     );
   }

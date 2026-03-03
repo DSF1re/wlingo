@@ -33,20 +33,18 @@ class MicrophoneIndicatorButton extends HookConsumerWidget {
       if (isActive) {
         controller.repeat(reverse: true);
       } else {
-        controller.stop();
+        controller.reverse();
       }
       return null;
     }, [isActive]);
 
     Future<void> handleTap() async {
       if (isActive) {
-        controller.stop(canceled: false);
-        controller.reset();
         await onStopListen?.call();
+        controller.stop();
+        controller.reset();
       } else {
-        onStateChanged?.call(true);
         await onRecordAndCheck();
-        onStateChanged?.call(false);
       }
     }
 
