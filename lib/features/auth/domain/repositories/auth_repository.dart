@@ -19,6 +19,12 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<AuthFailure, User>> updateProfile({
+    required String firstName,
+    required String lastName,
+    String? middleName,
+  });
+
   Future<Either<AuthFailure, void>> signOut();
 
   Stream<Either<AuthFailure, User?>> authStateChanges();

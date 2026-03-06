@@ -67,5 +67,8 @@
   "admin": "Administrator", 
   "user": "User",
   "rating": "Rating",
-  "history": "History"
+  "history": "History",
+  "editProfile": "Edit profile",
+  "save": "Save",
+  "cancel": "Cancel"
 }

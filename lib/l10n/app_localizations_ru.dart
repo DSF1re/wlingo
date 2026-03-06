@@ -214,4 +214,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get history => 'История';
+
+  @override
+  String get editProfile => 'Редактирование профиля';
+
+  @override
+  String get save => 'Сохранить';
+
+  @override
+  String get cancel => 'Отмена';
 }

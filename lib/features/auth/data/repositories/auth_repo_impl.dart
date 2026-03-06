@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart';
+import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
   SupabaseClient get _client => Supabase.instance.client;
@@ -111,6 +111,37 @@ class SupabaseAuthRepository implements AuthRepository {
         'Email not confirmed' => Left(AuthFailure.emailNotConfirmed()),
         _ => Left(AuthFailure.unexpected(e.message)),
       };
+    } catch (e) {
+      return Left(AuthFailure.unexpected(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, User>> updateProfile({
+    required String firstName,
+    required String lastName,
+    String? middleName,
+  }) async {
+    try {
+      if (firstName.trim().isEmpty || lastName.trim().isEmpty) {
+        return Left(AuthFailure.fillForm());
+      }
+
+      final userId = _client.auth.currentUser?.id;
+      if (userId == null) return Left(AuthFailure.nullUser());
+
+      final response = await _client
+          .from('profiles')
+          .update({
+            'first_name': firstName,
+            'last_name': lastName,
+            'mid_name': middleName,
+          })
+          .eq('id', userId)
+          .select()
+          .single();
+
+      return Right(User.fromJson(response));
     } catch (e) {
       return Left(AuthFailure.unexpected(e.toString()));
     }
