@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/core/router/routes.dart';
-import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/error_placeholder.dart';
@@ -36,45 +34,102 @@ class ProfileScreen extends HookConsumerWidget {
     }, [userAsync.value]);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          loc.profile,
-          style: ThemeTextStyles.title3SemiBold(isDark: isDark),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => context.go(Routes.home),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        actions: [AppbarActions(isDark: isDark)],
-      ),
-      body: userAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => ErrorPlaceholder(
-          message: '${loc.error}: $err',
-          onRetry: () => ref.invalidate(currentUserProvider),
-        ),
-        data: (either) => either.fold(
-          (failure) => ErrorPlaceholder(
-            message: failure.toLocalizedMessage(loc),
-            onRetry: () => ref.invalidate(currentUserProvider),
-          ),
-          (user) {
-            if (user == null) return Center(child: Text(loc.usr_not_found));
-
-            return RefreshIndicator(
-              onRefresh: refreshAll,
-              child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  ProfileHeaderSection(user: user, isDark: isDark, loc: loc),
-                  HistorySection(userId: user.id, isDark: isDark, loc: loc),
-                  const SliverToBoxAdapter(child: SizedBox(height: 40)),
-                ],
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isDark
+                      ? [
+                          const Color(0xFF1A1A2E),
+                          const Color(0xFF16213E),
+                          const Color(0xFF0F3460),
+                        ]
+                      : [
+                          const Color(0xFFF7F9FC),
+                          const Color(0xFFEDF2F7),
+                          const Color(0xFFE2E8F0),
+                        ],
+                ),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+
+          SafeArea(
+            bottom: false,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              loc.profile,
+                              style: ThemeTextStyles.title1ExtraBold(
+                                isDark: isDark,
+                              ),
+                            ),
+                          ),
+                          AppbarActions(isDark: isDark, padding: 0),
+                        ],
+                      ),
+                    ),
+
+                    Expanded(
+                      child: userAsync.when(
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (err, _) => ErrorPlaceholder(
+                          message: '${loc.error}: $err',
+                          onRetry: () => ref.invalidate(currentUserProvider),
+                        ),
+                        data: (either) => either.fold(
+                          (failure) => ErrorPlaceholder(
+                            message: failure.toLocalizedMessage(loc),
+                            onRetry: () => ref.invalidate(currentUserProvider),
+                          ),
+                          (user) {
+                            if (user == null) {
+                              return Center(child: Text(loc.usr_not_found));
+                            }
+                            return RefreshIndicator(
+                              onRefresh: refreshAll,
+                              child: CustomScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                slivers: [
+                                  ProfileHeaderSection(
+                                    user: user,
+                                    isDark: isDark,
+                                    loc: loc,
+                                  ),
+                                  HistorySection(
+                                    userId: user.id,
+                                    isDark: isDark,
+                                    loc: loc,
+                                  ),
+                                  const SliverToBoxAdapter(
+                                    child: SizedBox(height: 100),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

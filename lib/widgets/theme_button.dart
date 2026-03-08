@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/features/onboarding/domain/providers/theme/theme_provider.dart';
+import 'package:wlingo/core/providers/theme/theme_provider.dart';
 
 class ThemeButton extends ConsumerWidget {
   final bool isDark;

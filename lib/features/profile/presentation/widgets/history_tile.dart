@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/data/models/rating_record/rating_record.dart';
 import 'package:wlingo/features/profile/domain/providers/word_provider.dart';
+import 'package:wlingo/widgets/glass_box.dart';
 
 class HistoryTile extends ConsumerWidget {
   final RatingRecord record;
@@ -12,26 +13,92 @@ class HistoryTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wordAsync = ref.watch(wordProvider(record.correctWordId));
+    final isCorrect = record.isCorrect;
+    final statusColor = isCorrect ? const Color(0xFF2ED573) : const Color(0xFFFF6B6B);
 
-    return ListTile(
-      leading: Icon(
-        record.isCorrect ? Icons.check_circle : Icons.cancel,
-        color: record.isCorrect ? Colors.green : Colors.red,
-      ),
-      title: wordAsync.when(
-        data: (word) => Text(word.word),
-        loading: () => const Text(''),
-        error: (_, _) => const Text('Error'),
-      ),
-      subtitle: Text(record.userAnswer ?? 'No answer'),
-      trailing: record.isCorrect
-          ? null
-          : wordAsync.when(
-              data: (word) =>
-                  Text(word.russian, style: TextStyle(color: Colors.grey)),
-              loading: () => null,
-              error: (_, _) => null,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GlassBox(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        opacity: isDark ? 0.06 : 0.25,
+        blur: 8,
+        borderRadius: BorderRadius.circular(16),
+        color: isDark ? Colors.white : Colors.white,
+        border: Border.all(
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06),
+          width: 1,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                isCorrect ? Icons.check_rounded : Icons.close_rounded,
+                color: statusColor,
+                size: 20,
+              ),
             ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  wordAsync.when(
+                    data: (word) => Text(
+                      word.word,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: isDark ? Colors.white : Colors.black87,
+                      ),
+                    ),
+                    loading: () => Container(
+                      height: 14,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    error: (_, _) => const Text('Error'),
+                  ),
+                  if (record.userAnswer != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      record.userAnswer!,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            if (!isCorrect)
+              wordAsync.when(
+                data: (word) => Text(
+                  word.russian,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.35),
+                  ),
+                ),
+                loading: () => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

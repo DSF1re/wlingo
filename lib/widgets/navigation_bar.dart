@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/colors.dart';
+import 'package:wlingo/theme/text_styles.dart';
+import 'package:wlingo/widgets/glass_box.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -13,29 +16,107 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: onTap,
-      type: BottomNavigationBarType.fixed,
-      items: navBarItems(context),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final items = navBarItems(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 0, 40, 24),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: ThemeColors.blue.withValues(alpha: 0.15),
+              blurRadius: 24,
+              spreadRadius: 2,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: GlassBox(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          opacity: isDark ? 0.35 : 0.75,
+          blur: 20,
+          borderRadius: BorderRadius.circular(28),
+          color: isDark ? Colors.black : Colors.white,
+          border: Border.all(
+            color: ThemeColors.blue.withValues(alpha: isDark ? 0.15 : 0.1),
+            width: 1.5,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: items.asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
+              final isSelected = currentIndex == index;
+
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => onTap(index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOutCubic,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSelected ? 18 : 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? ThemeColors.blue.withValues(alpha: 0.15)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isSelected ? item.activeIcon : item.icon,
+                        size: isSelected ? 22 : 20,
+                        color: isSelected
+                            ? ThemeColors.blue
+                            : (isDark ? Colors.white54 : Colors.black38),
+                      ),
+                      if (isSelected && item.label != null) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          item.label!,
+                          style: ThemeTextStyles.regular(isDark: isDark),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
     );
   }
 }
 
-List<BottomNavigationBarItem> navBarItems(BuildContext context) => [
-  BottomNavigationBarItem(
-    icon: const Icon(Icons.home_outlined),
-    activeIcon: const Icon(Icons.home),
+class NavBarItem {
+  final IconData icon;
+  final IconData activeIcon;
+  final String? label;
+
+  NavBarItem({required this.icon, required this.activeIcon, this.label});
+}
+
+List<NavBarItem> navBarItems(BuildContext context) => [
+  NavBarItem(
+    icon: Icons.home_outlined,
+    activeIcon: Icons.home_rounded,
     label: AppLocalizations.of(context)!.home,
   ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.menu_book_outlined),
-    activeIcon: Icon(Icons.menu_book),
+  NavBarItem(
+    icon: Icons.menu_book_outlined,
+    activeIcon: Icons.menu_book_rounded,
     label: AppLocalizations.of(context)!.materials,
   ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.person_outline),
-    activeIcon: Icon(Icons.person),
+  NavBarItem(
+    icon: Icons.person_outline_rounded,
+    activeIcon: Icons.person_rounded,
     label: AppLocalizations.of(context)!.profile,
   ),
 ];

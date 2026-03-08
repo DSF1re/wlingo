@@ -28,20 +28,15 @@ class HistorySection extends ConsumerWidget {
           SliverToBoxAdapter(child: Center(child: Text('${loc.error}: $err'))),
       data: (history) {
         if (history.isEmpty) {
-          return SliverToBoxAdapter(child: Center(child: Text(loc.admin)));
+          return SliverToBoxAdapter(child: Center(child: Text(loc.history)));
         }
         return SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final record = history[index];
-                return Column(
-                  children: [
-                    HistoryTile(record: record, isDark: isDark),
-                    if (index != history.length - 1) const Divider(),
-                  ],
-                );
+                return HistoryTile(record: record, isDark: isDark);
               },
               childCount: history.length,
               addAutomaticKeepAlives: false,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
-import 'package:wlingo/theme/text_styles.dart';
 
 class ProfileHeaderSection extends ConsumerWidget {
   final dynamic user;
@@ -20,7 +19,7 @@ class ProfileHeaderSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ratingAsync = ref.watch(userRatingProvider(user.id));
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,8 +30,18 @@ class ProfileHeaderSection extends ConsumerWidget {
               isDark: isDark,
               loc: loc,
             ),
-            const SizedBox(height: 20),
-            Text(loc.history, style: ThemeTextStyles.regular(isDark: isDark)),
+            const SizedBox(height: 24),
+            Text(
+              (loc.history as String).toUpperCase(),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+                color: (isDark ? Colors.white : Colors.black).withValues(
+                  alpha: 0.35,
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
           ],
         ),

@@ -1,11 +1,11 @@
 import 'package:either_dart/either.dart';
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/features/auth/data/models/user/user.dart';
+import 'package:wlingo/features/auth/domain/entities/user.dart';
 
 abstract class AuthRepository {
-  Future<Either<AuthFailure, User?>> getCurrentUser();
+  Future<Either<AuthFailure, UserEntity?>> getCurrentUser();
 
-  Future<Either<AuthFailure, User>> signUp({
+  Future<Either<AuthFailure, UserEntity>> signUp({
     required String email,
     required String password,
     required String firstName,
@@ -14,12 +14,12 @@ abstract class AuthRepository {
     required int nativeLang,
   });
 
-  Future<Either<AuthFailure, User>> signIn({
+  Future<Either<AuthFailure, UserEntity>> signIn({
     required String email,
     required String password,
   });
 
-  Future<Either<AuthFailure, User>> updateProfile({
+  Future<Either<AuthFailure, UserEntity>> updateProfile({
     required String firstName,
     required String lastName,
     String? middleName,
@@ -27,5 +27,5 @@ abstract class AuthRepository {
 
   Future<Either<AuthFailure, void>> signOut();
 
-  Stream<Either<AuthFailure, User?>> authStateChanges();
+  Stream<Either<AuthFailure, UserEntity?>> authStateChanges();
 }

@@ -3,7 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
-import 'package:wlingo/features/auth/domain/providers/auth_provider.dart';
+import 'package:wlingo/features/auth/domain/usecases/sign_out_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
 import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
@@ -11,6 +12,7 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
+import 'package:wlingo/widgets/glass_box.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -22,9 +24,16 @@ class HomeScreen extends HookConsumerWidget {
     final languagesAsync = ref.watch(languagesProvider);
     final selectedLangId = useState<int?>(shared.getInt('lang_cource'));
 
+    final userAsync = ref.watch(currentUserProvider);
+    final isAdmin = userAsync.maybeWhen(
+      data: (either) =>
+          either.fold((_) => false, (user) => user?.isAdmin ?? false),
+      orElse: () => false,
+    );
+
     var langList = languagesAsync.when(
       data: (langList) => Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: LanguageDropdown(
           languages: langList,
           selectedId: selectedLangId,
@@ -35,44 +44,117 @@ class HomeScreen extends HookConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          loc.home,
-          style: ThemeTextStyles.title3SemiBold(isDark: isDark),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () async {
-            ref.read(authRepositoryProvider).signOut();
-            context.go(Routes.login);
-          },
-          icon: const Icon(Icons.logout),
-        ),
-        actions: [AppbarActions(isDark: isDark)],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
-            child: ListView(
-              children: [
-                langList,
-
-                MenuTile(
-                  icon: Icons.book,
-                  title: loc.study_materials,
-                  onTap: () => context.go(Routes.books),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isDark
+                      ? [
+                          const Color(0xFF1A1A2E),
+                          const Color(0xFF16213E),
+                          const Color(0xFF0F3460),
+                        ]
+                      : [
+                          const Color(0xFFF7F9FC),
+                          const Color(0xFFEDF2F7),
+                          const Color(0xFFE2E8F0),
+                        ],
                 ),
-                MenuTile(
-                  icon: Icons.mic,
-                  title: loc.ex_pronunce,
-                  onTap: () => context.go(Routes.pronounceGame),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          SafeArea(
+            bottom: false,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  loc.home,
+                                  style: ThemeTextStyles.title1ExtraBold(
+                                    isDark: isDark,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                AppbarActions(isDark: isDark),
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  onPressed: () async {
+                                    ref.read(signOutUseCaseProvider).call();
+                                    context.go(Routes.login);
+                                  },
+                                  icon: GlassBox(
+                                    padding: const EdgeInsets.all(8),
+                                    opacity: 0.1,
+                                    blur: 5,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Icon(
+                                      Icons.logout_rounded,
+                                      color: isDark
+                                          ? Colors.white
+                                          : Colors.black,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          langList,
+                          const SizedBox(height: 24),
+                          MenuTile(
+                            icon: Icons.mic_rounded,
+                            title: loc.ex_pronunce,
+                            iconColor: const Color(0xFFFF6B6B),
+                            onTap: () => context.go(Routes.pronounceGame),
+                          ),
+                          MenuTile(
+                            icon: Icons.auto_stories_rounded,
+                            title: loc.study_materials,
+                            iconColor: const Color(0xFF5B7BFE),
+                            onTap: () => context.go(Routes.books),
+                          ),
+                          if (isAdmin)
+                            MenuTile(
+                              icon: Icons.add_circle_outline_rounded,
+                              title: loc.add_study_materials,
+                              iconColor: const Color(0xFF2ED573),
+                              onTap: () => context.push(Routes.addBook),
+                            ),
+                          const SizedBox(height: 100),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

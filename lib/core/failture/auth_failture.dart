@@ -1,5 +1,3 @@
-// ignore_for_file: unreachable_switch_case
-
 import 'package:wlingo/l10n/app_localizations.dart';
 
 sealed class AuthFailure {
@@ -33,7 +31,6 @@ extension AuthFailureStrings on AuthFailure {
       FillPassword() => loc.fill_password,
       InvalidNameFormatFailure() => loc.invalid_name_format,
       UnexpectedFailure(message: final msg) => '${loc.error}: $msg',
-      _ => loc.error,
     };
   }
 }

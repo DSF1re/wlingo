@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/features/auth/data/models/user/user.dart';
-import 'package:wlingo/features/auth/domain/providers/auth_provider.dart';
-import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart';
+import 'package:wlingo/features/auth/domain/entities/user.dart';
+import 'package:wlingo/features/profile/presentation/widgets/edit_profile.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
+import 'package:wlingo/widgets/glass_box.dart';
 
 class ProfileCard extends HookConsumerWidget {
-  final User user;
+  final UserEntity user;
   final AsyncValue<int> ratingAsync;
   final bool isDark;
   final AppLocalizations loc;
@@ -23,156 +20,154 @@ class ProfileCard extends HookConsumerWidget {
     required this.loc,
   });
 
+  void _showEditDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => EditProfileDialog(user: user, loc: loc),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firstController = useTextEditingController(text: user.firstName);
-    final lastController = useTextEditingController(text: user.lastName);
-    final middleController = useTextEditingController(text: user.middleName);
+    final initials =
+        '${user.firstName.isNotEmpty ? user.firstName[0] : ''}${user.lastName.isNotEmpty ? user.lastName[0] : ''}'
+            .toUpperCase();
 
-    useValueChanged<User, void>(user, (_, _) {
-      firstController.text = user.firstName;
-      lastController.text = user.lastName;
-      middleController.text = user.middleName ?? '';
-    });
-
-    void showEditDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => HookBuilder(
-          builder: (dialogContext) {
-            final errorMessage = useState<String?>(null);
-            final isLoading = useState(false);
-
-            return AlertDialog(
-              title: Text(loc.editProfile),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (errorMessage.value != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        errorMessage.value!,
-                        style: const TextStyle(color: Colors.red, fontSize: 13),
-                      ),
-                    ),
-                  TextField(
-                    controller: firstController,
-                    enabled: !isLoading.value,
-                    decoration: InputDecoration(labelText: loc.first_name),
-                  ),
-                  TextField(
-                    controller: lastController,
-                    enabled: !isLoading.value,
-                    decoration: InputDecoration(labelText: loc.last_name),
-                  ),
-                  TextField(
-                    controller: middleController,
-                    enabled: !isLoading.value,
-                    decoration: InputDecoration(labelText: loc.mid_name),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: isLoading.value ? null : () => dialogContext.pop(),
-                  child: Text(loc.cancel),
-                ),
-                ElevatedButton(
-                  onPressed: isLoading.value
-                      ? null
-                      : () async {
-                          isLoading.value = true;
-                          errorMessage.value = null;
-
-                          final repository = ref.read(authRepositoryProvider);
-                          final result = await repository.updateProfile(
-                            firstName: firstController.text,
-                            lastName: lastController.text,
-                            middleName: middleController.text,
-                          );
-
-                          result.fold(
-                            (failure) {
-                              isLoading.value = false;
-                              errorMessage.value = failure.toLocalizedMessage(
-                                loc,
-                              );
-                            },
-                            (updatedUser) {
-                              ref.invalidate(currentUserProvider);
-                              if (dialogContext.mounted) dialogContext.pop();
-                            },
-                          );
-                        },
-                  child: isLoading.value
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(loc.save),
-                ),
-              ],
-            );
-          },
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
+    return GlassBox(
+      padding: const EdgeInsets.all(16),
+      opacity: isDark ? 0.08 : 0.35,
+      blur: 10,
+      borderRadius: BorderRadius.circular(20),
+      color: isDark ? Colors.white : Colors.white,
+      border: Border.all(
+        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.08),
+        width: 1,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              _buildAvatar(initials),
+              const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  '${user.firstName} ${user.lastName} ${user.middleName ?? ''}',
-                  style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${user.firstName} ${user.lastName}',
+                      style: ThemeTextStyles.title1SemiBold(
+                        isDark: isDark,
+                      ).copyWith(fontSize: 18),
+                    ),
+                    if (user.middleName != null && user.middleName!.isNotEmpty)
+                      Text(
+                        user.middleName!,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.45),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               IconButton(
                 icon: Icon(
-                  Icons.edit,
-                  size: 20,
-                  color: isDark ? Colors.white70 : Colors.black54,
+                  Icons.edit_rounded,
+                  size: 18,
+                  color: isDark ? Colors.white54 : Colors.black38,
                 ),
-                onPressed: () => showEditDialog(context),
+                onPressed: () => _showEditDialog(context),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          ratingAsync.when(
-            data: (points) => Row(
-              children: [
-                const Icon(Icons.star, color: Colors.amber, size: 20),
-                const SizedBox(width: 4),
-                Text(
-                  '${loc.rating}: $points',
-                  style: ThemeTextStyles.regular(isDark: isDark),
-                ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              _buildRatingBadge(),
+              if (user.isAdmin) ...[
+                const SizedBox(width: 8),
+                _buildAdminBadge(),
               ],
-            ),
-            loading: () => const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
-            error: (_, _) => const Text('—'),
+            ],
           ),
-          if (user.isAdmin) ...[
-            const SizedBox(height: 8),
-            Chip(label: Text(loc.admin)),
-          ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildAvatar(String initials) {
+    return Container(
+      width: 52,
+      height: 52,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF5B7BFE), Color(0xFF7C3AED)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRatingBadge() {
+    return ratingAsync.when(
+      data: (points) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.amber.withValues(alpha: isDark ? 0.15 : 0.12),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
+            const SizedBox(width: 4),
+            Text(
+              '$points',
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: Colors.amber,
+              ),
+            ),
+          ],
+        ),
+      ),
+      loading: () => const SizedBox(
+        height: 18,
+        width: 18,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      error: (_, _) => const Text('—'),
+    );
+  }
+
+  Widget _buildAdminBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2ED573).withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        loc.admin,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF2ED573),
+        ),
       ),
     );
   }

@@ -18,6 +18,7 @@ class MicrophoneIndicatorButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final controller = useAnimationController(
       duration: const Duration(milliseconds: 800),
     );
@@ -53,23 +54,38 @@ class MicrophoneIndicatorButton extends HookConsumerWidget {
       child: Transform.scale(
         scale: scaleAnimation,
         child: Container(
+          width: 80,
+          height: 80,
           decoration: BoxDecoration(
-            color: isActive ? Colors.redAccent : Colors.grey[300],
+            gradient: isActive
+                ? const LinearGradient(
+                    colors: [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+                  )
+                : LinearGradient(
+                    colors: isDark
+                        ? [const Color(0xFF5B7BFE), const Color(0xFF7C3AED)]
+                        : [const Color(0xFF5B7BFE), const Color(0xFF5B7BFE)],
+                  ),
             shape: BoxShape.circle,
             boxShadow: [
               if (isActive)
                 BoxShadow(
-                  color: Colors.redAccent.withValues(alpha: 0.6),
-                  blurRadius: 32,
-                  spreadRadius: 6,
+                  color: const Color(0xFFFF6B6B).withValues(alpha: 0.5),
+                  blurRadius: 28,
+                  spreadRadius: 4,
+                )
+              else
+                BoxShadow(
+                  color: const Color(0xFF5B7BFE).withValues(alpha: 0.3),
+                  blurRadius: 16,
+                  spreadRadius: 2,
                 ),
             ],
           ),
-          padding: const EdgeInsets.all(18),
           child: Icon(
-            Icons.mic,
-            size: 38,
-            color: isActive ? Colors.white : Colors.grey[600],
+            isActive ? Icons.stop_rounded : Icons.mic_rounded,
+            size: 36,
+            color: Colors.white,
           ),
         ),
       ),

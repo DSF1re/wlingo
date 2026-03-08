@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wlingo/features/auth/domain/providers/auth_provider.dart';
+import 'package:wlingo/features/auth/domain/usecases/sign_up_usecase.dart';
 
 part 'register_controller.g.dart';
 
@@ -18,8 +18,8 @@ class RegisterController extends _$RegisterController {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final res = await ref
-          .read(authRepositoryProvider)
-          .signUp(
+          .read(signUpUseCaseProvider)
+          .call(
             email: email,
             password: password,
             firstName: firstName,

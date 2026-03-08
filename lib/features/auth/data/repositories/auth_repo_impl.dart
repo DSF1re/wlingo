@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/features/auth/data/models/user/user.dart';
+import 'package:wlingo/features/auth/data/models/user/user.dart' as model;
+import 'package:wlingo/features/auth/data/models/user/user_mapper.dart';
+import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
@@ -43,7 +45,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, User?>> getCurrentUser() async {
+  Future<Either<AuthFailure, UserEntity?>> getCurrentUser() async {
     try {
       final session = _client.auth.currentSession;
       final supaUser = session?.user;
@@ -56,14 +58,14 @@ class SupabaseAuthRepository implements AuthRepository {
           .maybeSingle();
 
       if (response == null) return Left(AuthFailure.nullUser());
-      return Right(User.fromJson(response));
+      return Right(model.User.fromJson(response).toEntity());
     } catch (e) {
       return Left(_handleException(e));
     }
   }
 
   @override
-  Future<Either<AuthFailure, User>> signUp({
+  Future<Either<AuthFailure, UserEntity>> signUp({
     required String email,
     required String password,
     required String firstName,
@@ -100,14 +102,14 @@ class SupabaseAuthRepository implements AuthRepository {
           .select()
           .single();
 
-      return Right(User.fromJson(insertResponse));
+      return Right(model.User.fromJson(insertResponse).toEntity());
     } catch (e) {
       return Left(_handleException(e));
     }
   }
 
   @override
-  Future<Either<AuthFailure, User>> signIn({
+  Future<Either<AuthFailure, UserEntity>> signIn({
     required String email,
     required String password,
   }) async {
@@ -130,70 +132,34 @@ class SupabaseAuthRepository implements AuthRepository {
           .eq('id', supaUser.id)
           .single();
 
-      return Right(User.fromJson(response));
+      return Right(model.User.fromJson(response).toEntity());
     } catch (e) {
       return Left(_handleException(e));
     }
   }
 
   @override
-  Future<Either<AuthFailure, User>> updateProfile({
+  Future<Either<AuthFailure, UserEntity>> updateProfile({
     required String firstName,
     required String lastName,
     String? middleName,
   }) async {
     try {
-      final fName = firstName.trim();
-      final lName = lastName.trim();
-      final mName = middleName?.trim() ?? '';
-
-      if (fName.isEmpty || lName.isEmpty) {
-        return Left(AuthFailure.fillForm());
-      }
-
-      final nameRegExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ]+$');
-      final lastNameRegExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$');
-
-      if (!nameRegExp.hasMatch(fName) ||
-          !lastNameRegExp.hasMatch(lName) ||
-          (mName.isNotEmpty && !nameRegExp.hasMatch(mName))) {
-        return Left(AuthFailure.invalidNameFormat());
-      }
-
-      String capitalizeWord(String word) {
-        if (word.isEmpty) return word;
-        return word[0].toUpperCase() + word.substring(1).toLowerCase();
-      }
-
-      String capitalizeComplexName(String name) {
-        return name.splitMapJoin(
-          RegExp(r'[ -]'),
-          onMatch: (m) => m.group(0)!,
-          onNonMatch: (n) => capitalizeWord(n),
-        );
-      }
-
-      final formattedFirstName = capitalizeWord(fName);
-      final formattedLastName = capitalizeComplexName(lName);
-      final formattedMiddleName = mName.isNotEmpty
-          ? capitalizeWord(mName)
-          : null;
-
       final userId = _client.auth.currentUser?.id;
       if (userId == null) return Left(AuthFailure.nullUser());
 
       final response = await _client
           .from('profiles')
           .update({
-            'first_name': formattedFirstName,
-            'last_name': formattedLastName,
-            'mid_name': formattedMiddleName,
+            'first_name': firstName,
+            'last_name': lastName,
+            'mid_name': middleName,
           })
           .eq('id', userId)
           .select()
           .single();
 
-      return Right(User.fromJson(response));
+      return Right(model.User.fromJson(response).toEntity());
     } catch (e) {
       return Left(_handleException(e));
     }
@@ -210,7 +176,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Stream<Either<AuthFailure, User?>> authStateChanges() {
+  Stream<Either<AuthFailure, UserEntity?>> authStateChanges() {
     return _client.auth.onAuthStateChange.asyncMap((event) async {
       try {
         final session = event.session;
@@ -225,7 +191,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
         if (response == null) return Right(null);
 
-        return Right(User.fromJson(response));
+        return Right(model.User.fromJson(response).toEntity());
       } catch (e) {
         return Left(_handleException(e));
       }

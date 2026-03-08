@@ -7,6 +7,10 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: child, bottomNavigationBar: bnb);
+    return Scaffold(
+      extendBody: true,
+      body: child,
+      bottomNavigationBar: bnb,
+    );
   }
 }
