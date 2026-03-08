@@ -70,5 +70,9 @@
   "history": "History",
   "editProfile": "Edit profile",
   "save": "Save",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "invalid_name_format": "Invalid format: use letters only. Hyphens and spaces are allowed in the last name.",
+  "@invalid_name_format": {
+    "description": "Error when name or last name contains numbers or special characters"
+  }
 }

@@ -223,4 +223,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get cancel => 'Отмена';
+
+  @override
+  String get invalid_name_format => 'Недопустимый формат: используйте только буквы. В фамилии разрешены дефис и пробел.';
 }

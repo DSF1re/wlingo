@@ -223,4 +223,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get invalid_name_format => 'Invalid format: use letters only. Hyphens and spaces are allowed in the last name.';
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:wlingo/core/failture/auth_failture.dart';
@@ -6,6 +8,39 @@ import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
   SupabaseClient get _client => Supabase.instance.client;
+
+  AuthFailure _handleException(Object e) {
+    if (e is SocketException || e is HttpException) {
+      return AuthFailure.networkError();
+    }
+
+    if (e is AuthException) {
+      final msg = e.message.toLowerCase();
+
+      if (msg.contains('invalid login credentials')) {
+        return AuthFailure.invalidCredentials();
+      }
+      if (msg.contains('email not confirmed')) {
+        return AuthFailure.emailNotConfirmed();
+      }
+      if (msg.contains('already registered') ||
+          msg.contains('already in use')) {
+        return AuthFailure.emailAlreadyInUse();
+      }
+      return AuthFailure.unexpected(e.message);
+    }
+
+    if (e is PostgrestException) {
+      if (e.code == 'PGRST' ||
+          e.message.contains('SocketException') ||
+          e.code == '08006') {
+        return AuthFailure.networkError();
+      }
+      return AuthFailure.unexpected(e.message);
+    }
+
+    return AuthFailure.unexpected(e.toString());
+  }
 
   @override
   Future<Either<AuthFailure, User?>> getCurrentUser() async {
@@ -21,10 +56,9 @@ class SupabaseAuthRepository implements AuthRepository {
           .maybeSingle();
 
       if (response == null) return Left(AuthFailure.nullUser());
-
       return Right(User.fromJson(response));
     } catch (e) {
-      return Left(AuthFailure.unexpected(e.toString()));
+      return Left(_handleException(e));
     }
   }
 
@@ -44,15 +78,14 @@ class SupabaseAuthRepository implements AuthRepository {
           lastName.isEmpty) {
         return Left(AuthFailure.fillForm());
       }
+
       final authResponse = await _client.auth.signUp(
         email: email,
         password: password,
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) {
-        return Left(AuthFailure.invalidCredentials());
-      }
+      if (supaUser == null) return Left(AuthFailure.invalidCredentials());
 
       final insertResponse = await _client
           .from('profiles')
@@ -68,14 +101,8 @@ class SupabaseAuthRepository implements AuthRepository {
           .single();
 
       return Right(User.fromJson(insertResponse));
-    } on AuthException catch (e) {
-      return switch (e.message) {
-        'Email already registered' => Left(AuthFailure.emailAlreadyInUse()),
-        'Invalid email' => Left(AuthFailure.invalidEmail()),
-        _ => Left(AuthFailure.unexpected(e.message)),
-      };
     } catch (e) {
-      return Left(AuthFailure.unexpected(e.toString()));
+      return Left(_handleException(e));
     }
   }
 
@@ -85,18 +112,17 @@ class SupabaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
-      if (email.isEmpty && password.isEmpty) {
+      if (email.isEmpty || password.isEmpty) {
         return Left(AuthFailure.fillAuth());
       }
+
       final authResponse = await _client.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) {
-        return Left(AuthFailure.nullUser());
-      }
+      if (supaUser == null) return Left(AuthFailure.nullUser());
 
       final response = await _client
           .from('profiles')
@@ -105,14 +131,8 @@ class SupabaseAuthRepository implements AuthRepository {
           .single();
 
       return Right(User.fromJson(response));
-    } on AuthException catch (e) {
-      return switch (e.message) {
-        'Invalid login credentials' => Left(AuthFailure.nullUser()),
-        'Email not confirmed' => Left(AuthFailure.emailNotConfirmed()),
-        _ => Left(AuthFailure.unexpected(e.message)),
-      };
     } catch (e) {
-      return Left(AuthFailure.unexpected(e.toString()));
+      return Left(_handleException(e));
     }
   }
 
@@ -123,9 +143,41 @@ class SupabaseAuthRepository implements AuthRepository {
     String? middleName,
   }) async {
     try {
-      if (firstName.trim().isEmpty || lastName.trim().isEmpty) {
+      final fName = firstName.trim();
+      final lName = lastName.trim();
+      final mName = middleName?.trim() ?? '';
+
+      if (fName.isEmpty || lName.isEmpty) {
         return Left(AuthFailure.fillForm());
       }
+
+      final nameRegExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ]+$');
+      final lastNameRegExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$');
+
+      if (!nameRegExp.hasMatch(fName) ||
+          !lastNameRegExp.hasMatch(lName) ||
+          (mName.isNotEmpty && !nameRegExp.hasMatch(mName))) {
+        return Left(AuthFailure.invalidNameFormat());
+      }
+
+      String capitalizeWord(String word) {
+        if (word.isEmpty) return word;
+        return word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }
+
+      String capitalizeComplexName(String name) {
+        return name.splitMapJoin(
+          RegExp(r'[ -]'),
+          onMatch: (m) => m.group(0)!,
+          onNonMatch: (n) => capitalizeWord(n),
+        );
+      }
+
+      final formattedFirstName = capitalizeWord(fName);
+      final formattedLastName = capitalizeComplexName(lName);
+      final formattedMiddleName = mName.isNotEmpty
+          ? capitalizeWord(mName)
+          : null;
 
       final userId = _client.auth.currentUser?.id;
       if (userId == null) return Left(AuthFailure.nullUser());
@@ -133,9 +185,9 @@ class SupabaseAuthRepository implements AuthRepository {
       final response = await _client
           .from('profiles')
           .update({
-            'first_name': firstName,
-            'last_name': lastName,
-            'mid_name': middleName,
+            'first_name': formattedFirstName,
+            'last_name': formattedLastName,
+            'mid_name': formattedMiddleName,
           })
           .eq('id', userId)
           .select()
@@ -143,7 +195,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
       return Right(User.fromJson(response));
     } catch (e) {
-      return Left(AuthFailure.unexpected(e.toString()));
+      return Left(_handleException(e));
     }
   }
 
@@ -153,7 +205,7 @@ class SupabaseAuthRepository implements AuthRepository {
       await _client.auth.signOut();
       return Right(null);
     } catch (e) {
-      return Left(AuthFailure.unexpected(e.toString()));
+      return Left(_handleException(e));
     }
   }
 
@@ -175,7 +227,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
         return Right(User.fromJson(response));
       } catch (e) {
-        return Left(AuthFailure.unexpected(e.toString()));
+        return Left(_handleException(e));
       }
     });
   }

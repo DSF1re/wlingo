@@ -1,3 +1,5 @@
+// ignore_for_file: unreachable_switch_case
+
 import 'package:wlingo/l10n/app_localizations.dart';
 
 sealed class AuthFailure {
@@ -12,6 +14,7 @@ sealed class AuthFailure {
   factory AuthFailure.fillAuth() => FillAuth();
   factory AuthFailure.fillEmail() => FillEmail();
   factory AuthFailure.fillPassword() => FillPassword();
+  factory AuthFailure.invalidNameFormat() => InvalidNameFormatFailure();
   const AuthFailure();
 }
 
@@ -28,6 +31,8 @@ extension AuthFailureStrings on AuthFailure {
       FillAuth() => loc.fill_auth,
       FillEmail() => loc.fill_email,
       FillPassword() => loc.fill_password,
+      InvalidNameFormatFailure() => loc.invalid_name_format,
+      UnexpectedFailure(message: final msg) => '${loc.error}: $msg',
       _ => loc.error,
     };
   }
@@ -45,6 +50,8 @@ class UnexpectedFailure extends AuthFailure {
 class UserNotFound extends AuthFailure {}
 
 class EmailNotConfirmedFailure extends AuthFailure {}
+
+class InvalidNameFormatFailure extends AuthFailure {}
 
 class EmailAlredyInUse extends AuthFailure {}
 

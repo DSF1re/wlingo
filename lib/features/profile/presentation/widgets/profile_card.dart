@@ -3,9 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/failture/auth_failture.dart';
-import 'package:wlingo/core/global_variables/public_vars.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart';
 import 'package:wlingo/features/auth/domain/providers/auth_provider.dart';
+import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
@@ -29,54 +29,94 @@ class ProfileCard extends HookConsumerWidget {
     final lastController = useTextEditingController(text: user.lastName);
     final middleController = useTextEditingController(text: user.middleName);
 
+    useValueChanged<User, void>(user, (_, _) {
+      firstController.text = user.firstName;
+      lastController.text = user.lastName;
+      middleController.text = user.middleName ?? '';
+    });
+
     void showEditDialog(BuildContext context) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text(loc.editProfile),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: firstController,
-                decoration: InputDecoration(labelText: loc.first_name),
-              ),
-              TextField(
-                controller: lastController,
-                decoration: InputDecoration(labelText: loc.last_name),
-              ),
-              TextField(
-                controller: middleController,
-                decoration: InputDecoration(labelText: loc.mid_name),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(onPressed: () => context.pop(), child: Text(loc.cancel)),
-            ElevatedButton(
-              onPressed: () async {
-                final repository = ref.read(authRepositoryProvider);
+        barrierDismissible: false,
+        builder: (context) => HookBuilder(
+          builder: (dialogContext) {
+            final errorMessage = useState<String?>(null);
+            final isLoading = useState(false);
 
-                final result = await repository.updateProfile(
-                  firstName: firstController.text,
-                  lastName: lastController.text,
-                  middleName: middleController.text,
-                );
+            return AlertDialog(
+              title: Text(loc.editProfile),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (errorMessage.value != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        errorMessage.value!,
+                        style: const TextStyle(color: Colors.red, fontSize: 13),
+                      ),
+                    ),
+                  TextField(
+                    controller: firstController,
+                    enabled: !isLoading.value,
+                    decoration: InputDecoration(labelText: loc.first_name),
+                  ),
+                  TextField(
+                    controller: lastController,
+                    enabled: !isLoading.value,
+                    decoration: InputDecoration(labelText: loc.last_name),
+                  ),
+                  TextField(
+                    controller: middleController,
+                    enabled: !isLoading.value,
+                    decoration: InputDecoration(labelText: loc.mid_name),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: isLoading.value ? null : () => dialogContext.pop(),
+                  child: Text(loc.cancel),
+                ),
+                ElevatedButton(
+                  onPressed: isLoading.value
+                      ? null
+                      : () async {
+                          isLoading.value = true;
+                          errorMessage.value = null;
 
-                result.fold(
-                  (failure) {
-                    scaffoldMessengerKey.currentState?.showSnackBar(
-                      SnackBar(content: Text(failure.toLocalizedMessage(loc))),
-                    );
-                  },
-                  (user) {
-                    if (context.mounted) context.pop();
-                  },
-                );
-              },
-              child: Text(loc.save),
-            ),
-          ],
+                          final repository = ref.read(authRepositoryProvider);
+                          final result = await repository.updateProfile(
+                            firstName: firstController.text,
+                            lastName: lastController.text,
+                            middleName: middleController.text,
+                          );
+
+                          result.fold(
+                            (failure) {
+                              isLoading.value = false;
+                              errorMessage.value = failure.toLocalizedMessage(
+                                loc,
+                              );
+                            },
+                            (updatedUser) {
+                              ref.invalidate(currentUserProvider);
+                              if (dialogContext.mounted) dialogContext.pop();
+                            },
+                          );
+                        },
+                  child: isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(loc.save),
+                ),
+              ],
+            );
+          },
         ),
       );
     }
@@ -95,7 +135,7 @@ class ProfileCard extends HookConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  '${user.firstName} ${user.lastName} ${user.middleName}',
+                  '${user.firstName} ${user.lastName} ${user.middleName ?? ''}',
                   style: ThemeTextStyles.title1SemiBold(isDark: isDark),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/core/failture/auth_failture.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/domain/providers/current_user_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
@@ -55,7 +56,7 @@ class ProfileScreen extends HookConsumerWidget {
         ),
         data: (either) => either.fold(
           (failure) => ErrorPlaceholder(
-            message: '${loc.error}: $failure',
+            message: failure.toLocalizedMessage(loc),
             onRetry: () => ref.invalidate(currentUserProvider),
           ),
           (user) {

@@ -526,6 +526,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// Error when name or last name contains numbers or special characters
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid format: use letters only. Hyphens and spaces are allowed in the last name.'**
+  String get invalid_name_format;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
