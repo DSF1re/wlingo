@@ -8,6 +8,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/theme/text_styles.dart';
+import 'package:wlingo/widgets/base_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class PdfViewerScreen extends HookConsumerWidget {
   const PdfViewerScreen({
@@ -60,36 +62,56 @@ class PdfViewerScreen extends HookConsumerWidget {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          title,
-          style: ThemeTextStyles.title3SemiBold(isDark: isDark),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => loadPdf(forceRefresh: true),
+    return BaseScreen(
+      isDark: isDark,
+      safeAreaTop: true,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  onPressed: () => context.pop(),
+                  color: isDark ? Colors.white : Colors.black,
+                ),
+                Expanded(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: ThemeTextStyles.title3SemiBold(isDark: isDark),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh_rounded),
+                  onPressed: () => loadPdf(forceRefresh: true),
+                  color: isDark ? Colors.white : Colors.black,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: pdfFile.value == null
+                ? const Center(child: CircularProgressIndicator())
+                : SfPdfViewer.file(
+                    pdfFile.value!,
+                    controller: controller,
+                    onDocumentLoaded: (details) {
+                      totalPages.value = details.document.pages.count;
+                      final saved = prefs.getBookPage(bookId);
+                      if (saved > 1) {
+                        Future.microtask(() => controller.jumpToPage(saved));
+                        currentPage.value = saved;
+                      }
+                    },
+                    onPageChanged: (details) =>
+                        handlePageChange(details.newPageNumber),
+                  ),
           ),
         ],
       ),
-      body: pdfFile.value == null
-          ? const Center(child: CircularProgressIndicator())
-          : SfPdfViewer.file(
-              pdfFile.value!,
-              controller: controller,
-              onDocumentLoaded: (details) {
-                totalPages.value = details.document.pages.count;
-                final saved = prefs.getBookPage(bookId);
-                if (saved > 1) {
-                  Future.microtask(() => controller.jumpToPage(saved));
-                  currentPage.value = saved;
-                }
-              },
-              onPageChanged: (details) =>
-                  handlePageChange(details.newPageNumber),
-            ),
     );
   }
 }

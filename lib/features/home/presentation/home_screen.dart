@@ -12,6 +12,7 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
+import 'package:wlingo/widgets/base_screen.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class HomeScreen extends HookConsumerWidget {
@@ -43,115 +44,76 @@ class HomeScreen extends HookConsumerWidget {
       error: (err, stack) => Center(child: Text('${loc.error}: $err')),
     );
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: isDark
-                      ? [
-                          const Color(0xFF1A1A2E),
-                          const Color(0xFF16213E),
-                          const Color(0xFF0F3460),
-                        ]
-                      : [
-                          const Color(0xFFF7F9FC),
-                          const Color(0xFFEDF2F7),
-                          const Color(0xFFE2E8F0),
-                        ],
-                ),
+    return BaseScreen(
+      isDark: isDark,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    loc.home,
+                    style: ThemeTextStyles.title1ExtraBold(
+                      isDark: isDark,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      AppbarActions(isDark: isDark),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        onPressed: () async {
+                          ref.read(signOutUseCaseProvider).call();
+                          context.go(Routes.login);
+                        },
+                        icon: GlassBox(
+                          padding: const EdgeInsets.all(8),
+                          opacity: 0.1,
+                          blur: 5,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Icon(
+                            Icons.logout_rounded,
+                            color: isDark ? Colors.white : Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
-          SafeArea(
-            bottom: false,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  loc.home,
-                                  style: ThemeTextStyles.title1ExtraBold(
-                                    isDark: isDark,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                AppbarActions(isDark: isDark),
-                                const SizedBox(width: 8),
-                                IconButton(
-                                  onPressed: () async {
-                                    ref.read(signOutUseCaseProvider).call();
-                                    context.go(Routes.login);
-                                  },
-                                  icon: GlassBox(
-                                    padding: const EdgeInsets.all(8),
-                                    opacity: 0.1,
-                                    blur: 5,
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Icon(
-                                      Icons.logout_rounded,
-                                      color: isDark
-                                          ? Colors.white
-                                          : Colors.black,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate([
-                          langList,
-                          const SizedBox(height: 24),
-                          MenuTile(
-                            icon: Icons.mic_rounded,
-                            title: loc.ex_pronunce,
-                            iconColor: const Color(0xFFFF6B6B),
-                            onTap: () => context.go(Routes.pronounceGame),
-                          ),
-                          MenuTile(
-                            icon: Icons.auto_stories_rounded,
-                            title: loc.study_materials,
-                            iconColor: const Color(0xFF5B7BFE),
-                            onTap: () => context.go(Routes.books),
-                          ),
-                          if (isAdmin)
-                            MenuTile(
-                              icon: Icons.add_circle_outline_rounded,
-                              title: loc.add_study_materials,
-                              iconColor: const Color(0xFF2ED573),
-                              onTap: () => context.push(Routes.addBook),
-                            ),
-                          const SizedBox(height: 100),
-                        ]),
-                      ),
-                    ),
-                  ],
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                langList,
+                const SizedBox(height: 24),
+                MenuTile(
+                  icon: Icons.mic_rounded,
+                  title: loc.ex_pronunce,
+                  iconColor: const Color(0xFFFF6B6B),
+                  onTap: () => context.go(Routes.pronounceGame),
                 ),
-              ),
+                MenuTile(
+                  icon: Icons.auto_stories_rounded,
+                  title: loc.study_materials,
+                  iconColor: const Color(0xFF5B7BFE),
+                  onTap: () => context.go(Routes.books),
+                ),
+                if (isAdmin)
+                  MenuTile(
+                    icon: Icons.add_circle_outline_rounded,
+                    title: loc.add_study_materials,
+                    iconColor: const Color(0xFF2ED573),
+                    onTap: () => context.push(Routes.addBook),
+                  ),
+                const SizedBox(height: 100),
+              ]),
             ),
           ),
         ],

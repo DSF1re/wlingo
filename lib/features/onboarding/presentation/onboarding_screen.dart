@@ -12,6 +12,7 @@ import 'package:wlingo/features/onboarding/presentation/widgets/onboarding_pagev
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
+import 'package:wlingo/widgets/base_screen.dart';
 import 'package:wlingo/widgets/button.dart';
 
 class OnboardingScreen extends HookConsumerWidget {
@@ -27,61 +28,67 @@ class OnboardingScreen extends HookConsumerWidget {
         ? true
         : false;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        actions: [AppbarActions(isDark: isDark)],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 500),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OnboardinPageview(
-                  controller: pageController,
-                  items: onboardingData,
-                  onPageChanged: (index) {
-                    ref.read(pageProvider.notifier).state = index;
-                  },
-                ),
-                DotsW(onboardingData: onboardingData, currentPage: currentPage),
-                BottomOnboarding(
-                  currentPage: currentPage,
-                  items: onboardingData,
-                ),
-                Column(
-                  spacing: 8,
-                  children: [
-                    Button(
-                      text: onboardingData[currentPage].buttonText,
-                      onClicked: () => onNextPressed(
-                        context,
-                        ref,
-                        pageController,
-                        currentPage,
-                        onboardingData.length,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => skipOnboarding(context),
-                      child: Text(
-                        loc.skipOnboarding,
-                        style: ThemeTextStyles.custom(
-                          isDark: isDark,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+    return BaseScreen(
+      isDark: isDark,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [AppbarActions(isDark: isDark, padding: 0)],
             ),
           ),
-        ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  OnboardinPageview(
+                    controller: pageController,
+                    items: onboardingData,
+                    onPageChanged: (index) {
+                      ref.read(pageProvider.notifier).state = index;
+                    },
+                  ),
+                  DotsW(onboardingData: onboardingData, currentPage: currentPage),
+                  BottomOnboarding(
+                    currentPage: currentPage,
+                    items: onboardingData,
+                  ),
+                  const SizedBox(height: 24),
+                  Column(
+                    spacing: 8,
+                    children: [
+                      Button(
+                        text: onboardingData[currentPage].buttonText,
+                        onClicked: () => onNextPressed(
+                          context,
+                          ref,
+                          pageController,
+                          currentPage,
+                          onboardingData.length,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => skipOnboarding(context),
+                        child: Text(
+                          loc.skipOnboarding,
+                          style: ThemeTextStyles.custom(
+                            isDark: isDark,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

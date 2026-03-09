@@ -9,6 +9,7 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/images.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
+import 'package:wlingo/widgets/base_screen.dart';
 import 'package:wlingo/widgets/button.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 import 'package:wlingo/widgets/input.dart';
@@ -42,116 +43,88 @@ class AuthScreen extends HookConsumerWidget {
       );
     });
 
-    return Scaffold(
-      body: Stack(
+    return BaseScreen(
+      isDark: isDark,
+      child: Column(
         children: [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: isDark
-                      ? [
-                          const Color(0xFF1A1A2E),
-                          const Color(0xFF16213E),
-                          const Color(0xFF0F3460),
-                        ]
-                      : [
-                          const Color(0xFFF7F9FC),
-                          const Color(0xFFEDF2F7),
-                          const Color(0xFFE2E8F0),
-                        ],
-                ),
-              ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [AppbarActions(isDark: isDark, padding: 0)],
             ),
           ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [AppbarActions(isDark: isDark, padding: 0)],
-                  ),
-                ),
-
-                Expanded(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 420),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: GlassBox(
-                            padding: const EdgeInsets.all(20),
-                            opacity: isDark ? 0.08 : 0.4,
-                            blur: 12,
-                            borderRadius: BorderRadius.circular(28),
-                            color: isDark ? Colors.white : Colors.white,
-                            border: Border.all(
-                              color: (isDark ? Colors.white : Colors.black)
-                                  .withValues(alpha: 0.08),
-                              width: 1,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset(AppImages.icon, width: 140),
-                                const SizedBox(height: 20),
-                                Text(
-                                  loc.promo_auth,
-                                  textAlign: TextAlign.center,
-                                  style: ThemeTextStyles.custom(
-                                    fontSize: 20,
-                                    isDark: isDark,
-                                  ),
-                                ),
-                                const SizedBox(height: 28),
-                                Input(
-                                  controller: emailController,
-                                  labelText: loc.email,
-                                ),
-                                const SizedBox(height: 14),
-                                Input(
-                                  controller: passwordController,
-                                  isObscured: true,
-                                  labelText: loc.password,
-                                ),
-                                const SizedBox(height: 24),
-                                Button(
-                                  isLoading: authState.isLoading,
-                                  text: loc.login,
-                                  onClicked: () {
-                                    ref
-                                        .read(authControllerProvider.notifier)
-                                        .login(
-                                          emailController.text,
-                                          passwordController.text,
-                                        );
-                                  },
-                                ),
-                                const SizedBox(height: 8),
-                                TextButton(
-                                  onPressed: () => context.go(Routes.register),
-                                  child: Text(
-                                    loc.sign_up,
-                                    style: ThemeTextStyles.regular(
-                                      isDark: isDark,
-                                    ),
-                                  ),
-                                ),
-                              ],
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: GlassBox(
+                      padding: const EdgeInsets.all(20),
+                      opacity: isDark ? 0.08 : 0.4,
+                      blur: 12,
+                      borderRadius: BorderRadius.circular(28),
+                      color: isDark ? Colors.white : Colors.white,
+                      border: Border.all(
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withValues(alpha: 0.08),
+                        width: 1,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(AppImages.icon, width: 140),
+                          const SizedBox(height: 20),
+                          Text(
+                            loc.promo_auth,
+                            textAlign: TextAlign.center,
+                            style: ThemeTextStyles.custom(
+                              fontSize: 20,
+                              isDark: isDark,
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 28),
+                          Input(
+                            controller: emailController,
+                            labelText: loc.email,
+                          ),
+                          const SizedBox(height: 14),
+                          Input(
+                            controller: passwordController,
+                            isObscured: true,
+                            labelText: loc.password,
+                          ),
+                          const SizedBox(height: 24),
+                          Button(
+                            isLoading: authState.isLoading,
+                            text: loc.login,
+                            onClicked: () {
+                              ref
+                                  .read(authControllerProvider.notifier)
+                                  .login(
+                                    emailController.text,
+                                    passwordController.text,
+                                  );
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () => context.go(Routes.register),
+                            child: Text(
+                              loc.sign_up,
+                              style: ThemeTextStyles.regular(
+                                isDark: isDark,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ],

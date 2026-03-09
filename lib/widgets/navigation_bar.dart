@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
     final items = navBarItems(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 0, 40, 24),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),

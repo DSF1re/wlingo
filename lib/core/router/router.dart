@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
+import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.dart';
 import 'package:wlingo/features/bookview/presentation/screens/book_screen.dart';
 import 'package:wlingo/features/bookview/presentation/screens/pdf_view.dart';
-import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.dart';
 import 'package:wlingo/features/home/presentation/home_screen.dart';
 import 'package:wlingo/features/main/presentation/main_layout.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
@@ -18,7 +18,7 @@ import 'package:wlingo/widgets/navigation_bar.dart';
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: shared.getBool('onboarding_completed') == true
-        ? Routes.login
+        ? Routes.splash
         : Routes.splash,
     routes: [
       GoRoute(
