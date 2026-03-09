@@ -18,7 +18,7 @@ import 'package:wlingo/widgets/navigation_bar.dart';
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: shared.getBool('onboarding_completed') == true
-        ? Routes.splash
+        ? Routes.login
         : Routes.splash,
     routes: [
       GoRoute(
