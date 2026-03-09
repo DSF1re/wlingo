@@ -40,8 +40,9 @@ class PronunciationGameScreen extends HookConsumerWidget {
       if (wordsState.value?.isNotEmpty == true && currentWord.value == null) {
         pickWord();
       }
+      final notifier = ref.read(speechNotifierProvider.notifier);
       return () {
-        ref.read(speechNotifierProvider.notifier).stop();
+        notifier.stop();
       };
     }, [wordsState.value]);
 
@@ -93,9 +94,7 @@ class PronunciationGameScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.pronunciation,
-                    style: ThemeTextStyles.title3SemiBold(
-                      isDark: isDark,
-                    ),
+                    style: ThemeTextStyles.title3SemiBold(isDark: isDark),
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),
@@ -109,18 +108,10 @@ class PronunciationGameScreen extends HookConsumerWidget {
               data: (words) => words.isEmpty || currentWord.value == null
                   ? Center(child: Text(loc.error))
                   : Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        24,
-                        24,
-                        24,
-                        0,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
                       child: Column(
                         children: [
-                          WordDisplay(
-                            word: currentWord.value!,
-                            isDark: isDark,
-                          ),
+                          WordDisplay(word: currentWord.value!, isDark: isDark),
                           const Spacer(),
                           if (speechState.value?.isNotEmpty == true &&
                               !speechState.isLoading)
@@ -135,9 +126,7 @@ class PronunciationGameScreen extends HookConsumerWidget {
                             onRecordAndCheck: () async {
                               if (speechState.isLoading) {
                                 await ref
-                                    .read(
-                                      speechNotifierProvider.notifier,
-                                    )
+                                    .read(speechNotifierProvider.notifier)
                                     .stop();
                                 return "";
                               }

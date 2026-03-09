@@ -532,6 +532,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid format: use letters only. Hyphens and spaces are allowed in the last name.'**
   String get invalid_name_format;
+
+  /// No description provided for @downloadCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Certificate'**
+  String get downloadCertificate;
+
+  /// No description provided for @certificateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate of Completion'**
+  String get certificateTitle;
+
+  /// No description provided for @certificateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Introductory Language Course'**
+  String get certificateSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

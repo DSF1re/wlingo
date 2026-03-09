@@ -226,4 +226,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get invalid_name_format => 'Недопустимый формат: используйте только буквы. В фамилии разрешены дефис и пробел.';
+
+  @override
+  String get downloadCertificate => 'Скачать сертификат';
+
+  @override
+  String get certificateTitle => 'Сертификат об окончании';
+
+  @override
+  String get certificateSubtitle => 'Вводный языковой курс';
 }

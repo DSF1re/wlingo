@@ -226,4 +226,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalid_name_format => 'Invalid format: use letters only. Hyphens and spaces are allowed in the last name.';
+
+  @override
+  String get downloadCertificate => 'Download Certificate';
+
+  @override
+  String get certificateTitle => 'Certificate of Completion';
+
+  @override
+  String get certificateSubtitle => 'Introductory Language Course';
 }
