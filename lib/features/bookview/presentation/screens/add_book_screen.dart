@@ -104,9 +104,9 @@ class AddBookScreen extends HookConsumerWidget {
             width: 1.5,
           ),
         ),
-        labelStyle: TextStyle(
+        labelStyle: ThemeTextStyles.caption(
+          isDark: isDark,
           color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
-          fontSize: 14,
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -189,10 +189,7 @@ class AddBookScreen extends HookConsumerWidget {
                         children: [
                           TextFormField(
                             controller: titleController,
-                            style: TextStyle(
-                              color: isDark ? Colors.white : Colors.black,
-                              fontSize: 15,
-                            ),
+                            style: ThemeTextStyles.regular(isDark: isDark),
                             decoration: premiumDecoration(
                               label: loc.book_name,
                               icon: Icons.title_rounded,
@@ -205,10 +202,7 @@ class AddBookScreen extends HookConsumerWidget {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: authorController,
-                            style: TextStyle(
-                              color: isDark ? Colors.white : Colors.black,
-                              fontSize: 15,
-                            ),
+                            style: ThemeTextStyles.regular(isDark: isDark),
                             decoration: premiumDecoration(
                               label: loc.author,
                               icon: Icons.person_rounded,
@@ -222,10 +216,7 @@ class AddBookScreen extends HookConsumerWidget {
                           languagesAsync.when(
                             data: (langs) {
                               return DropdownButtonFormField<int>(
-                                style: TextStyle(
-                                  color: isDark ? Colors.white : Colors.black,
-                                  fontSize: 15,
-                                ),
+                                style: ThemeTextStyles.regular(isDark: isDark),
                                 decoration: premiumDecoration(
                                   icon: Icons.language_rounded,
                                   isDark: isDark,
@@ -297,16 +288,16 @@ class AddBookScreen extends HookConsumerWidget {
                                     selectedFileName.value ?? loc.select_upload,
                                     textAlign: TextAlign.center,
                                     style: ThemeTextStyles.regular(
-                                      color: (isDark
-                                          ? Colors.white
-                                          : Colors.black),
+                                      isDark: isDark,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   if (selectedFileName.value == null) ...[
                                     const SizedBox(height: 4),
                                     Text(
                                       loc.pdf_files_only,
-                                      style: ThemeTextStyles.regular(
+                                      style: ThemeTextStyles.caption(
+                                        isDark: isDark,
                                         color:
                                             (isDark
                                                     ? Colors.white

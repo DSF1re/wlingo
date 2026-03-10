@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/data/models/rating_record/rating_record.dart';
 import 'package:wlingo/features/profile/domain/providers/word_provider.dart';
+import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class HistoryTile extends ConsumerWidget {
@@ -53,10 +54,9 @@ class HistoryTile extends ConsumerWidget {
                   wordAsync.when(
                     data: (word) => Text(
                       word.word,
-                      style: TextStyle(
+                      style: ThemeTextStyles.regular(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: isDark ? Colors.white : Colors.black87,
+                        isDark: isDark,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -75,8 +75,8 @@ class HistoryTile extends ConsumerWidget {
                     const SizedBox(height: 2),
                     Text(
                       record.userAnswer!,
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: ThemeTextStyles.caption(
+                        isDark: isDark,
                         color: (isDark ? Colors.white : Colors.black)
                             .withValues(alpha: 0.45),
                       ),
@@ -88,30 +88,13 @@ class HistoryTile extends ConsumerWidget {
             const SizedBox(width: 12),
             Text(
               '${record.createdAt.day.toString().padLeft(2, '0')}.${record.createdAt.month.toString().padLeft(2, '0')}.${record.createdAt.year}',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
+              style: ThemeTextStyles.small(
+                isDark: isDark,
                 color: (isDark ? Colors.white : Colors.black).withValues(
                   alpha: 0.3,
                 ),
               ),
             ),
-            const SizedBox(width: 12),
-            if (!isCorrect)
-              wordAsync.when(
-                data: (word) => Text(
-                  word.russian,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: (isDark ? Colors.white : Colors.black).withValues(
-                      alpha: 0.35,
-                    ),
-                  ),
-                ),
-                loading: () => const SizedBox.shrink(),
-                error: (_, _) => const SizedBox.shrink(),
-              ),
           ],
         ),
       ),

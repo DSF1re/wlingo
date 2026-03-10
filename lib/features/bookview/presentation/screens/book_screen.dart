@@ -32,9 +32,7 @@ class BooksScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.study_materials,
-                    style: ThemeTextStyles.title1SemiBold(
-                      isDark: isDark,
-                    ),
+                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),
@@ -50,9 +48,7 @@ class BooksScreen extends HookConsumerWidget {
                 return RefreshIndicator(
                   onRefresh: () => ref.read(booksProvider.notifier).refresh(),
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: books.length,
                     itemBuilder: (context, i) {
                       final book = books[i];
@@ -69,7 +65,7 @@ class BooksScreen extends HookConsumerWidget {
                               Uri(
                                 path: Routes.pdf,
                                 queryParameters: queryParams,
-                                ).toString(),
+                              ).toString(),
                             );
                           },
                           child: GlassBox(
@@ -110,25 +106,21 @@ class BooksScreen extends HookConsumerWidget {
                                     children: [
                                       Text(
                                         book.title,
-                                        style: TextStyle(
-                                          fontSize: 15,
+                                        style: ThemeTextStyles.regular(
                                           fontWeight: FontWeight.w600,
-                                          color: isDark
-                                              ? Colors.white
-                                              : Colors.black87,
+                                          isDark: isDark,
                                         ),
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
                                         book.author,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: (isDark
-                                                  ? Colors.white
-                                                  : Colors.black)
-                                              .withValues(
-                                            alpha: 0.45,
-                                          ),
+                                        style: ThemeTextStyles.caption(
+                                          isDark: isDark,
+                                          color:
+                                              (isDark
+                                                      ? Colors.white
+                                                      : Colors.black)
+                                                  .withValues(alpha: 0.45),
                                         ),
                                       ),
                                     ],

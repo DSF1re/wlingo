@@ -90,6 +90,30 @@ abstract class ThemeTextStyles {
     );
   }
 
+  static TextStyle caption({
+    Color? color,
+    FontWeight? fontWeight = FontWeight.w400,
+    bool? isDark,
+  }) {
+    return GoogleFonts.manrope(
+      fontSize: 12,
+      fontWeight: fontWeight,
+      color: color ?? _getDefaultColor(isDark: isDark),
+    );
+  }
+
+  static TextStyle small({
+    Color? color,
+    FontWeight? fontWeight = FontWeight.w400,
+    bool? isDark,
+  }) {
+    return GoogleFonts.manrope(
+      fontSize: 10,
+      fontWeight: fontWeight,
+      color: color ?? _getDefaultColor(isDark: isDark),
+    );
+  }
+
   static TextStyle custom({
     Color? color,
     FontWeight? fontWeight = FontWeight.w400,
