@@ -235,4 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get certificateSubtitle => 'Introductory Language Course';
+
+  @override
+  String get dateLabel => 'Date';
 }

@@ -550,6 +550,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Introductory Language Course'**
   String get certificateSubtitle;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

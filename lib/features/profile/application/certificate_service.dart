@@ -1,4 +1,6 @@
-import 'package:intl/intl.dart';
+import 'dart:math';
+
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -13,8 +15,16 @@ class CertificateService {
     final font = await PdfGoogleFonts.robotoRegular();
     final boldFont = await PdfGoogleFonts.robotoBold();
 
+    final logoImage = pw.MemoryImage(
+      (await rootBundle.load('assets/images/icon.png')).buffer.asUint8List(),
+    );
+
+    final random = Random();
+    final certNumber = List.generate(10, (_) => random.nextInt(10)).join();
+
     final now = DateTime.now();
-    final dateString = DateFormat.yMMMMd().format(now);
+    final dateString =
+        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
 
     pdf.addPage(
       pw.Page(
@@ -38,7 +48,9 @@ class CertificateService {
                       color: PdfColors.blue900,
                     ),
                   ),
-                  pw.SizedBox(height: 20),
+                  pw.SizedBox(height: 10),
+                  pw.Image(logoImage, width: 150, height: 150),
+                  pw.SizedBox(height: 10),
                   pw.Text(
                     loc.certificateSubtitle,
                     style: const pw.TextStyle(
@@ -63,7 +75,8 @@ class CertificateService {
                       pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('Date: $dateString'),
+                          pw.Text('${loc.dateLabel}: $dateString'),
+                          pw.Text('№ $certNumber'),
                           pw.Text('Wlingo Language Platform'),
                         ],
                       ),
@@ -72,7 +85,8 @@ class CertificateService {
                         height: 100,
                         child: pw.BarcodeWidget(
                           barcode: pw.Barcode.qrCode(),
-                          data: 'https://wlingo.app/verify/certificate',
+                          data:
+                              'https://wlingo.app/verify/certificate?id=$certNumber',
                         ),
                       ),
                     ],

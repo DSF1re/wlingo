@@ -14,7 +14,9 @@ class HistoryTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wordAsync = ref.watch(wordProvider(record.correctWordId));
     final isCorrect = record.isCorrect;
-    final statusColor = isCorrect ? const Color(0xFF2ED573) : const Color(0xFFFF6B6B);
+    final statusColor = isCorrect
+        ? const Color(0xFF2ED573)
+        : const Color(0xFFFF6B6B);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -56,6 +58,7 @@ class HistoryTile extends ConsumerWidget {
                         fontSize: 14,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     loading: () => Container(
                       height: 14,
@@ -82,6 +85,18 @@ class HistoryTile extends ConsumerWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 12),
+            Text(
+              '${record.createdAt.day.toString().padLeft(2, '0')}.${record.createdAt.month.toString().padLeft(2, '0')}.${record.createdAt.year}',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w400,
+                color: (isDark ? Colors.white : Colors.black).withValues(
+                  alpha: 0.3,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
             if (!isCorrect)
               wordAsync.when(
                 data: (word) => Text(
@@ -89,8 +104,9 @@ class HistoryTile extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: (isDark ? Colors.white : Colors.black)
-                        .withValues(alpha: 0.35),
+                    color: (isDark ? Colors.white : Colors.black).withValues(
+                      alpha: 0.35,
+                    ),
                   ),
                 ),
                 loading: () => const SizedBox.shrink(),

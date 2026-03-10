@@ -235,4 +235,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get certificateSubtitle => 'Вводный языковой курс';
+
+  @override
+  String get dateLabel => 'Дата';
 }

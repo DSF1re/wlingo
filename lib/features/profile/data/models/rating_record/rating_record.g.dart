@@ -13,6 +13,7 @@ _RatingRecord _$RatingRecordFromJson(Map<String, dynamic> json) =>
       userAnswer: json['user_answer'] as String?,
       userId: json['user_id'] as String,
       isCorrect: json['is_correct'] as bool,
+      createdAt: DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$RatingRecordToJson(_RatingRecord instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$RatingRecordToJson(_RatingRecord instance) =>
       'user_answer': instance.userAnswer,
       'user_id': instance.userId,
       'is_correct': instance.isCorrect,
+      'created_at': instance.createdAt.toIso8601String(),
     };

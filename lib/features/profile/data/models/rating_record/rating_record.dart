@@ -11,6 +11,7 @@ sealed class RatingRecord with _$RatingRecord {
     @JsonKey(name: 'user_answer') required String? userAnswer,
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'is_correct') required bool isCorrect,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
   }) = _RatingRecord;
   factory RatingRecord.fromJson(Map<String, dynamic> json) =>
       _$RatingRecordFromJson(json);

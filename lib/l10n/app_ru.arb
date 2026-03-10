@@ -77,5 +77,6 @@
   },
   "downloadCertificate": "Скачать сертификат",
   "certificateTitle": "Сертификат об окончании",
-  "certificateSubtitle": "Вводный языковой курс"
+  "certificateSubtitle": "Вводный языковой курс",
+  "dateLabel": "Дата"
 }

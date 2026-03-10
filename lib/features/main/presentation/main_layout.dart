@@ -7,6 +7,14 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(extendBody: true, body: child, bottomNavigationBar: bnb);
+    return Scaffold(
+      extendBody: true,
+      body: child,
+      bottomNavigationBar: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [bnb],
+      ),
+    );
   }
 }
