@@ -10,7 +10,6 @@ import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/text_styles.dart';
-import 'package:wlingo/widgets/glass_box.dart';
 
 class AddBookScreen extends HookConsumerWidget {
   const AddBookScreen({super.key});
@@ -156,17 +155,7 @@ class AddBookScreen extends HookConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () => context.pop(),
-                  child: GlassBox(
-                    padding: const EdgeInsets.all(8),
-                    opacity: isDark ? 0.05 : 0.1,
-                    blur: 10,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Icon(
-                      Icons.close_rounded,
-                      color: isDark ? Colors.white : Colors.black,
-                      size: 20,
-                    ),
-                  ),
+                  child: Icon(Icons.close_rounded),
                 ),
               ],
             ),

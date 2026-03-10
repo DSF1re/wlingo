@@ -22,10 +22,12 @@ class ProfileCard extends HookConsumerWidget {
   });
 
   void _showEditDialog(BuildContext context) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => EditProfileDialog(user: user, loc: loc),
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => EditProfileSheet(user: user, loc: loc),
     );
   }
 
@@ -84,7 +86,8 @@ class ProfileCard extends HookConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
+          if (user.isAdmin) ...[_buildAdminBadge(), const SizedBox(height: 12)],
           Row(
             children: [
               _buildRatingBadge(),
@@ -113,10 +116,6 @@ class ProfileCard extends HookConsumerWidget {
                 loading: () => const SizedBox.shrink(),
                 error: (_, _) => const SizedBox.shrink(),
               ),
-              if (user.isAdmin) ...[
-                const SizedBox(width: 8),
-                _buildAdminBadge(),
-              ],
             ],
           ),
         ],
@@ -178,7 +177,7 @@ class ProfileCard extends HookConsumerWidget {
 
   Widget _buildAdminBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFF2ED573).withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
@@ -186,9 +185,9 @@ class ProfileCard extends HookConsumerWidget {
       child: Text(
         loc.admin,
         style: ThemeTextStyles.regular(
-          fontWeight: FontWeight.w700,
           color: Color(0xFF2ED573),
-        ),
+        ).copyWith(fontSize: 12),
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
