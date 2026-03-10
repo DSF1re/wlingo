@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
+import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
 import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
@@ -13,7 +14,6 @@ import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
-import 'package:wlingo/widgets/glass_box.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -56,9 +56,7 @@ class HomeScreen extends HookConsumerWidget {
                 children: [
                   Text(
                     loc.home,
-                    style: ThemeTextStyles.title1ExtraBold(
-                      isDark: isDark,
-                    ),
+                    style: ThemeTextStyles.title1ExtraBold(isDark: isDark),
                   ),
                   Row(
                     children: [
@@ -69,17 +67,7 @@ class HomeScreen extends HookConsumerWidget {
                           ref.read(signOutUseCaseProvider).call();
                           context.go(Routes.login);
                         },
-                        icon: GlassBox(
-                          padding: const EdgeInsets.all(8),
-                          opacity: 0.1,
-                          blur: 5,
-                          borderRadius: BorderRadius.circular(12),
-                          child: Icon(
-                            Icons.logout_rounded,
-                            color: isDark ? Colors.white : Colors.black,
-                            size: 20,
-                          ),
-                        ),
+                        icon: Icon(Icons.logout_rounded),
                       ),
                     ],
                   ),
@@ -110,7 +98,15 @@ class HomeScreen extends HookConsumerWidget {
                     icon: Icons.add_circle_outline_rounded,
                     title: loc.add_study_materials,
                     iconColor: const Color(0xFF2ED573),
-                    onTap: () => context.push(Routes.addBook),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const AddBookScreen(),
+                      );
+                    },
                   ),
                 const SizedBox(height: 100),
               ]),

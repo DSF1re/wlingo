@@ -14,7 +14,6 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
-import 'package:wlingo/widgets/glass_box.dart';
 
 class PronunciationGameScreen extends HookConsumerWidget {
   const PronunciationGameScreen({super.key});
@@ -73,28 +72,18 @@ class PronunciationGameScreen extends HookConsumerWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () => context.go(Routes.home),
-                  child: GlassBox(
-                    padding: const EdgeInsets.all(8),
-                    opacity: isDark ? 0.1 : 0.3,
-                    blur: 8,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      color: isDark ? Colors.white : Colors.black,
-                      size: 20,
-                    ),
-                  ),
+                  child: Icon(Icons.arrow_back_rounded),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     loc.pronunciation,
-                    style: ThemeTextStyles.title3SemiBold(isDark: isDark),
+                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),

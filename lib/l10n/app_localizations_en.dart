@@ -238,4 +238,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateLabel => 'Date';
+
+  @override
+  String get pdf_files_only => 'PDF files only';
 }

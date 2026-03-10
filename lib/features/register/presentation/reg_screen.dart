@@ -55,17 +55,7 @@ class RegisterScreen extends HookConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () => context.go(Routes.login),
-                  child: GlassBox(
-                    padding: const EdgeInsets.all(8),
-                    opacity: isDark ? 0.1 : 0.3,
-                    blur: 8,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      color: isDark ? Colors.white : Colors.black,
-                      size: 20,
-                    ),
-                  ),
+                  child: Icon(Icons.arrow_back_rounded),
                 ),
                 const Spacer(),
                 AppbarActions(isDark: isDark, padding: 0),
@@ -100,20 +90,14 @@ class RegisterScreen extends HookConsumerWidget {
                             ).copyWith(fontSize: 26, letterSpacing: -0.5),
                           ),
                           const SizedBox(height: 24),
-                          Input(
-                            controller: lastName,
-                            labelText: loc.last_name,
-                          ),
+                          Input(controller: lastName, labelText: loc.last_name),
                           const SizedBox(height: 12),
                           Input(
                             controller: firstName,
                             labelText: loc.first_name,
                           ),
                           const SizedBox(height: 12),
-                          Input(
-                            controller: midName,
-                            labelText: loc.mid_name,
-                          ),
+                          Input(controller: midName, labelText: loc.mid_name),
                           const SizedBox(height: 12),
                           Input(controller: email, labelText: loc.email),
                           const SizedBox(height: 12),
@@ -128,9 +112,7 @@ class RegisterScreen extends HookConsumerWidget {
                             text: loc.sign_up,
                             onClicked: () {
                               ref
-                                  .read(
-                                    registerControllerProvider.notifier,
-                                  )
+                                  .read(registerControllerProvider.notifier)
                                   .register(
                                     email: email.text.trim(),
                                     password: password.text,

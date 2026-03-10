@@ -238,4 +238,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dateLabel => 'Дата';
+
+  @override
+  String get pdf_files_only => 'Только PDF файлы';
 }

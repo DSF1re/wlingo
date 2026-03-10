@@ -78,5 +78,6 @@
   "downloadCertificate": "Download Certificate",
   "certificateTitle": "Certificate of Completion",
   "certificateSubtitle": "Introductory Language Course",
-  "dateLabel": "Date"
+  "dateLabel": "Date",
+  "pdf_files_only": "PDF files only"
 }

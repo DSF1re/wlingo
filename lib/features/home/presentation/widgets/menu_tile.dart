@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class MenuTile extends StatelessWidget {
@@ -45,22 +46,13 @@ class MenuTile extends StatelessWidget {
                   color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  size: 22,
-                  color: color,
-                ),
+                child: Icon(icon, size: 22, color: color),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.3,
-                    color: isDark ? Colors.white : Colors.black87,
-                  ),
+                  style: ThemeTextStyles.regular(isDark: isDark),
                 ),
               ),
               Icon(

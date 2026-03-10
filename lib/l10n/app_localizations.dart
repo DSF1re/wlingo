@@ -556,6 +556,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date'**
   String get dateLabel;
+
+  /// No description provided for @pdf_files_only.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF files only'**
+  String get pdf_files_only;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -150,7 +150,7 @@ class ProfileCard extends HookConsumerWidget {
   Widget _buildRatingBadge() {
     return ratingAsync.when(
       data: (points) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.amber.withValues(alpha: isDark ? 0.15 : 0.12),
           borderRadius: BorderRadius.circular(12),
@@ -162,11 +162,7 @@ class ProfileCard extends HookConsumerWidget {
             const SizedBox(width: 4),
             Text(
               '$points',
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                color: Colors.amber,
-              ),
+              style: ThemeTextStyles.regular(color: Colors.amber),
             ),
           ],
         ),
@@ -189,8 +185,7 @@ class ProfileCard extends HookConsumerWidget {
       ),
       child: Text(
         loc.admin,
-        style: const TextStyle(
-          fontSize: 12,
+        style: ThemeTextStyles.regular(
           fontWeight: FontWeight.w700,
           color: Color(0xFF2ED573),
         ),
