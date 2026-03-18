@@ -46,7 +46,7 @@
   "zoom_reset": "Reset zoom",
   "page": "Page",
   "of_total": "of",
-  "ask_somethink": "Ask something...",
+  "ask_somethink": "Search",
   "ai_chat": "AI Chat",
   "add_study_materials": "Add study materials",
   "issue_found": "Something went wrong!",
@@ -79,5 +79,10 @@
   "certificateTitle": "Certificate of Completion",
   "certificateSubtitle": "Introductory Language Course",
   "dateLabel": "Date",
-  "pdf_files_only": "PDF files only"
+  "pdf_files_only": "PDF files only",
+  "user_management": "User Management",
+  "users": "Users",
+  "statistics": "Statistics",
+  "download_report": "Download Report",
+  "rating_distribution": "User Rating Distribution"
 }

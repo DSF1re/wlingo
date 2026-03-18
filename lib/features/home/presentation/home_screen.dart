@@ -93,7 +93,13 @@ class HomeScreen extends HookConsumerWidget {
                   iconColor: const Color(0xFF5B7BFE),
                   onTap: () => context.go(Routes.books),
                 ),
-                if (isAdmin)
+                if (isAdmin) ...[
+                  MenuTile(
+                    icon: Icons.people_outline_rounded,
+                    title: loc.user_management,
+                    iconColor: const Color(0xFFFFA502),
+                    onTap: () => context.go(Routes.adminUsers),
+                  ),
                   MenuTile(
                     icon: Icons.add_circle_outline_rounded,
                     title: loc.add_study_materials,
@@ -108,7 +114,7 @@ class HomeScreen extends HookConsumerWidget {
                       );
                     },
                   ),
-                const SizedBox(height: 100),
+                ],
               ]),
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wlingo/core/router/routes.dart';
+import 'package:wlingo/features/admin/presentation/user_management_screen.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
 import 'package:wlingo/features/bookview/presentation/screens/book_screen.dart';
 import 'package:wlingo/features/bookview/presentation/screens/pdf_view.dart';
@@ -82,6 +83,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: Routes.profile,
             builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.adminUsers,
+            builder: (context, state) => const AdminUsersScreen(),
           ),
         ],
       ),

@@ -176,6 +176,58 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<Either<AuthFailure, List<UserEntity>>> getAllUsers() async {
+    try {
+      final response = await _client.from('profiles').select();
+
+      final List<dynamic> data = response as List<dynamic>;
+      return Right(
+        data.map((json) => model.User.fromJson(json).toEntity()).toList(),
+      );
+    } catch (e) {
+      return Left(_handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, List<Map<String, dynamic>>>>
+      getUsersWithRatings() async {
+    try {
+      final response = await _client.from('profiles').select('*, rating(points)');
+
+      final List<dynamic> data = response as List<dynamic>;
+      return Right(data.cast<Map<String, dynamic>>());
+    } catch (e) {
+      return Left(_handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, UserEntity>> updateProfileById({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    String? middleName,
+  }) async {
+    try {
+      final response = await _client
+          .from('profiles')
+          .update({
+            'first_name': firstName,
+            'last_name': lastName,
+            'mid_name': middleName,
+          })
+          .eq('id', userId)
+          .select()
+          .single();
+
+      return Right(model.User.fromJson(response).toEntity());
+    } catch (e) {
+      return Left(_handleException(e));
+    }
+  }
+
+  @override
   Stream<Either<AuthFailure, UserEntity?>> authStateChanges() {
     return _client.auth.onAuthStateChange.asyncMap((event) async {
       try {

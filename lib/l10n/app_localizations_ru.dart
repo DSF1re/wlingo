@@ -150,7 +150,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get of_total => 'из';
 
   @override
-  String get ask_somethink => 'Спросите что нибудь...';
+  String get ask_somethink => 'Поиск';
 
   @override
   String get ai_chat => 'ИИ Ассистент';
@@ -241,4 +241,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pdf_files_only => 'Только PDF файлы';
+
+  @override
+  String get user_management => 'Управление пользователями';
+
+  @override
+  String get users => 'Пользователи';
+
+  @override
+  String get statistics => 'Статистика';
+
+  @override
+  String get download_report => 'Скачать отчет';
+
+  @override
+  String get rating_distribution => 'Распределение рейтинга пользователей';
 }

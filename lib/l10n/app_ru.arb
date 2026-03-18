@@ -46,7 +46,7 @@
   "zoom_reset": "Сбросить зум",
   "page": "Страница",
   "of_total": "из",
-  "ask_somethink": "Спросите что нибудь...",
+  "ask_somethink": "Поиск",
   "ai_chat": "ИИ Ассистент",
   "add_study_materials": "Добавить учебные материалы",
   "issue_found": "Произошла ошибка!",
@@ -79,5 +79,10 @@
   "certificateTitle": "Сертификат об окончании",
   "certificateSubtitle": "Вводный языковой курс",
   "dateLabel": "Дата",
-  "pdf_files_only": "Только PDF файлы"
+  "pdf_files_only": "Только PDF файлы",
+  "user_management": "Управление пользователями",
+  "users": "Пользователи",
+  "statistics": "Статистика",
+  "download_report": "Скачать отчет",
+  "rating_distribution": "Распределение рейтинга пользователей"
 }

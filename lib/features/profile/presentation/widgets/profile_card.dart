@@ -125,8 +125,8 @@ class ProfileCard extends HookConsumerWidget {
 
   Widget _buildAvatar(String initials) {
     return Container(
-      width: 52,
-      height: 52,
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF5B7BFE), Color(0xFF7C3AED)],
