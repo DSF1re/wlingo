@@ -87,5 +87,12 @@
   "rating_distribution": "User Rating Distribution",
   "compiled_by": "Compiled by",
   "signature": "Signature",
-  "report": "Report"
+  "report": "Report",
+  "audition": "Audition",
+  "ex_audition": "Words audition",
+  "check": "Check",
+  "correct": "Correct!",
+  "correct_is": "Correct is",
+  "listen_and_type": "Listen and type the word",
+  "word": "Word"
 }

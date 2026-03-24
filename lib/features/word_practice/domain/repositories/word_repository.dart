@@ -7,4 +7,9 @@ abstract class WordRepository {
     String? userAnswer,
     required bool isCorrect,
   });
+  Future<void> saveAuditionRecord({
+    required int correctWordId,
+    int? selectedWordId,
+    required bool isCorrect,
+  });
 }

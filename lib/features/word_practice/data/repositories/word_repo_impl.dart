@@ -50,6 +50,27 @@ class SupabaseWordRepository implements WordRepository {
     }
   }
 
+  @override
+  Future<void> saveAuditionRecord({
+    required int correctWordId,
+    int? selectedWordId,
+    required bool isCorrect,
+  }) async {
+    final user = _client.auth.currentUser;
+    if (user == null) return;
+
+    await _client.from('ex_audition').insert({
+      'correct_word_id': correctWordId,
+      'selected_word_id': selectedWordId,
+      'user_id': user.id,
+      'is_correct': isCorrect,
+    });
+
+    if (isCorrect) {
+      await _addOrUpdateRating(user.id, 10);
+    }
+  }
+
   Future<void> _addOrUpdateRating(String userId, int increment) async {
     final List result = await _client
         .from('rating')

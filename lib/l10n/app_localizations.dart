@@ -610,6 +610,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report'**
   String get report;
+
+  /// No description provided for @audition.
+  ///
+  /// In en, this message translates to:
+  /// **'Audition'**
+  String get audition;
+
+  /// No description provided for @ex_audition.
+  ///
+  /// In en, this message translates to:
+  /// **'Words audition'**
+  String get ex_audition;
+
+  /// No description provided for @check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get check;
+
+  /// No description provided for @correct.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct!'**
+  String get correct;
+
+  /// No description provided for @correct_is.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct is'**
+  String get correct_is;
+
+  /// No description provided for @listen_and_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen and type the word'**
+  String get listen_and_type;
+
+  /// No description provided for @word.
+  ///
+  /// In en, this message translates to:
+  /// **'Word'**
+  String get word;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

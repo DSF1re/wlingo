@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
+  flutter_tts
   printing
   share_plus
   speech_to_text_windows

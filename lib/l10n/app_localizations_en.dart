@@ -265,4 +265,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get report => 'Report';
+
+  @override
+  String get audition => 'Audition';
+
+  @override
+  String get ex_audition => 'Words audition';
+
+  @override
+  String get check => 'Check';
+
+  @override
+  String get correct => 'Correct!';
+
+  @override
+  String get correct_is => 'Correct is';
+
+  @override
+  String get listen_and_type => 'Listen and type the word';
+
+  @override
+  String get word => 'Word';
 }

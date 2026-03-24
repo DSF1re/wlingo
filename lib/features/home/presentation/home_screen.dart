@@ -88,6 +88,13 @@ class HomeScreen extends HookConsumerWidget {
                     iconColor: const Color(0xFFFF6B6B),
                     onTap: () => context.go(Routes.pronounceGame),
                   ),
+                if (!isAdmin)
+                  MenuTile(
+                    icon: Icons.hearing_rounded,
+                    title: loc.audition,
+                    iconColor: const Color(0xFF7C3AED),
+                    onTap: () => context.go(Routes.auditionGame),
+                  ),
                 MenuTile(
                   icon: Icons.auto_stories_rounded,
                   title: loc.study_materials,

@@ -265,4 +265,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get report => 'Отчет';
+
+  @override
+  String get audition => 'Аудирование';
+
+  @override
+  String get ex_audition => 'Аудирование слов';
+
+  @override
+  String get check => 'Проверить';
+
+  @override
+  String get correct => 'Правильно!';
+
+  @override
+  String get correct_is => 'Правильный ответ';
+
+  @override
+  String get listen_and_type => 'Послушайте и напишите слово';
+
+  @override
+  String get word => 'Слово';
 }
