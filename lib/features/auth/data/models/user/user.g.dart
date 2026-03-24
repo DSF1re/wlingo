@@ -13,6 +13,9 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
   middleName: json['mid_name'] as String?,
   nativeLang: (json['mother_language'] as num).toInt(),
   isAdmin: json['isAdmin'] as bool,
+  createdAt: json['created_at'] == null
+      ? null
+      : DateTime.parse(json['created_at'] as String),
 );
 
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
@@ -22,4 +25,5 @@ Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
   'mid_name': instance.middleName,
   'mother_language': instance.nativeLang,
   'isAdmin': instance.isAdmin,
+  'created_at': instance.createdAt?.toIso8601String(),
 };

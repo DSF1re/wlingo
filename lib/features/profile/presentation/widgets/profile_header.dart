@@ -32,7 +32,7 @@ class ProfileHeaderSection extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              (loc.history as String).toUpperCase(),
+              (user.isAdmin ? (loc.registration as String) : (loc.history as String)).toUpperCase(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

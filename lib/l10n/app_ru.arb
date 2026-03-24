@@ -84,5 +84,8 @@
   "users": "Пользователи",
   "statistics": "Статистика",
   "download_report": "Скачать отчет",
-  "rating_distribution": "Распределение рейтинга пользователей"
+  "rating_distribution": "Распределение рейтинга пользователей",
+  "compiled_by": "Документ составлен",
+  "signature": "Подпись",
+  "report": "Отчет"
 }

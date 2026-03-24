@@ -256,4 +256,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rating_distribution => 'Распределение рейтинга пользователей';
+
+  @override
+  String get compiled_by => 'Документ составлен';
+
+  @override
+  String get signature => 'Подпись';
+
+  @override
+  String get report => 'Отчет';
 }

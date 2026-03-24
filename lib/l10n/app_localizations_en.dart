@@ -256,4 +256,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rating_distribution => 'User Rating Distribution';
+
+  @override
+  String get compiled_by => 'Compiled by';
+
+  @override
+  String get signature => 'Signature';
+
+  @override
+  String get report => 'Report';
 }

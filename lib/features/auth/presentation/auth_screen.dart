@@ -43,6 +43,8 @@ class AuthScreen extends HookConsumerWidget {
       );
     });
 
+    final showPassword = useState(false);
+
     return BaseScreen(
       isDark: isDark,
       child: Column(
@@ -93,8 +95,20 @@ class AuthScreen extends HookConsumerWidget {
                           const SizedBox(height: 14),
                           Input(
                             controller: passwordController,
-                            isObscured: true,
+                            isObscured: !showPassword.value,
                             labelText: loc.password,
+                            suffixIcon: IconButton(
+                              onPressed: () =>
+                                  showPassword.value = !showPassword.value,
+                              icon: Icon(
+                                showPassword.value
+                                    ? Icons.visibility_off_rounded
+                                    : Icons.visibility_rounded,
+                                size: 20,
+                                color: (isDark ? Colors.white : Colors.black)
+                                    .withValues(alpha: 0.35),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 24),
                           Button(

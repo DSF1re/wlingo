@@ -84,5 +84,8 @@
   "users": "Users",
   "statistics": "Statistics",
   "download_report": "Download Report",
-  "rating_distribution": "User Rating Distribution"
+  "rating_distribution": "User Rating Distribution",
+  "compiled_by": "Compiled by",
+  "signature": "Signature",
+  "report": "Report"
 }

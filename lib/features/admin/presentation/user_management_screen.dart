@@ -7,6 +7,8 @@ import 'package:wlingo/features/admin/application/admin_report_service.dart';
 import 'package:wlingo/features/admin/presentation/widgets/admin_edit_user_sheet.dart';
 import 'package:wlingo/features/auth/domain/usecases/get_all_users_usecase.dart';
 import 'package:wlingo/features/auth/domain/usecases/get_users_with_ratings_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -52,12 +54,25 @@ class AdminUsersScreen extends HookConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    final reportData = await ref.read(getUsersWithRatingsUseCaseProvider).call();
+                    final currentUserResult = await ref.read(
+                      currentUserProvider.future,
+                    );
+                    String adminName = loc.admin;
+                    currentUserResult.fold((failure) {}, (user) {
+                      if (user != null) {
+                        adminName = '${user.firstName} ${user.lastName}';
+                      }
+                    });
+
+                    final reportData = await ref
+                        .read(getUsersWithRatingsUseCaseProvider)
+                        .call();
                     reportData.fold(
-                      (failure) => null, // Handle error if needed
+                      (failure) => null,
                       (data) => AdminReportService.generateUserStatsReport(
                         userData: data,
                         loc: loc,
+                        adminName: adminName,
                       ),
                     );
                   },
@@ -149,13 +164,27 @@ class AdminUsersScreen extends HookConsumerWidget {
                                 isDark: isDark,
                               ),
                             ),
-                            subtitle: Text(
-                              user.isAdmin ? loc.admin : loc.user,
-                              style: ThemeTextStyles.caption(
-                                isDark: isDark,
-                                color: (isDark ? Colors.white : Colors.black)
-                                    .withValues(alpha: 0.5),
-                              ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  user.isAdmin ? loc.admin : loc.user,
+                                  style: ThemeTextStyles.caption(
+                                    isDark: isDark,
+                                    color: (isDark ? Colors.white : Colors.black)
+                                        .withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                if (user.createdAt != null)
+                                  Text(
+                                    DateFormat('dd.MM.yyyy').format(user.createdAt!),
+                                    style: ThemeTextStyles.caption(
+                                      isDark: isDark,
+                                      color: (isDark ? Colors.white : Colors.black)
+                                          .withValues(alpha: 0.35),
+                                    ),
+                                  ),
+                              ],
                             ),
                             trailing: const Icon(Icons.edit_note_rounded),
                             onTap: () {

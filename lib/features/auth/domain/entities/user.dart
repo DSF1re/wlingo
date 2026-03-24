@@ -11,5 +11,6 @@ sealed class UserEntity with _$UserEntity {
     String? middleName,
     required int nativeLang,
     required bool isAdmin,
+    DateTime? createdAt,
   }) = _UserEntity;
 }

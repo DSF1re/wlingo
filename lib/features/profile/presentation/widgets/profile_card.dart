@@ -94,7 +94,7 @@ class ProfileCard extends HookConsumerWidget {
               const SizedBox(width: 8),
               ratingAsync.when(
                 data: (points) {
-                  if (points <= 100) return const SizedBox.shrink();
+                  if (points <= 100 || user.isAdmin) return const SizedBox.shrink();
                   return IconButton.filledTonal(
                     onPressed: () => CertificateService.generateAndDownload(
                       userName: '${user.firstName} ${user.lastName}',

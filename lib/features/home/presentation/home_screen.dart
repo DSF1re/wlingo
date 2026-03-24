@@ -81,12 +81,13 @@ class HomeScreen extends HookConsumerWidget {
               delegate: SliverChildListDelegate([
                 langList,
                 const SizedBox(height: 24),
-                MenuTile(
-                  icon: Icons.mic_rounded,
-                  title: loc.ex_pronunce,
-                  iconColor: const Color(0xFFFF6B6B),
-                  onTap: () => context.go(Routes.pronounceGame),
-                ),
+                if (!isAdmin)
+                  MenuTile(
+                    icon: Icons.mic_rounded,
+                    title: loc.ex_pronunce,
+                    iconColor: const Color(0xFFFF6B6B),
+                    onTap: () => context.go(Routes.pronounceGame),
+                  ),
                 MenuTile(
                   icon: Icons.auto_stories_rounded,
                   title: loc.study_materials,

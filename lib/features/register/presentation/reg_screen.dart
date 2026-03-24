@@ -45,6 +45,8 @@ class RegisterScreen extends HookConsumerWidget {
 
     final isLoading = ref.watch(registerControllerProvider).isLoading;
 
+    final showPassword = useState(false);
+
     return BaseScreen(
       isDark: isDark,
       child: Column(
@@ -104,7 +106,19 @@ class RegisterScreen extends HookConsumerWidget {
                           Input(
                             controller: password,
                             labelText: loc.password,
-                            isObscured: true,
+                            isObscured: !showPassword.value,
+                            suffixIcon: IconButton(
+                              onPressed: () =>
+                                  showPassword.value = !showPassword.value,
+                              icon: Icon(
+                                showPassword.value
+                                    ? Icons.visibility_off_rounded
+                                    : Icons.visibility_rounded,
+                                size: 20,
+                                color: (isDark ? Colors.white : Colors.black)
+                                    .withValues(alpha: 0.35),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 24),
                           Button(

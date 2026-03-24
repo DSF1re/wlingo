@@ -7,6 +7,7 @@ import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/error_placeholder.dart';
 import 'package:wlingo/features/profile/presentation/widgets/history.dart';
+import 'package:wlingo/features/profile/presentation/widgets/registration_history.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_header.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
@@ -80,11 +81,17 @@ class ProfileScreen extends HookConsumerWidget {
                           isDark: isDark,
                           loc: loc,
                         ),
-                        HistorySection(
-                          userId: user.id,
-                          isDark: isDark,
-                          loc: loc,
-                        ),
+                        if (user.isAdmin)
+                          RegistrationHistorySection(
+                            isDark: isDark,
+                            loc: loc,
+                          )
+                        else
+                          HistorySection(
+                            userId: user.id,
+                            isDark: isDark,
+                            loc: loc,
+                          ),
                         const SliverToBoxAdapter(
                           child: SizedBox(height: 100),
                         ),

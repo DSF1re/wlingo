@@ -592,6 +592,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User Rating Distribution'**
   String get rating_distribution;
+
+  /// No description provided for @compiled_by.
+  ///
+  /// In en, this message translates to:
+  /// **'Compiled by'**
+  String get compiled_by;
+
+  /// No description provided for @signature.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature'**
+  String get signature;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

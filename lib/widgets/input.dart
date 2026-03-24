@@ -12,6 +12,7 @@ class Input extends ConsumerWidget {
   final double height;
   final double width;
   final bool isObscured;
+  final Widget? suffixIcon;
   const Input({
     super.key,
     this.style,
@@ -22,6 +23,7 @@ class Input extends ConsumerWidget {
     this.height = 50,
     this.width = double.infinity,
     this.isObscured = false,
+    this.suffixIcon,
   });
 
   @override
@@ -49,6 +51,7 @@ class Input extends ConsumerWidget {
           hintText: hint,
           labelText: labelText,
           hintStyle: ThemeTextStyles.regular(isDark: isDark),
+          suffixIcon: suffixIcon,
           border: outlineInputBorder,
           errorBorder: outlineInputBorder,
           focusedErrorBorder: outlineInputBorder,
