@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/theme/app_colors.dart';
 
 class MicrophoneIndicatorButton extends HookConsumerWidget {
   final bool isActive;
@@ -59,24 +60,24 @@ class MicrophoneIndicatorButton extends HookConsumerWidget {
           decoration: BoxDecoration(
             gradient: isActive
                 ? const LinearGradient(
-                    colors: [Color(0xFFFF6B6B), Color(0xFFEE5A24)],
+                    colors: [AppColors.errorRed, AppColors.errorRedDark],
                   )
                 : LinearGradient(
                     colors: isDark
-                        ? [const Color(0xFF5B7BFE), const Color(0xFF7C3AED)]
-                        : [const Color(0xFF5B7BFE), const Color(0xFF5B7BFE)],
+                        ? [AppColors.primaryBlue, AppColors.auditionPurple]
+                        : [AppColors.primaryBlue, AppColors.primaryBlue],
                   ),
             shape: BoxShape.circle,
             boxShadow: [
               if (isActive)
                 BoxShadow(
-                  color: const Color(0xFFFF6B6B).withValues(alpha: 0.5),
+                  color: AppColors.errorRed.withValues(alpha: 0.5),
                   blurRadius: 28,
                   spreadRadius: 4,
                 )
               else
                 BoxShadow(
-                  color: const Color(0xFF5B7BFE).withValues(alpha: 0.3),
+                  color: AppColors.primaryBlue.withValues(alpha: 0.3),
                   blurRadius: 16,
                   spreadRadius: 2,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class ResultDisplay extends StatelessWidget {
@@ -17,7 +18,7 @@ class ResultDisplay extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final statusColor = isCorrect == null
         ? (isDark ? Colors.white54 : Colors.black38)
-        : (isCorrect! ? const Color(0xFF2ED573) : const Color(0xFFFF6B6B));
+        : (isCorrect! ? AppColors.successGreen : AppColors.errorRed);
 
     return GlassBox(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

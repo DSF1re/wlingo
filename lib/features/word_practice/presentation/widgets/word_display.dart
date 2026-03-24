@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
+import 'package:wlingo/theme/app_colors.dart';
 
 class WordDisplay extends StatelessWidget {
   final WordEntity word;
@@ -17,7 +18,7 @@ class WordDisplay extends StatelessWidget {
             style: const TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF2ED573),
+              color: AppColors.successGreen,
               letterSpacing: -1,
             ),
           ),
@@ -26,7 +27,7 @@ class WordDisplay extends StatelessWidget {
             '[ ${word.transcription} ]',
             style: TextStyle(
               fontFamily: 'monospace',
-              color: const Color(0xFF5B7BFE).withValues(alpha: 0.6),
+              color: AppColors.primaryBlue.withValues(alpha: 0.6),
               fontSize: 18,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/data/models/rating_record/rating_record.dart';
 import 'package:wlingo/features/profile/domain/providers/word_provider.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
@@ -16,8 +17,8 @@ class HistoryTile extends ConsumerWidget {
     final wordAsync = ref.watch(wordProvider(record.correctWordId));
     final isCorrect = record.isCorrect;
     final statusColor = isCorrect
-        ? const Color(0xFF2ED573)
-        : const Color(0xFFFF6B6B);
+        ? AppColors.successGreen
+        : AppColors.errorRed;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),

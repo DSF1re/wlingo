@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:wlingo/theme/text_styles.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class MenuTile extends StatelessWidget {
@@ -20,7 +21,7 @@ class MenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = iconColor ?? const Color(0xFF5B7BFE);
+    final color = iconColor ?? AppColors.primaryBlue;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),

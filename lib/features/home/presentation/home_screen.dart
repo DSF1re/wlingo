@@ -11,6 +11,7 @@ import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
 import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -85,33 +86,33 @@ class HomeScreen extends HookConsumerWidget {
                   MenuTile(
                     icon: Icons.mic_rounded,
                     title: loc.ex_pronunce,
-                    iconColor: const Color(0xFFFF6B6B),
+                    iconColor: AppColors.errorRed,
                     onTap: () => context.go(Routes.pronounceGame),
                   ),
                 if (!isAdmin)
                   MenuTile(
                     icon: Icons.hearing_rounded,
                     title: loc.audition,
-                    iconColor: const Color(0xFF7C3AED),
+                    iconColor: AppColors.auditionPurple,
                     onTap: () => context.go(Routes.auditionGame),
                   ),
                 MenuTile(
                   icon: Icons.auto_stories_rounded,
                   title: loc.study_materials,
-                  iconColor: const Color(0xFF5B7BFE),
+                  iconColor: AppColors.primaryBlue,
                   onTap: () => context.go(Routes.books),
                 ),
                 if (isAdmin) ...[
                   MenuTile(
                     icon: Icons.people_outline_rounded,
                     title: loc.user_management,
-                    iconColor: const Color(0xFFFFA502),
+                    iconColor: AppColors.adminOrange,
                     onTap: () => context.go(Routes.adminUsers),
                   ),
                   MenuTile(
                     icon: Icons.add_circle_outline_rounded,
                     title: loc.add_study_materials,
-                    iconColor: const Color(0xFF2ED573),
+                    iconColor: AppColors.successGreen,
                     onTap: () {
                       showModalBottomSheet(
                         context: context,

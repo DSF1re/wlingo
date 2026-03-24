@@ -9,6 +9,7 @@ import 'package:wlingo/features/bookview/presentation/providers/books_notifier.d
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
 class AddBookScreen extends HookConsumerWidget {
@@ -99,7 +100,7 @@ class AddBookScreen extends HookConsumerWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: const Color(0xFF6B8EFF).withValues(alpha: 0.5),
+            color: AppColors.primaryBlueLight.withValues(alpha: 0.5),
             width: 1.5,
           ),
         ),
@@ -269,8 +270,8 @@ class AddBookScreen extends HookConsumerWidget {
                                         : Icons.cloud_upload_rounded,
                                     size: 40,
                                     color: selectedFileName.value != null
-                                        ? const Color(0xFF4CAF50)
-                                        : const Color(0xFF6B8EFF),
+                                      ? AppColors.greenLight
+                                      : AppColors.primaryBlueLight,
                                   ),
                                   const SizedBox(height: 12),
                                   Text(
@@ -307,16 +308,14 @@ class AddBookScreen extends HookConsumerWidget {
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
                                   colors: [
-                                    Color(0xFF6B8EFF),
-                                    Color(0xFF8E6BFF),
+                                    AppColors.primaryBlueLight,
+                                    AppColors.primaryBlueLighter,
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(
-                                      0xFF6B8EFF,
-                                    ).withValues(alpha: 0.3),
+                                    color: AppColors.primaryBlueLight.withValues(alpha: 0.3),
                                     blurRadius: 12,
                                     offset: const Offset(0, 4),
                                   ),

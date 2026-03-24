@@ -4,6 +4,7 @@ import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/profile/application/certificate_service.dart';
 import 'package:wlingo/features/profile/presentation/widgets/edit_profile.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
@@ -129,7 +130,7 @@ class ProfileCard extends HookConsumerWidget {
       height: 50,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF5B7BFE), Color(0xFF7C3AED)],
+          colors: [AppColors.primaryBlue, AppColors.auditionPurple],
         ),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -179,13 +180,13 @@ class ProfileCard extends HookConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFF2ED573).withValues(alpha: 0.15),
+        color: AppColors.successGreen.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         loc.admin,
         style: ThemeTextStyles.regular(
-          color: Color(0xFF2ED573),
+          color: AppColors.successGreen,
         ).copyWith(fontSize: 12),
         overflow: TextOverflow.ellipsis,
       ),

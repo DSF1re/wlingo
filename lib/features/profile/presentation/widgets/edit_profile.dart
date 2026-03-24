@@ -8,6 +8,7 @@ import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/domain/usecases/update_profile_usecase.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
 class EditProfileSheet extends HookConsumerWidget {
@@ -53,7 +54,7 @@ class EditProfileSheet extends HookConsumerWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: const Color(0xFF6B8EFF).withValues(alpha: 0.5),
+            color: AppColors.primaryBlueLight.withValues(alpha: 0.5),
             width: 1.5,
           ),
         ),
@@ -193,14 +194,12 @@ class EditProfileSheet extends HookConsumerWidget {
                       height: 56,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF6B8EFF), Color(0xFF8E6BFF)],
+                          colors: [AppColors.primaryBlueLight, AppColors.primaryBlueLighter],
                         ),
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(
-                              0xFF6B8EFF,
-                            ).withValues(alpha: 0.3),
+                            color: AppColors.primaryBlueLight.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),

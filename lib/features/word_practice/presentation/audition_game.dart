@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/tts/tts_provider.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/words/audition_notifier.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/action_button.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
@@ -118,17 +119,17 @@ class AuditionGameScreen extends HookConsumerWidget {
                               width: 120,
                               height: 120,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF5B7BFE).withValues(alpha: 0.1),
+                                color: AppColors.primaryBlue.withValues(alpha: 0.1),
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xFF5B7BFE).withValues(alpha: 0.2),
+                                  color: AppColors.primaryBlue.withValues(alpha: 0.2),
                                   width: 2,
                                 ),
                               ),
                               child: const Icon(
                                 Icons.volume_up_rounded,
                                 size: 48,
-                                color: Color(0xFF5B7BFE),
+                                color: AppColors.primaryBlue,
                               ),
                             ),
                           ),
@@ -152,7 +153,7 @@ class AuditionGameScreen extends HookConsumerWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w700,
-                                color: isCorrect.value == true ? const Color(0xFF2ED573) : Colors.red,
+                                color: isCorrect.value == true ? AppColors.successGreen : AppColors.errorRed,
                               ),
                             ),
                             if (isCorrect.value == false) ...[

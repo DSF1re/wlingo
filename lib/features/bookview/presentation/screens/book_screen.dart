@@ -8,6 +8,7 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
 class BooksScreen extends HookConsumerWidget {
@@ -87,14 +88,12 @@ class BooksScreen extends HookConsumerWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFFFF6B6B,
-                                    ).withValues(alpha: 0.15),
+                                    color: AppColors.errorRed.withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: const Icon(
                                     Icons.picture_as_pdf_rounded,
-                                    color: Color(0xFFFF6B6B),
+                                    color: AppColors.errorRed,
                                     size: 22,
                                   ),
                                 ),

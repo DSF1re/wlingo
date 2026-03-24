@@ -6,6 +6,8 @@ import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
 import 'package:wlingo/features/word_practice/domain/usecases/get_words_usecase.dart';
 import 'package:wlingo/features/word_practice/domain/usecases/save_audition_record_usecase.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/lang_state/lang_state_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/main.dart';
 
 part 'audition_notifier.g.dart';
@@ -54,6 +56,11 @@ class AuditionNotifier extends _$AuditionNotifier {
       selectedWordId: selectedWordId,
       isCorrect: isCorrect,
     );
+    
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId != null) {
+      ref.invalidate(userHistoryProvider(userId));
+    }
   }
 
   Future<void> refresh() async {

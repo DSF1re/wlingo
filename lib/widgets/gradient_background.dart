@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wlingo/theme/app_colors.dart';
 
 class GradientBackground extends StatelessWidget {
   final bool isDark;
@@ -18,8 +19,8 @@ class GradientBackground extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isDark
-              ? const [Color(0xFF010409), Color(0xFF0D1117), Color(0xFF161B22)]
-              : const [Color(0xFFF7F9FC), Color(0xFFEDF2F7), Color(0xFFE2E8F0)],
+              ? const [AppColors.darkBgDarker, AppColors.darkBg, AppColors.darkBgLighter]
+              : const [AppColors.lightBgLighter, AppColors.lightBg, AppColors.lightBgDarker],
         ),
       ),
       child: child,
