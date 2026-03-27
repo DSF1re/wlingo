@@ -190,6 +190,7 @@ class AdminUsersScreen extends HookConsumerWidget {
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
+                                useRootNavigator: true,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 builder: (context) =>

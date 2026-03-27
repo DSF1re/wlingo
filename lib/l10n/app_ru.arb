@@ -94,5 +94,16 @@
   "correct": "Правильно!",
   "correct_is": "Правильный ответ",
   "listen_and_type": "Послушайте и напишите слово",
-  "word": "Слово"
+  "word": "Слово",
+  "login_as": "Вы вошли как {role} {name}",
+  "@login_as": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/failture/auth_failture.dart';
 import 'package:wlingo/core/router/routes.dart';
+import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/presentation/providers/auth_controller.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/images.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -27,18 +29,30 @@ class AuthScreen extends HookConsumerWidget {
 
     final authState = ref.watch(authControllerProvider);
 
-    ref.listen<AsyncValue<void>>(authControllerProvider, (prev, next) {
+    ref.listen<AsyncValue<UserEntity?>>(authControllerProvider, (prev, next) {
       next.whenOrNull(
         error: (error, _) {
-          final msg = error is AuthFailure
-              ? error.toLocalizedMessage(loc)
-              : error.toString();
+          final msg =
+              error is AuthFailure
+                  ? error.toLocalizedMessage(loc)
+                  : error.toString();
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(msg)));
         },
-        data: (_) {
-          if (prev is AsyncLoading) context.go(Routes.home);
+        data: (user) {
+          if (prev is AsyncLoading && user != null) {
+            final role = user.isAdmin ? loc.admin : loc.user;
+            final name = '${user.firstName} ${user.lastName}';
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(loc.login_as(role, name)),
+                backgroundColor: AppColors.successGreen,
+              ),
+            );
+            context.go(Routes.home);
+          }
         },
       );
     });

@@ -31,6 +31,7 @@ class AddBookScreen extends HookConsumerWidget {
     final addState = ref.watch(addBookProvider);
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
+    final errorMessage = useState<String?>(null);
 
     ref.listen<AsyncValue>(addBookProvider, (_, state) {
       if (state.hasError) {
@@ -56,21 +57,29 @@ class AddBookScreen extends HookConsumerWidget {
     }
 
     void submit() {
-      if (formKey.currentState!.validate() && selectedFilePath.value != null) {
-        ref
-            .read(addBookProvider.notifier)
-            .addBook(
-              title: titleController.text,
-              author: authorController.text,
-              filePath: selectedFilePath.value!,
-              fileName: selectedFileName.value!,
-              languageId: selectedLangId.value,
-            );
-      } else if (selectedFilePath.value == null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(loc.fill_form)));
+      errorMessage.value = null;
+      final isFormValid = formKey.currentState!.validate();
+      
+      if (!isFormValid || selectedFilePath.value == null) {
+        if (!isFormValid && selectedFilePath.value == null) {
+          errorMessage.value = loc.fill_form;
+        } else if (!isFormValid) {
+          errorMessage.value = loc.fill_form;
+        } else if (selectedFilePath.value == null) {
+          errorMessage.value = '${loc.error}: ${loc.select_upload}';
+        }
+        return;
       }
+
+      ref
+          .read(addBookProvider.notifier)
+          .addBook(
+            title: titleController.text,
+            author: authorController.text,
+            filePath: selectedFilePath.value!,
+            fileName: selectedFileName.value!,
+            languageId: selectedLangId.value,
+          );
     }
 
     InputDecoration premiumDecoration({
@@ -256,8 +265,9 @@ class AddBookScreen extends HookConsumerWidget {
                                     .withValues(alpha: 0.03),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: (isDark ? Colors.white : Colors.black)
-                                      .withValues(alpha: 0.1),
+                                  color: errorMessage.value != null && selectedFilePath.value == null
+                                      ? Colors.red.withValues(alpha: 0.8)
+                                      : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
                                   style: BorderStyle.solid,
                                   width: 1.5,
                                 ),
@@ -301,6 +311,18 @@ class AddBookScreen extends HookConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 32),
+                          if (errorMessage.value != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: Text(
+                                errorMessage.value!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 13,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           Bounceable(
                             onTap: submit,
                             child: Container(

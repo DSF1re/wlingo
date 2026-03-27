@@ -286,4 +286,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get word => 'Word';
+
+  @override
+  String login_as(String role, String name) {
+    return 'You are logged in as $role $name';
+  }
 }

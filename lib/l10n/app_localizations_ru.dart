@@ -286,4 +286,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get word => 'Слово';
+
+  @override
+  String login_as(String role, String name) {
+    return 'Вы вошли как $role $name';
+  }
 }

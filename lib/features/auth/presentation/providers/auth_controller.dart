@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/domain/usecases/sign_in_usecase.dart';
 
 part 'auth_controller.g.dart';
@@ -6,7 +8,7 @@ part 'auth_controller.g.dart';
 @riverpod
 class AuthController extends _$AuthController {
   @override
-  FutureOr<void> build() {}
+  FutureOr<UserEntity?> build() => null;
 
   Future<void> login(String email, String password) async {
     final signIn = ref.read(signInUseCaseProvider);
@@ -14,7 +16,7 @@ class AuthController extends _$AuthController {
 
     state = await AsyncValue.guard(() async {
       final result = await signIn(email: email, password: password);
-      return result.fold((failure) => throw failure, (user) => null);
+      return result.fold((failure) => throw failure, (user) => user);
     });
   }
 }

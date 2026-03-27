@@ -94,5 +94,16 @@
   "correct": "Correct!",
   "correct_is": "Correct is",
   "listen_and_type": "Listen and type the word",
-  "word": "Word"
+  "word": "Word",
+  "login_as": "You are logged in as {role} {name}",
+  "@login_as": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
