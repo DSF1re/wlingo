@@ -16,13 +16,15 @@ class AddWordNotifier extends _$AddWordNotifier {
     String? image,
   }) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() =>
-        ref.read(wordRepositoryProvider).addWord(
-          word: word,
-          transcription: transcription,
-          russian: russian,
-          languageId: languageId,
-          image: image,
-        ));
+    state = await AsyncValue.guard(
+      () => ref
+          .read(wordRepositoryProvider)
+          .addWord(
+            word: word,
+            transcription: transcription,
+            russian: russian,
+            languageId: languageId,
+          ),
+    );
   }
 }

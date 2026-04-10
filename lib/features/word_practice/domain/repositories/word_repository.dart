@@ -17,6 +17,5 @@ abstract class WordRepository {
     required String transcription,
     required String russian,
     required int languageId,
-    String? image,
   });
 }

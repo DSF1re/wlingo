@@ -21,7 +21,6 @@ class AddWordScreen extends HookConsumerWidget {
     final wordController = useTextEditingController();
     final transcriptionController = useTextEditingController();
     final russianController = useTextEditingController();
-    final imageController = useTextEditingController();
 
     final selectedLangId = useState<int>(shared.getInt('lang_cource') ?? 2);
 
@@ -55,9 +54,6 @@ class AddWordScreen extends HookConsumerWidget {
             transcription: transcriptionController.text,
             russian: russianController.text,
             languageId: selectedLangId.value,
-            image: imageController.text.isNotEmpty
-                ? imageController.text
-                : null,
           );
     }
 
@@ -202,16 +198,6 @@ class AddWordScreen extends HookConsumerWidget {
                             validator: (value) => value == null || value.isEmpty
                                 ? loc.fill_field
                                 : null,
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: imageController,
-                            style: ThemeTextStyles.regular(isDark: isDark),
-                            decoration: premiumDecoration(
-                              label: loc.image_url,
-                              icon: Icons.image_rounded,
-                              isDark: isDark,
-                            ),
                           ),
                           const SizedBox(height: 16),
                           languagesAsync.when(

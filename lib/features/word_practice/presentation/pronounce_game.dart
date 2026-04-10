@@ -28,6 +28,7 @@ class PronunciationGameScreen extends HookConsumerWidget {
 
     final currentWord = useState<WordEntity?>(null);
     final isCorrect = useState<bool?>(null);
+    final correctCount = useState<int>(0);
 
     void pickWord() {
       isCorrect.value = null;
@@ -62,6 +63,9 @@ class PronunciationGameScreen extends HookConsumerWidget {
 
         if (context.mounted) {
           isCorrect.value = result;
+          if (result) {
+            correctCount.value++;
+          }
         }
       }
       return recognized;
@@ -81,9 +85,21 @@ class PronunciationGameScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    loc.pronunciation,
-                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        loc.pronunciation,
+                        style: ThemeTextStyles.title3SemiBold(isDark: isDark),
+                      ),
+                      Text(
+                        '${loc.correct}: ${correctCount.value}',
+                        style: ThemeTextStyles.caption(
+                          isDark: isDark,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),
