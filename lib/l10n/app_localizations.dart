@@ -647,17 +647,35 @@ abstract class AppLocalizations {
   /// **'Listen and type the word'**
   String get listen_and_type;
 
+  /// No description provided for @word.
+  ///
+  /// In en, this message translates to:
+  /// **'Word'**
+  String get word;
+
   /// No description provided for @login_as.
   ///
   /// In en, this message translates to:
   /// **'You are logged in as {role} {name}'**
   String login_as(String role, String name);
 
-  /// No description provided for @word.
+  /// No description provided for @transcription.
   ///
   /// In en, this message translates to:
-  /// **'Word'**
-  String get word;
+  /// **'Transcription'**
+  String get transcription;
+
+  /// No description provided for @translation.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get translation;
+
+  /// No description provided for @image_url.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get image_url;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

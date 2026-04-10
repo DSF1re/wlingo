@@ -9,6 +9,8 @@ import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.da
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
 import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
+import 'package:wlingo/features/word_practice/presentation/screens/add_word_screen.dart'
+    as w;
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/main.dart';
 import 'package:wlingo/theme/app_colors.dart';
@@ -120,6 +122,20 @@ class HomeScreen extends HookConsumerWidget {
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
                         builder: (context) => const AddBookScreen(),
+                      );
+                    },
+                  ),
+                  MenuTile(
+                    icon: Icons.abc_rounded,
+                    title: loc.new_word,
+                    iconColor: AppColors.successGreen,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const w.AddWordScreen(),
                       );
                     },
                   ),

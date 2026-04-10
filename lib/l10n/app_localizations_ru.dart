@@ -291,4 +291,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String login_as(String role, String name) {
     return 'Вы вошли как $role $name';
   }
+
+  @override
+  String get transcription => 'Транскрипция';
+
+  @override
+  String get translation => 'Перевод';
+
+  @override
+  String get image_url => 'URL картинки';
 }

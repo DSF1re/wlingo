@@ -291,4 +291,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String login_as(String role, String name) {
     return 'You are logged in as $role $name';
   }
+
+  @override
+  String get transcription => 'Transcription';
+
+  @override
+  String get translation => 'Translation';
+
+  @override
+  String get image_url => 'Image URL';
 }

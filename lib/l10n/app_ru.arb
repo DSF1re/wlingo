@@ -105,5 +105,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "transcription": "Транскрипция",
+  "translation": "Перевод",
+  "image_url": "URL картинки"
 }

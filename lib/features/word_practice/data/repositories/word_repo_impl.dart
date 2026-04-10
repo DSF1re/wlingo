@@ -90,4 +90,21 @@ class SupabaseWordRepository implements WordRepository {
       });
     }
   }
+
+  @override
+  Future<void> addWord({
+    required String word,
+    required String transcription,
+    required String russian,
+    required int languageId,
+    String? image,
+  }) async {
+    await _client.from('words').insert({
+      'word': word,
+      'transcription': transcription,
+      'russian': russian,
+      'language_id': languageId,
+      if (image != null && image.isNotEmpty) 'image': image,
+    });
+  }
 }

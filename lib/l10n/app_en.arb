@@ -105,5 +105,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "transcription": "Transcription",
+  "translation": "Translation",
+  "image_url": "Image URL"
 }

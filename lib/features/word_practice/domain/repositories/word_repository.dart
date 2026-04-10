@@ -12,4 +12,11 @@ abstract class WordRepository {
     int? selectedWordId,
     required bool isCorrect,
   });
+  Future<void> addWord({
+    required String word,
+    required String transcription,
+    required String russian,
+    required int languageId,
+    String? image,
+  });
 }
