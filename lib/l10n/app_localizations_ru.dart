@@ -300,4 +300,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get image_url => 'URL картинки';
+
+  @override
+  String get no_internet => 'Отсутствует интернет соединение';
+
+  @override
+  String get internet_restored => 'Интернет соединение восстановлено';
 }

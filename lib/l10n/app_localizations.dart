@@ -676,6 +676,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image URL'**
   String get image_url;
+
+  /// No description provided for @no_internet.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get no_internet;
+
+  /// No description provided for @internet_restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet connection restored'**
+  String get internet_restored;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

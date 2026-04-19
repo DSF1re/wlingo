@@ -108,5 +108,7 @@
   },
   "transcription": "Транскрипция",
   "translation": "Перевод",
-  "image_url": "URL картинки"
+  "image_url": "URL картинки",
+  "no_internet": "Отсутствует интернет соединение",
+  "internet_restored": "Интернет соединение восстановлено"
 }

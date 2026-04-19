@@ -108,5 +108,7 @@
   },
   "transcription": "Transcription",
   "translation": "Translation",
-  "image_url": "Image URL"
+  "image_url": "Image URL",
+  "no_internet": "No internet connection",
+  "internet_restored": "Internet connection restored"
 }

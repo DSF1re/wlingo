@@ -33,7 +33,7 @@ final class AddWordNotifierProvider
   AddWordNotifier create() => AddWordNotifier();
 }
 
-String _$addWordNotifierHash() => r'3c5f9cda2fce099b0039e9840a9aa96c2e9cbaa3';
+String _$addWordNotifierHash() => r'd0a18033e8be646ce0ae3f4a89d435613e4847d2';
 
 abstract class _$AddWordNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();

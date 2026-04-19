@@ -100,7 +100,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
 });
 
 int _calculateSelectedIndex(String location) {
-  if (location.startsWith('/books')) return 1;
-  if (location.startsWith('/profile')) return 2;
+  if (location.startsWith(Routes.books)) return 1;
+  if (location.startsWith(Routes.profile)) return 2;
   return 0;
 }

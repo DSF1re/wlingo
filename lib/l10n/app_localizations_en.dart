@@ -300,4 +300,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get image_url => 'Image URL';
+
+  @override
+  String get no_internet => 'No internet connection';
+
+  @override
+  String get internet_restored => 'Internet connection restored';
 }
