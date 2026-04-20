@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -110,21 +110,21 @@ class PdfViewerScreen extends HookConsumerWidget {
                         handlePageChange(details.newPageNumber),
                   )
                 : pdfFile.value == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : SfPdfViewer.file(
-                        pdfFile.value!,
-                        controller: controller,
-                        onDocumentLoaded: (details) {
-                          totalPages.value = details.document.pages.count;
-                          final saved = prefs.getBookPage(bookId);
-                          if (saved > 1) {
-                            Future.microtask(() => controller.jumpToPage(saved));
-                            currentPage.value = saved;
-                          }
-                        },
-                        onPageChanged: (details) =>
-                            handlePageChange(details.newPageNumber),
-                      ),
+                ? const Center(child: CircularProgressIndicator())
+                : SfPdfViewer.file(
+                    pdfFile.value!,
+                    controller: controller,
+                    onDocumentLoaded: (details) {
+                      totalPages.value = details.document.pages.count;
+                      final saved = prefs.getBookPage(bookId);
+                      if (saved > 1) {
+                        Future.microtask(() => controller.jumpToPage(saved));
+                        currentPage.value = saved;
+                      }
+                    },
+                    onPageChanged: (details) =>
+                        handlePageChange(details.newPageNumber),
+                  ),
           ),
         ],
       ),

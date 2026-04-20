@@ -6,7 +6,7 @@ import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/lang_state/lang_state_provider.dart';
 import 'package:wlingo/features/word_practice/domain/usecases/get_words_usecase.dart';
 import 'package:wlingo/features/word_practice/domain/usecases/save_word_practice_usecase.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 
 part 'words_notifier.g.dart';
 

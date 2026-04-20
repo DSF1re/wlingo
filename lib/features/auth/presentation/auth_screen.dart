@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/core/failture/auth_failture.dart';
+import 'package:wlingo/core/failure/auth_failure.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/presentation/providers/auth_controller.dart';
@@ -32,10 +32,9 @@ class AuthScreen extends HookConsumerWidget {
     ref.listen<AsyncValue<UserEntity?>>(authControllerProvider, (prev, next) {
       next.whenOrNull(
         error: (error, _) {
-          final msg =
-              error is AuthFailure
-                  ? error.toLocalizedMessage(loc)
-                  : error.toString();
+          final msg = error is AuthFailure
+              ? error.toLocalizedMessage(loc)
+              : error.toString();
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(msg)));
@@ -61,15 +60,13 @@ class AuthScreen extends HookConsumerWidget {
 
     return BaseScreen(
       isDark: isDark,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [AppbarActions(isDark: isDark)],
+      ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [AppbarActions(isDark: isDark, padding: 0)],
-            ),
-          ),
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -142,9 +139,7 @@ class AuthScreen extends HookConsumerWidget {
                             onPressed: () => context.go(Routes.register),
                             child: Text(
                               loc.sign_up,
-                              style: ThemeTextStyles.regular(
-                                isDark: isDark,
-                              ),
+                              style: ThemeTextStyles.regular(isDark: isDark),
                             ),
                           ),
                         ],

@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:wlingo/core/failture/auth_failture.dart';
+import 'package:wlingo/core/failure/auth_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 
 abstract class AuthRepository {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/core/failture/auth_failture.dart';
+import 'package:wlingo/core/failure/auth_failure.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
@@ -46,9 +46,7 @@ class ProfileScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.profile,
-                    style: ThemeTextStyles.title1ExtraBold(
-                      isDark: isDark,
-                    ),
+                    style: ThemeTextStyles.title1ExtraBold(isDark: isDark),
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),
@@ -82,19 +80,14 @@ class ProfileScreen extends HookConsumerWidget {
                           loc: loc,
                         ),
                         if (user.isAdmin)
-                          RegistrationHistorySection(
-                            isDark: isDark,
-                            loc: loc,
-                          )
+                          RegistrationHistorySection(isDark: isDark, loc: loc)
                         else
                           HistorySection(
                             userId: user.id,
                             isDark: isDark,
                             loc: loc,
                           ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 100),
-                        ),
+                        const SliverToBoxAdapter(child: SizedBox(height: 100)),
                       ],
                     ),
                   );

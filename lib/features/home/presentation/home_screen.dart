@@ -12,7 +12,7 @@ import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
 import 'package:wlingo/features/word_practice/presentation/screens/add_word_screen.dart'
     as w;
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';

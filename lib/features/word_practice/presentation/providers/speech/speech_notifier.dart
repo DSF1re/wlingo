@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 
 class SpeechNotifier extends AsyncNotifier<String> {
   final SpeechToText _speech = SpeechToText();
@@ -75,7 +75,8 @@ class SpeechNotifier extends AsyncNotifier<String> {
 
       if (finalResult.isNotEmpty) {
         Future.delayed(const Duration(seconds: 5), () {
-          if (state.value == finalResult) { // Ensure it wasn't changed by a new recording
+          if (state.value == finalResult) {
+            // Ensure it wasn't changed by a new recording
             state = const AsyncData('');
           }
         });

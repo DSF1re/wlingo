@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 
 class LangStateNotifier extends Notifier<int> {
   @override

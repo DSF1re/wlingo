@@ -8,7 +8,7 @@ import 'package:wlingo/features/bookview/presentation/providers/add_book_notifie
 import 'package:wlingo/features/bookview/presentation/providers/books_notifier.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
@@ -59,7 +59,7 @@ class AddBookScreen extends HookConsumerWidget {
     void submit() {
       errorMessage.value = null;
       final isFormValid = formKey.currentState!.validate();
-      
+
       if (!isFormValid || selectedFilePath.value == null) {
         if (!isFormValid && selectedFilePath.value == null) {
           errorMessage.value = loc.fill_form;
@@ -265,9 +265,12 @@ class AddBookScreen extends HookConsumerWidget {
                                     .withValues(alpha: 0.03),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: errorMessage.value != null && selectedFilePath.value == null
+                                  color:
+                                      errorMessage.value != null &&
+                                          selectedFilePath.value == null
                                       ? Colors.red.withValues(alpha: 0.8)
-                                      : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
+                                      : (isDark ? Colors.white : Colors.black)
+                                            .withValues(alpha: 0.1),
                                   style: BorderStyle.solid,
                                   width: 1.5,
                                 ),
@@ -280,8 +283,8 @@ class AddBookScreen extends HookConsumerWidget {
                                         : Icons.cloud_upload_rounded,
                                     size: 40,
                                     color: selectedFileName.value != null
-                                      ? AppColors.greenLight
-                                      : AppColors.primaryBlueLight,
+                                        ? AppColors.greenLight
+                                        : AppColors.primaryBlueLight,
                                   ),
                                   const SizedBox(height: 12),
                                   Text(
@@ -337,7 +340,8 @@ class AddBookScreen extends HookConsumerWidget {
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primaryBlueLight.withValues(alpha: 0.3),
+                                    color: AppColors.primaryBlueLight
+                                        .withValues(alpha: 0.3),
                                     blurRadius: 12,
                                     offset: const Offset(0, 4),
                                   ),

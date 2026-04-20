@@ -7,6 +7,7 @@ class BaseScreen extends StatelessWidget {
   final double maxWidth;
   final bool safeAreaBottom;
   final bool safeAreaTop;
+  final PreferredSizeWidget? appBar;
 
   const BaseScreen({
     super.key,
@@ -15,11 +16,14 @@ class BaseScreen extends StatelessWidget {
     this.maxWidth = 500,
     this.safeAreaBottom = false,
     this.safeAreaTop = true,
+    this.appBar,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           Positioned.fill(

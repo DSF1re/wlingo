@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/core/failture/auth_failture.dart';
+import 'package:wlingo/core/failure/auth_failure.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/register/domain/providers/register_controller.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
@@ -49,21 +49,17 @@ class RegisterScreen extends HookConsumerWidget {
 
     return BaseScreen(
       isDark: isDark,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => context.go(Routes.login),
+          icon: const Icon(Icons.arrow_back_rounded),
+        ),
+        actions: [AppbarActions(isDark: isDark)],
+      ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => context.go(Routes.login),
-                  child: Icon(Icons.arrow_back_rounded),
-                ),
-                const Spacer(),
-                AppbarActions(isDark: isDark, padding: 0),
-              ],
-            ),
-          ),
           Expanded(
             child: Center(
               child: SingleChildScrollView(

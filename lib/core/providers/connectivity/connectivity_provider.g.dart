@@ -48,4 +48,4 @@ final class ConnectivityProvider
   }
 }
 
-String _$connectivityHash() => r'0b9c9912c5d1cfc2b8b35a062d1a614c52301afd';
+String _$connectivityHash() => r'1be36818b5034dc2d5296d62bf7d895b4f73931c';

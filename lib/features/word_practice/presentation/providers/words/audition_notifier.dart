@@ -8,7 +8,7 @@ import 'package:wlingo/features/word_practice/domain/usecases/save_audition_reco
 import 'package:wlingo/features/word_practice/presentation/providers/lang_state/lang_state_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 
 part 'audition_notifier.g.dart';
 
@@ -56,7 +56,7 @@ class AuditionNotifier extends _$AuditionNotifier {
       selectedWordId: selectedWordId,
       isCorrect: isCorrect,
     );
-    
+
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId != null) {
       ref.invalidate(userHistoryProvider(userId));

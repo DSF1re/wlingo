@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/features/bookview/domain/entities/book_entity.dart';
 import 'package:wlingo/features/bookview/domain/usecases/get_books_usecase.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 
 part 'books_notifier.g.dart';
 

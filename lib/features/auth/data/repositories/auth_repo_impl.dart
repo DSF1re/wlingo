@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
-import 'package:wlingo/core/failture/auth_failture.dart';
+import 'package:wlingo/core/failure/auth_failure.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart' as model;
 import 'package:wlingo/features/auth/data/models/user/user_mapper.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
@@ -12,22 +12,23 @@ class SupabaseAuthRepository implements AuthRepository {
   SupabaseClient get _client => Supabase.instance.client;
 
   AuthFailure _handleException(Object e) {
+    if (e is AuthFailure) return e;
     if (e is SocketException || e is HttpException) {
-      return AuthFailure.networkError();
+      return const AuthFailure.networkError();
     }
 
     if (e is AuthException) {
       final msg = e.message.toLowerCase();
 
       if (msg.contains('invalid login credentials')) {
-        return AuthFailure.invalidCredentials();
+        return const AuthFailure.invalidCredentials();
       }
       if (msg.contains('email not confirmed')) {
-        return AuthFailure.emailNotConfirmed();
+        return const AuthFailure.emailNotConfirmed();
       }
       if (msg.contains('already registered') ||
           msg.contains('already in use')) {
-        return AuthFailure.emailAlreadyInUse();
+        return const AuthFailure.emailAlreadyInUse();
       }
       return AuthFailure.unexpected(e.message);
     }
@@ -36,7 +37,7 @@ class SupabaseAuthRepository implements AuthRepository {
       if (e.code == 'PGRST' ||
           e.message.contains('SocketException') ||
           e.code == '08006') {
-        return AuthFailure.networkError();
+        return const AuthFailure.networkError();
       }
       return AuthFailure.unexpected(e.message);
     }
@@ -44,12 +45,29 @@ class SupabaseAuthRepository implements AuthRepository {
     return AuthFailure.unexpected(e.toString());
   }
 
+  Future<Either<AuthFailure, T>> _safeCall<T>(Future<T> Function() call) async {
+    try {
+      final result = await call();
+      return Right(result);
+    } catch (e) {
+      return Left(_handleException(e));
+    }
+  }
+
+  Future<UserEntity> _getProfileAndToEntity(String userId) async {
+    final response = await _client
+        .from('profiles')
+        .select()
+        .eq('id', userId)
+        .single();
+    return model.User.fromJson(response).toEntity();
+  }
+
   @override
   Future<Either<AuthFailure, UserEntity?>> getCurrentUser() async {
-    try {
-      final session = _client.auth.currentSession;
-      final supaUser = session?.user;
-      if (supaUser == null) return Left(AuthFailure.nullUser());
+    return _safeCall(() async {
+      final supaUser = _client.auth.currentUser;
+      if (supaUser == null) return null;
 
       final response = await _client
           .from('profiles')
@@ -57,11 +75,9 @@ class SupabaseAuthRepository implements AuthRepository {
           .eq('id', supaUser.id)
           .maybeSingle();
 
-      if (response == null) return Left(AuthFailure.nullUser());
-      return Right(model.User.fromJson(response).toEntity());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      if (response == null) return null;
+      return model.User.fromJson(response).toEntity();
+    });
   }
 
   @override
@@ -73,12 +89,12 @@ class SupabaseAuthRepository implements AuthRepository {
     required String middleName,
     required int nativeLang,
   }) async {
-    try {
+    return _safeCall(() async {
       if (email.isEmpty ||
           password.isEmpty ||
           firstName.isEmpty ||
           lastName.isEmpty) {
-        return Left(AuthFailure.fillForm());
+        throw const AuthFailure.fillForm();
       }
 
       final authResponse = await _client.auth.signUp(
@@ -87,7 +103,7 @@ class SupabaseAuthRepository implements AuthRepository {
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) return Left(AuthFailure.invalidCredentials());
+      if (supaUser == null) throw const AuthFailure.invalidCredentials();
 
       final insertResponse = await _client
           .from('profiles')
@@ -102,10 +118,8 @@ class SupabaseAuthRepository implements AuthRepository {
           .select()
           .single();
 
-      return Right(model.User.fromJson(insertResponse).toEntity());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return model.User.fromJson(insertResponse).toEntity();
+    });
   }
 
   @override
@@ -113,9 +127,9 @@ class SupabaseAuthRepository implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
+    return _safeCall(() async {
       if (email.isEmpty || password.isEmpty) {
-        return Left(AuthFailure.fillAuth());
+        throw const AuthFailure.fillAuth();
       }
 
       final authResponse = await _client.auth.signInWithPassword(
@@ -124,18 +138,10 @@ class SupabaseAuthRepository implements AuthRepository {
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) return Left(AuthFailure.nullUser());
+      if (supaUser == null) throw const AuthFailure.nullUser();
 
-      final response = await _client
-          .from('profiles')
-          .select()
-          .eq('id', supaUser.id)
-          .single();
-
-      return Right(model.User.fromJson(response).toEntity());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return _getProfileAndToEntity(supaUser.id);
+    });
   }
 
   @override
@@ -144,9 +150,9 @@ class SupabaseAuthRepository implements AuthRepository {
     required String lastName,
     String? middleName,
   }) async {
-    try {
+    return _safeCall(() async {
       final userId = _client.auth.currentUser?.id;
-      if (userId == null) return Left(AuthFailure.nullUser());
+      if (userId == null) throw const AuthFailure.nullUser();
 
       final response = await _client
           .from('profiles')
@@ -159,47 +165,34 @@ class SupabaseAuthRepository implements AuthRepository {
           .select()
           .single();
 
-      return Right(model.User.fromJson(response).toEntity());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return model.User.fromJson(response).toEntity();
+    });
   }
 
   @override
   Future<Either<AuthFailure, void>> signOut() async {
-    try {
-      await _client.auth.signOut();
-      return Right(null);
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+    return _safeCall(() => _client.auth.signOut());
   }
 
   @override
   Future<Either<AuthFailure, List<UserEntity>>> getAllUsers() async {
-    try {
+    return _safeCall(() async {
       final response = await _client.from('profiles').select();
-
       final List<dynamic> data = response as List<dynamic>;
-      return Right(
-        data.map((json) => model.User.fromJson(json).toEntity()).toList(),
-      );
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return data.map((json) => model.User.fromJson(json).toEntity()).toList();
+    });
   }
 
   @override
   Future<Either<AuthFailure, List<Map<String, dynamic>>>>
-      getUsersWithRatings() async {
-    try {
-      final response = await _client.from('profiles').select('*, rating(points)');
-
+  getUsersWithRatings() async {
+    return _safeCall(() async {
+      final response = await _client
+          .from('profiles')
+          .select('*, rating(points)');
       final List<dynamic> data = response as List<dynamic>;
-      return Right(data.cast<Map<String, dynamic>>());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return data.cast<Map<String, dynamic>>();
+    });
   }
 
   @override
@@ -209,7 +202,7 @@ class SupabaseAuthRepository implements AuthRepository {
     required String lastName,
     String? middleName,
   }) async {
-    try {
+    return _safeCall(() async {
       final response = await _client
           .from('profiles')
           .update({
@@ -221,10 +214,8 @@ class SupabaseAuthRepository implements AuthRepository {
           .select()
           .single();
 
-      return Right(model.User.fromJson(response).toEntity());
-    } catch (e) {
-      return Left(_handleException(e));
-    }
+      return model.User.fromJson(response).toEntity();
+    });
   }
 
   @override
@@ -233,7 +224,7 @@ class SupabaseAuthRepository implements AuthRepository {
       try {
         final session = event.session;
         final supaUser = session?.user;
-        if (supaUser == null) return Right(null);
+        if (supaUser == null) return const Right(null);
 
         final response = await _client
             .from('profiles')
@@ -241,7 +232,7 @@ class SupabaseAuthRepository implements AuthRepository {
             .eq('id', supaUser.id)
             .maybeSingle();
 
-        if (response == null) return Right(null);
+        if (response == null) return const Right(null);
 
         return Right(model.User.fromJson(response).toEntity());
       } catch (e) {

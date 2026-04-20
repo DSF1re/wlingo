@@ -1,4 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
+late final SharedPreferences shared;
+final talker = TalkerFlutter.init();
 
 Future<void> supabaseInitialize() async {
   await Supabase.initialize(

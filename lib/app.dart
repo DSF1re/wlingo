@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wlingo/core/global_variables/public_vars.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/core/providers/locale/locale_provider.dart';
 import 'package:wlingo/core/providers/theme/theme_provider.dart';
 import 'package:wlingo/core/providers/connectivity/connectivity_provider.dart';
 import 'package:wlingo/core/router/router.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/theme/text_styles.dart';
 
 class MainApp extends ConsumerWidget {
   const MainApp({super.key});
@@ -59,7 +59,10 @@ class ConnectivityListener extends ConsumerWidget {
         if (status == ConnectivityStatus.disconnected) {
           scaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(
-              content: Text(l10n.no_internet),
+              content: Text(
+                l10n.no_internet,
+                style: ThemeTextStyles.regular(isDark: true),
+              ),
               backgroundColor: Colors.red,
               duration: const Duration(days: 1),
               action: SnackBarAction(

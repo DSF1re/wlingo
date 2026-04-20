@@ -13,7 +13,7 @@ import 'package:wlingo/features/register/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/features/word_practice/presentation/audition_game.dart';
 import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
-import 'package:wlingo/main.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/widgets/navigation_bar.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {

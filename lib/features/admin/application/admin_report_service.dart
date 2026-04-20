@@ -7,16 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 
 class AdminReportService {
-  // New Design tokens for a modern look
-  static const _primary = PdfColor.fromInt(0xFF2563EB); // Modern Blue
+  static const _primary = PdfColor.fromInt(0xFF2563EB);
   static const _primaryLight = PdfColor.fromInt(0xFFEFF6FF);
-  static const _dark = PdfColor.fromInt(0xFF0F172A); // Slate 900
-  static const _textMain = PdfColor.fromInt(0xFF334155); // Slate 700
-  static const _textMuted = PdfColor.fromInt(0xFF64748B); // Slate 500
-  static const _bgLight = PdfColor.fromInt(0xFFF8FAFC); // Slate 50
-  static const _border = PdfColor.fromInt(0xFFE2E8F0); // Slate 200
+  static const _dark = PdfColor.fromInt(0xFF0F172A);
+  static const _textMain = PdfColor.fromInt(0xFF334155);
+  static const _textMuted = PdfColor.fromInt(0xFF64748B);
+  static const _bgLight = PdfColor.fromInt(0xFFF8FAFC);
+  static const _border = PdfColor.fromInt(0xFFE2E8F0);
   static const _white = PdfColors.white;
-
 
   static Future<void> generateUserStatsReport({
     required List<Map<String, dynamic>> userData,
@@ -34,7 +32,6 @@ class AdminReportService {
     final boldFont = await PdfGoogleFonts.robotoBold();
     final mediumFont = await PdfGoogleFonts.robotoMedium();
 
-    // ── Prepare data ──
     final chartData = userData.map((user) {
       final name = '${user['first_name']} ${user['last_name']}';
       final ratingData = user['rating'];
@@ -44,7 +41,7 @@ class AdminReportService {
       } else if (ratingData is Map) {
         points = ratingData['points'] as int? ?? 0;
       }
-      
+
       final createdAtRaw = user['created_at'];
       DateTime? createdAt;
       if (createdAtRaw is String) {
@@ -52,21 +49,16 @@ class AdminReportService {
       } else if (createdAtRaw is DateTime) {
         createdAt = createdAtRaw;
       }
-      
+
       return _UserStat(name: name, points: points, createdAt: createdAt);
     }).toList();
 
     chartData.sort((a, b) => b.points.compareTo(a.points));
 
-
-    // Formatting date as dd.mm.yyyy
-
-    // Formatting date as dd.mm.yyyy
     final now = DateTime.now();
     final dateStr =
         '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
 
-    // ── Page theme ──
     final theme = pw.ThemeData.withFont(
       base: font,
       bold: boldFont,
@@ -79,7 +71,6 @@ class AdminReportService {
         theme: theme,
         margin: const pw.EdgeInsets.symmetric(horizontal: 40, vertical: 48),
 
-        // ── Header (All Pages) ──
         header: (context) => pw.Column(
           children: [
             pw.Row(
@@ -140,7 +131,6 @@ class AdminReportService {
           ],
         ),
 
-        // ── Footer (All Pages) ──
         footer: (context) => pw.Column(
           children: [
             pw.Divider(color: _border, thickness: 1),
@@ -157,10 +147,8 @@ class AdminReportService {
           ],
         ),
 
-        // ── Content ──
         build: (context) {
           return [
-            // Full Table
             pw.Text(
               loc.users.toUpperCase(),
               style: pw.TextStyle(
@@ -302,7 +290,6 @@ class AdminReportService {
 
             pw.SizedBox(height: 48),
 
-            // Signature Block
             pw.Container(
               padding: const pw.EdgeInsets.all(24),
               decoration: pw.BoxDecoration(
@@ -410,7 +397,6 @@ class AdminReportService {
       name: 'wlingo_user_statistics_$dateStr.pdf',
     );
   }
-
 }
 
 class _UserStat {
