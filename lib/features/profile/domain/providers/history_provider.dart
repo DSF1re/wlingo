@@ -11,12 +11,16 @@ final userHistoryProvider = FutureProvider.family<List<RatingRecord>, String>((
   final practiceFuture = client
       .from('ex_word_practice')
       .select()
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', ascending: false)
+      .limit(50);
 
   final auditionFuture = client
       .from('ex_audition')
       .select()
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', ascending: false)
+      .limit(50);
 
   final responses = await Future.wait([practiceFuture, auditionFuture]);
 

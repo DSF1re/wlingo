@@ -177,7 +177,11 @@ class SupabaseAuthRepository implements AuthRepository {
   @override
   Future<Either<AuthFailure, List<UserEntity>>> getAllUsers() async {
     return _safeCall(() async {
-      final response = await _client.from('profiles').select();
+      final response = await _client
+          .from('profiles')
+          .select()
+          .order('created_at', ascending: false)
+          .limit(50);
       final List<dynamic> data = response as List<dynamic>;
       return data.map((json) => model.User.fromJson(json).toEntity()).toList();
     });

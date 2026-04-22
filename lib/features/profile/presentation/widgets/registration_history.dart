@@ -17,7 +17,7 @@ class RegistrationHistorySection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final usersAsync = ref.watch(getAllUsersUseCaseProvider).call();
+    final usersAsync = ref.read(getAllUsersUseCaseProvider).call();
 
     return FutureBuilder(
       future: usersAsync,
@@ -37,9 +37,8 @@ class RegistrationHistorySection extends ConsumerWidget {
         if (result == null) return const SliverToBoxAdapter(child: SizedBox());
 
         return result.fold(
-          (failure) => SliverToBoxAdapter(
-            child: Center(child: Text(loc.error)),
-          ),
+          (failure) =>
+              SliverToBoxAdapter(child: Center(child: Text(loc.error))),
           (users) {
             if (users.isEmpty) {
               return SliverToBoxAdapter(
@@ -47,51 +46,46 @@ class RegistrationHistorySection extends ConsumerWidget {
               );
             }
 
-            // Sort by date descending
-            users.sort((a, b) => (b.createdAt ?? DateTime(0)).compareTo(a.createdAt ?? DateTime(0)));
-
             return SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final user = users[index];
-                    final fullName = '${user.firstName} ${user.lastName}';
-                    final dateStr = user.createdAt != null
-                        ? DateFormat('dd.MM.yyyy').format(user.createdAt!)
-                        : '—';
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final user = users[index];
+                  final fullName = '${user.firstName} ${user.lastName}';
+                  final dateStr = user.createdAt != null
+                      ? DateFormat('dd.MM.yyyy').format(user.createdAt!)
+                      : '—';
 
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: (isDark ? Colors.white : Colors.black)
-                            .withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(16),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: (isDark ? Colors.white : Colors.black).withValues(
+                        alpha: 0.05,
                       ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        title: Text(
-                          fullName,
-                          style: ThemeTextStyles.regular(
-                            isDark: isDark,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        trailing: Text(
-                          dateStr,
-                          style: ThemeTextStyles.caption(
-                            isDark: isDark,
-                            color: (isDark ? Colors.white : Colors.black)
-                                .withValues(alpha: 0.5),
-                          ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      title: Text(
+                        fullName,
+                        style: ThemeTextStyles.regular(
+                          isDark: isDark,
+                        ).copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      trailing: Text(
+                        dateStr,
+                        style: ThemeTextStyles.caption(
+                          isDark: isDark,
+                          color: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.5),
                         ),
                       ),
-                    );
-                  },
-                  childCount: users.length,
-                ),
+                    ),
+                  );
+                }, childCount: users.length),
               ),
             );
           },
