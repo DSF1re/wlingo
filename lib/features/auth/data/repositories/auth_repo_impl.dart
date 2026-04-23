@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
-import 'package:wlingo/core/failure/auth_failure.dart';
+import 'package:wlingo/core/failure/app_failure.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart' as model;
 import 'package:wlingo/features/auth/data/models/user/user_mapper.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
@@ -11,45 +12,52 @@ import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 class SupabaseAuthRepository implements AuthRepository {
   SupabaseClient get _client => Supabase.instance.client;
 
-  AuthFailure _handleException(Object e) {
-    if (e is AuthFailure) return e;
-    if (e is SocketException || e is HttpException) {
-      return const AuthFailure.networkError();
+  AppFailure _handleException(Object e) {
+    if (e is AppFailure) return e;
+    if (e is SocketException ||
+        e is HttpException ||
+        e is HandshakeException ||
+        e is TlsException) {
+      return const AppFailure.networkError();
     }
 
     if (e is AuthException) {
+      if (e is AuthRetryableFetchException) {
+        return const AppFailure.networkError();
+      }
       final msg = e.message.toLowerCase();
 
       if (msg.contains('invalid login credentials')) {
-        return const AuthFailure.invalidCredentials();
+        return const AppFailure.invalidCredentials();
       }
       if (msg.contains('email not confirmed')) {
-        return const AuthFailure.emailNotConfirmed();
+        return const AppFailure.emailNotConfirmed();
       }
       if (msg.contains('already registered') ||
           msg.contains('already in use')) {
-        return const AuthFailure.emailAlreadyInUse();
+        return const AppFailure.emailAlreadyInUse();
       }
-      return AuthFailure.unexpected(e.message);
+      return AppFailure.unexpected(e.message);
     }
 
     if (e is PostgrestException) {
       if (e.code == 'PGRST' ||
           e.message.contains('SocketException') ||
           e.code == '08006') {
-        return const AuthFailure.networkError();
+        return const AppFailure.networkError();
       }
-      return AuthFailure.unexpected(e.message);
+      return AppFailure.unexpected(e.message);
     }
 
-    return AuthFailure.unexpected(e.toString());
+    return AppFailure.unexpected(e.toString());
   }
 
-  Future<Either<AuthFailure, T>> _safeCall<T>(Future<T> Function() call) async {
+  Future<Either<AppFailure, T>> _safeCall<T>(Future<T> Function() call) async {
     try {
       final result = await call();
       return Right(result);
-    } catch (e) {
+    } catch (e, st) {
+      talker.handle(e, st, 'SupabaseAuthRepository Error');
       return Left(_handleException(e));
     }
   }
@@ -64,7 +72,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity?>> getCurrentUser() async {
+  Future<Either<AppFailure, UserEntity?>> getCurrentUser() async {
     return _safeCall(() async {
       final supaUser = _client.auth.currentUser;
       if (supaUser == null) return null;
@@ -81,7 +89,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity>> signUp({
+  Future<Either<AppFailure, UserEntity>> signUp({
     required String email,
     required String password,
     required String firstName,
@@ -94,7 +102,7 @@ class SupabaseAuthRepository implements AuthRepository {
           password.isEmpty ||
           firstName.isEmpty ||
           lastName.isEmpty) {
-        throw const AuthFailure.fillForm();
+        throw const AppFailure.fillForm();
       }
 
       final authResponse = await _client.auth.signUp(
@@ -103,7 +111,7 @@ class SupabaseAuthRepository implements AuthRepository {
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) throw const AuthFailure.invalidCredentials();
+      if (supaUser == null) throw const AppFailure.invalidCredentials();
 
       final insertResponse = await _client
           .from('profiles')
@@ -123,13 +131,13 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity>> signIn({
+  Future<Either<AppFailure, UserEntity>> signIn({
     required String email,
     required String password,
   }) async {
     return _safeCall(() async {
       if (email.isEmpty || password.isEmpty) {
-        throw const AuthFailure.fillAuth();
+        throw const AppFailure.fillAuth();
       }
 
       final authResponse = await _client.auth.signInWithPassword(
@@ -138,21 +146,21 @@ class SupabaseAuthRepository implements AuthRepository {
       );
 
       final supaUser = authResponse.user;
-      if (supaUser == null) throw const AuthFailure.nullUser();
+      if (supaUser == null) throw const AppFailure.nullUser();
 
       return _getProfileAndToEntity(supaUser.id);
     });
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity>> updateProfile({
+  Future<Either<AppFailure, UserEntity>> updateProfile({
     required String firstName,
     required String lastName,
     String? middleName,
   }) async {
     return _safeCall(() async {
       final userId = _client.auth.currentUser?.id;
-      if (userId == null) throw const AuthFailure.nullUser();
+      if (userId == null) throw const AppFailure.nullUser();
 
       final response = await _client
           .from('profiles')
@@ -170,12 +178,12 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, void>> signOut() async {
+  Future<Either<AppFailure, void>> signOut() async {
     return _safeCall(() => _client.auth.signOut());
   }
 
   @override
-  Future<Either<AuthFailure, List<UserEntity>>> getAllUsers() async {
+  Future<Either<AppFailure, List<UserEntity>>> getAllUsers() async {
     return _safeCall(() async {
       final response = await _client
           .from('profiles')
@@ -188,7 +196,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, List<Map<String, dynamic>>>>
+  Future<Either<AppFailure, List<Map<String, dynamic>>>>
   getUsersWithRatings() async {
     return _safeCall(() async {
       final response = await _client
@@ -200,7 +208,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, UserEntity>> updateProfileById({
+  Future<Either<AppFailure, UserEntity>> updateProfileById({
     required String userId,
     required String firstName,
     required String lastName,
@@ -223,7 +231,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Stream<Either<AuthFailure, UserEntity?>> authStateChanges() {
+  Stream<Either<AppFailure, UserEntity?>> authStateChanges() {
     return _client.auth.onAuthStateChange.asyncMap((event) async {
       try {
         final session = event.session;

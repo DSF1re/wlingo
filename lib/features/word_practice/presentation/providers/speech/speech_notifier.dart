@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:wlingo/core/global_variables/services.dart';
 
@@ -16,20 +16,22 @@ class SpeechNotifier extends AsyncNotifier<String> {
   }
 
   String _getLocaleId() {
-    final prefs = shared;
-    switch (prefs.getInt('lang_cource') ?? 2) {
+    final prefs = ref.read(sharedPrefsProvider);
+    switch (prefs.getInt('lang_course') ?? prefs.getInt('lang_cource') ?? 2) {
       case 1:
-        return 'ru_RU';
+        return 'ru-RU';
       case 2:
-        return 'en_US';
+        return 'en-US';
       case 3:
-        return 'de_DE';
+        return 'de-DE';
       case 4:
-        return 'fr_FR';
+        return 'fr-FR';
       case 5:
-        return 'es_ES';
+        return 'es-ES';
+      case 6:
+        return 'tr-TR';
       default:
-        return 'en_US';
+        return 'en-US';
     }
   }
 

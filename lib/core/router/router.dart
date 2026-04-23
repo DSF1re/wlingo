@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/admin/presentation/user_management_screen.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
@@ -9,7 +9,7 @@ import 'package:wlingo/features/home/presentation/home_screen.dart';
 import 'package:wlingo/features/main/presentation/main_layout.dart';
 import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:wlingo/features/profile/presentation/profile_screen.dart';
-import 'package:wlingo/features/register/presentation/reg_screen.dart';
+import 'package:wlingo/features/auth/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/features/word_practice/presentation/audition_game.dart';
 import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
@@ -17,8 +17,9 @@ import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/widgets/navigation_bar.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
+  final prefs = ref.read(sharedPrefsProvider);
   return GoRouter(
-    initialLocation: shared.getBool('onboarding_completed') == true
+    initialLocation: prefs.getBool('onboarding_completed') == true
         ? Routes.login
         : Routes.splash,
     routes: [

@@ -3,10 +3,10 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/add_word_notifier.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
@@ -22,7 +22,9 @@ class AddWordScreen extends HookConsumerWidget {
     final transcriptionController = useTextEditingController();
     final russianController = useTextEditingController();
 
-    final selectedLangId = useState<int>(shared.getInt('lang_cource') ?? 2);
+    final selectedLangId = useState<int>(
+      ref.read(preferencesServiceProvider).getCourseLanguage(),
+    );
 
     final languagesAsync = ref.watch(languagesProvider);
     final addState = ref.watch(addWordProvider);

@@ -1,11 +1,11 @@
 import 'package:either_dart/either.dart';
-import 'package:wlingo/core/failure/auth_failure.dart';
+import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 
 abstract class AuthRepository {
-  Future<Either<AuthFailure, UserEntity?>> getCurrentUser();
+  Future<Either<AppFailure, UserEntity?>> getCurrentUser();
 
-  Future<Either<AuthFailure, UserEntity>> signUp({
+  Future<Either<AppFailure, UserEntity>> signUp({
     required String email,
     required String password,
     required String firstName,
@@ -14,29 +14,29 @@ abstract class AuthRepository {
     required int nativeLang,
   });
 
-  Future<Either<AuthFailure, UserEntity>> signIn({
+  Future<Either<AppFailure, UserEntity>> signIn({
     required String email,
     required String password,
   });
 
-  Future<Either<AuthFailure, UserEntity>> updateProfile({
+  Future<Either<AppFailure, UserEntity>> updateProfile({
     required String firstName,
     required String lastName,
     String? middleName,
   });
 
-  Future<Either<AuthFailure, void>> signOut();
+  Future<Either<AppFailure, void>> signOut();
 
-  Future<Either<AuthFailure, List<UserEntity>>> getAllUsers();
+  Future<Either<AppFailure, List<UserEntity>>> getAllUsers();
 
-  Future<Either<AuthFailure, List<Map<String, dynamic>>>> getUsersWithRatings();
+  Future<Either<AppFailure, List<Map<String, dynamic>>>> getUsersWithRatings();
 
-  Future<Either<AuthFailure, UserEntity>> updateProfileById({
+  Future<Either<AppFailure, UserEntity>> updateProfileById({
     required String userId,
     required String firstName,
     required String lastName,
     String? middleName,
   });
 
-  Stream<Either<AuthFailure, UserEntity?>> authStateChanges();
+  Stream<Either<AppFailure, UserEntity?>> authStateChanges();
 }

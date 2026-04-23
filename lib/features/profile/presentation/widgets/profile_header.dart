@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
 
@@ -32,7 +32,10 @@ class ProfileHeaderSection extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              (user.isAdmin ? (loc.registration as String) : (loc.history as String)).toUpperCase(),
+              (user.isAdmin
+                      ? (loc.registration as String)
+                      : (loc.history as String))
+                  .toUpperCase(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

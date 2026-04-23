@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wlingo/theme/colors.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
 class Button extends StatelessWidget {
@@ -15,7 +15,7 @@ class Button extends StatelessWidget {
     required this.text,
     this.onClicked,
     this.height = 50,
-    this.color = ThemeColors.blue,
+    this.color = AppColors.primaryBlue,
     this.isLoading = false,
   });
 

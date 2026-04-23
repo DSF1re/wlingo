@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/router.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/splash/domain/providers/splash_state.dart';
@@ -15,6 +15,7 @@ class SplashAsyncNotifier extends AsyncNotifier<SplashState> {
   @override
   FutureOr<SplashState> build() async {
     router = ref.read(routerProvider);
+    final shared = ref.read(sharedPrefsProvider);
 
     final bool isFirstLaunch = shared.getBool('isFirstLaunch') ?? true;
 

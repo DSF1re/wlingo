@@ -3,6 +3,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tts_provider.g.dart';
 
+String getTtsLanguageCode(int langId) {
+  switch (langId) {
+    case 1:
+      return "ru-RU";
+    case 2:
+      return "en-US";
+    case 3:
+      return "de-DE";
+    case 4:
+      return "fr-FR";
+    case 5:
+      return "es-ES";
+    case 6:
+      return "tr-TR";
+    default:
+      return "en-US";
+  }
+}
+
 @riverpod
 FlutterTts tts(Ref ref) {
   final tts = FlutterTts();

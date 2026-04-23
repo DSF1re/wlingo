@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/core/failure/auth_failure.dart';
+import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/core/router/routes.dart';
-import 'package:wlingo/features/register/domain/providers/register_controller.dart';
+import 'package:wlingo/features/auth/presentation/providers/register_controller.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -30,7 +30,7 @@ class RegisterScreen extends HookConsumerWidget {
     ref.listen<AsyncValue<void>>(registerControllerProvider, (prev, next) {
       next.whenOrNull(
         error: (fail, _) {
-          final msg = fail is AuthFailure
+          final msg = fail is AppFailure
               ? fail.toLocalizedMessage(loc)
               : fail.toString();
           ScaffoldMessenger.of(

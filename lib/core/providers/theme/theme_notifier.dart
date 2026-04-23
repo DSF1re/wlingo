@@ -5,19 +5,21 @@ import 'package:wlingo/core/global_variables/services.dart';
 class ThemeNotifier extends Notifier<ThemeMode> {
   @override
   ThemeMode build() {
-    final savedMode = shared.getString('app_theme_mode') == 'dark'
+    final prefs = ref.read(sharedPrefsProvider);
+    final savedMode = prefs.getString('app_theme_mode') == 'dark'
         ? ThemeMode.dark
         : ThemeMode.light;
     return savedMode;
   }
 
   void toggleTheme() {
+    final prefs = ref.read(sharedPrefsProvider);
     if (state == ThemeMode.dark) {
       state = ThemeMode.light;
-      shared.setString('app_theme_mode', 'light');
+      prefs.setString('app_theme_mode', 'light');
     } else {
       state = ThemeMode.dark;
-      shared.setString('app_theme_mode', 'dark');
+      prefs.setString('app_theme_mode', 'dark');
     }
   }
 }

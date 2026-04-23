@@ -4,11 +4,11 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/features/bookview/presentation/providers/add_book_notifier.dart';
 import 'package:wlingo/features/bookview/presentation/providers/books_notifier.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
@@ -25,7 +25,10 @@ class AddBookScreen extends HookConsumerWidget {
 
     final selectedFilePath = useState<String?>(null);
     final selectedFileName = useState<String?>(null);
-    final selectedLangId = useState<int>(shared.getInt('lang_cource') ?? 2);
+    final prefs = ref.read(sharedPrefsProvider);
+    final selectedLangId = useState<int>(
+      prefs.getInt('lang_course') ?? prefs.getInt('lang_cource') ?? 2,
+    );
 
     final languagesAsync = ref.watch(languagesProvider);
     final addState = ref.watch(addBookProvider);

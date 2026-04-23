@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wlingo/theme/colors.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 
-class Input extends ConsumerWidget {
+class Input extends StatelessWidget {
   final TextStyle? style;
   final String? labelText;
   final double borderRadius;
@@ -27,14 +26,14 @@ class Input extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark
         ? true
         : false;
     var outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide(
         width: 1,
-        color: isDark ? ThemeColors.inputLight : ThemeColors.inputDark,
+        color: isDark ? AppColors.inputLight : AppColors.inputDark,
       ),
       borderRadius: BorderRadius.circular(borderRadius),
     );
@@ -47,7 +46,7 @@ class Input extends ConsumerWidget {
         style: style ?? ThemeTextStyles.regular(isDark: isDark),
         decoration: InputDecoration(
           filled: true,
-          fillColor: isDark ? ThemeColors.inputDark : ThemeColors.inputLight,
+          fillColor: isDark ? AppColors.inputDark : AppColors.inputLight,
           hintText: hint,
           labelText: labelText,
           hintStyle: ThemeTextStyles.regular(isDark: isDark),

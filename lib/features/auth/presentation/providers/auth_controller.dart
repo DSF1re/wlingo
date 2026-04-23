@@ -11,12 +11,17 @@ class AuthController extends _$AuthController {
   FutureOr<UserEntity?> build() => null;
 
   Future<void> login(String email, String password) async {
+    final link = ref.keepAlive();
     final signIn = ref.read(signInUseCaseProvider);
     state = const AsyncLoading();
 
-    state = await AsyncValue.guard(() async {
-      final result = await signIn(email: email, password: password);
-      return result.fold((failure) => throw failure, (user) => user);
-    });
+    try {
+      state = await AsyncValue.guard(() async {
+        final result = await signIn(email: email, password: password);
+        return result.fold((failure) => throw failure, (user) => user);
+      });
+    } finally {
+      link.close();
+    }
   }
 }

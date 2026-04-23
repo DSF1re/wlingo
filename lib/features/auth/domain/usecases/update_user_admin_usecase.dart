@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wlingo/core/failure/auth_failure.dart';
+import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
@@ -17,7 +17,7 @@ class UpdateUserAdminUseCase {
 
   UpdateUserAdminUseCase(this._repository);
 
-  Future<Either<AuthFailure, UserEntity>> call({
+  Future<Either<AppFailure, UserEntity>> call({
     required String userId,
     required String firstName,
     required String lastName,
@@ -28,7 +28,7 @@ class UpdateUserAdminUseCase {
     final mName = middleName?.trim() ?? '';
 
     if (fName.isEmpty || lName.isEmpty) {
-      return Future.value(Left(AuthFailure.fillForm()));
+      return Future.value(Left(AppFailure.fillForm()));
     }
 
     final nameRegExp = RegExp(r'^[a-zA-Zа-яА-ЯёЁ]+$');
@@ -37,7 +37,7 @@ class UpdateUserAdminUseCase {
     if (!nameRegExp.hasMatch(fName) ||
         !lastNameRegExp.hasMatch(lName) ||
         (mName.isNotEmpty && !nameRegExp.hasMatch(mName))) {
-      return Future.value(Left(AuthFailure.invalidNameFormat()));
+      return Future.value(Left(AppFailure.invalidNameFormat()));
     }
 
     String capitalizeWord(String word) {

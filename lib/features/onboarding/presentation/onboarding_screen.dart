@@ -52,7 +52,10 @@ class OnboardingScreen extends HookConsumerWidget {
                       ref.read(pageProvider.notifier).state = index;
                     },
                   ),
-                  DotsW(onboardingData: onboardingData, currentPage: currentPage),
+                  DotsW(
+                    onboardingData: onboardingData,
+                    currentPage: currentPage,
+                  ),
                   BottomOnboarding(
                     currentPage: currentPage,
                     items: onboardingData,
@@ -72,7 +75,7 @@ class OnboardingScreen extends HookConsumerWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => skipOnboarding(context),
+                        onPressed: () => skipOnboarding(context, ref),
                         child: Text(
                           loc.skipOnboarding,
                           style: ThemeTextStyles.custom(

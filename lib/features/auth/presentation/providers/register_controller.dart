@@ -15,19 +15,25 @@ class RegisterController extends _$RegisterController {
     required String lastName,
     required String midName,
   }) async {
+    final link = ref.keepAlive();
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final res = await ref
-          .read(signUpUseCaseProvider)
-          .call(
-            email: email,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
-            middleName: midName,
-            nativeLang: 1,
-          );
-      return res.fold((fail) => throw fail, (user) => null);
-    });
+    
+    try {
+      state = await AsyncValue.guard(() async {
+        final res = await ref
+            .read(signUpUseCaseProvider)
+            .call(
+              email: email,
+              password: password,
+              firstName: firstName,
+              lastName: lastName,
+              middleName: midName,
+              nativeLang: 1,
+            );
+        return res.fold((fail) => throw fail, (user) => null);
+      });
+    } finally {
+      link.close();
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
+import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.dart';
@@ -12,7 +13,6 @@ import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
 import 'package:wlingo/features/word_practice/presentation/screens/add_word_screen.dart'
     as w;
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
@@ -26,7 +26,9 @@ class HomeScreen extends HookConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final loc = AppLocalizations.of(context)!;
     final languagesAsync = ref.watch(languagesProvider);
-    final selectedLangId = useState<int?>(shared.getInt('lang_cource'));
+    final selectedLangId = useState<int?>(
+      ref.read(preferencesServiceProvider).getCourseLanguage(),
+    );
 
     final userAsync = ref.watch(currentUserProvider);
     final isAdmin = userAsync.maybeWhen(

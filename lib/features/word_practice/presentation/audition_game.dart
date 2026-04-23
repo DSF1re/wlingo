@@ -37,21 +37,6 @@ class AuditionGameScreen extends HookConsumerWidget {
       currentWord.value = ref.read(auditionNotifierProvider.notifier).getRandomWord();
     }
 
-    String getTtsLanguageCode(int langId) {
-      switch (langId) {
-        case 1:
-          return "en-US";
-        case 2:
-          return "tr-TR";
-        case 3:
-          return "de-DE";
-        case 4:
-          return "fr-FR";
-        default:
-          return "en-US";
-      }
-    }
-
     void playWord() {
       if (currentWord.value != null) {
         final langCode = getTtsLanguageCode(currentWord.value!.languageId);

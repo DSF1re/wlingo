@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
-import 'package:wlingo/theme/colors.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
@@ -26,7 +26,7 @@ class BottomNavBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: ThemeColors.blue.withValues(alpha: 0.15),
+              color: AppColors.blue.withValues(alpha: 0.15),
               blurRadius: 24,
               spreadRadius: 2,
               offset: const Offset(0, 4),
@@ -40,7 +40,7 @@ class BottomNavBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(28),
           color: isDark ? Colors.black : Colors.white,
           border: Border.all(
-            color: ThemeColors.blue.withValues(alpha: isDark ? 0.15 : 0.1),
+            color: AppColors.blue.withValues(alpha: isDark ? 0.15 : 0.1),
             width: 1.5,
           ),
           child: Row(
@@ -62,7 +62,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? ThemeColors.blue.withValues(alpha: 0.15)
+                        ? AppColors.blue.withValues(alpha: 0.15)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -73,7 +73,7 @@ class BottomNavBar extends StatelessWidget {
                         isSelected ? item.activeIcon : item.icon,
                         size: isSelected ? 22 : 20,
                         color: isSelected
-                            ? ThemeColors.blue
+                            ? AppColors.blue
                             : (isDark ? Colors.white54 : Colors.black38),
                       ),
                       if (isSelected && item.label != null) ...[

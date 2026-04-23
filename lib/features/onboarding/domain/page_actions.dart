@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/onboarding/domain/providers/page/page_provider.dart';
-import 'package:wlingo/core/global_variables/services.dart';
+import 'package:wlingo/core/shared/shared_provider.dart';
 
 void onNextPressed(
   BuildContext context,
@@ -23,11 +23,11 @@ void onNextPressed(
       curve: Curves.easeInOut,
     );
   } else {
-    skipOnboarding(context);
+    skipOnboarding(context, ref);
   }
 }
 
-void skipOnboarding(BuildContext context) {
-  shared.setBool('onboarding_completed', true);
+void skipOnboarding(BuildContext context, WidgetRef ref) {
+  ref.read(preferencesServiceProvider).saveOnboardingCompleted(true);
   context.go(Routes.login);
 }

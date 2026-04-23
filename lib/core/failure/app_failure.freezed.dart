@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'auth_failure.dart';
+part of 'app_failure.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,7 +12,7 @@ part of 'auth_failure.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$AuthFailure {
+mixin _$AppFailure {
 
 
 
@@ -20,7 +20,7 @@ mixin _$AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthFailure);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppFailure);
 }
 
 
@@ -29,20 +29,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure()';
+  return 'AppFailure()';
 }
 
 
 }
 
 /// @nodoc
-class $AuthFailureCopyWith<$Res>  {
-$AuthFailureCopyWith(AuthFailure _, $Res Function(AuthFailure) __);
+class $AppFailureCopyWith<$Res>  {
+$AppFailureCopyWith(AppFailure _, $Res Function(AppFailure) __);
 }
 
 
-/// Adds pattern-matching-related methods to [AuthFailure].
-extension AuthFailurePatterns on AuthFailure {
+/// Adds pattern-matching-related methods to [AppFailure].
+extension AppFailurePatterns on AppFailure {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -234,7 +234,7 @@ return invalidNameFormat();case _:
 /// @nodoc
 
 
-class _NetworkError implements AuthFailure {
+class _NetworkError implements AppFailure {
   const _NetworkError();
   
 
@@ -254,7 +254,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.networkError()';
+  return 'AppFailure.networkError()';
 }
 
 
@@ -266,7 +266,7 @@ String toString() {
 /// @nodoc
 
 
-class _InvalidCredentials implements AuthFailure {
+class _InvalidCredentials implements AppFailure {
   const _InvalidCredentials();
   
 
@@ -286,7 +286,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.invalidCredentials()';
+  return 'AppFailure.invalidCredentials()';
 }
 
 
@@ -298,13 +298,13 @@ String toString() {
 /// @nodoc
 
 
-class _Unexpected implements AuthFailure {
+class _Unexpected implements AppFailure {
   const _Unexpected(this.message);
   
 
  final  String message;
 
-/// Create a copy of AuthFailure
+/// Create a copy of AppFailure
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -323,14 +323,14 @@ int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'AuthFailure.unexpected(message: $message)';
+  return 'AppFailure.unexpected(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$UnexpectedCopyWith<$Res> implements $AuthFailureCopyWith<$Res> {
+abstract mixin class _$UnexpectedCopyWith<$Res> implements $AppFailureCopyWith<$Res> {
   factory _$UnexpectedCopyWith(_Unexpected value, $Res Function(_Unexpected) _then) = __$UnexpectedCopyWithImpl;
 @useResult
 $Res call({
@@ -349,7 +349,7 @@ class __$UnexpectedCopyWithImpl<$Res>
   final _Unexpected _self;
   final $Res Function(_Unexpected) _then;
 
-/// Create a copy of AuthFailure
+/// Create a copy of AppFailure
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
   return _then(_Unexpected(
@@ -364,7 +364,7 @@ as String,
 /// @nodoc
 
 
-class _NullUser implements AuthFailure {
+class _NullUser implements AppFailure {
   const _NullUser();
   
 
@@ -384,7 +384,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.nullUser()';
+  return 'AppFailure.nullUser()';
 }
 
 
@@ -396,7 +396,7 @@ String toString() {
 /// @nodoc
 
 
-class _EmailNotConfirmed implements AuthFailure {
+class _EmailNotConfirmed implements AppFailure {
   const _EmailNotConfirmed();
   
 
@@ -416,7 +416,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.emailNotConfirmed()';
+  return 'AppFailure.emailNotConfirmed()';
 }
 
 
@@ -428,7 +428,7 @@ String toString() {
 /// @nodoc
 
 
-class _EmailAlreadyInUse implements AuthFailure {
+class _EmailAlreadyInUse implements AppFailure {
   const _EmailAlreadyInUse();
   
 
@@ -448,7 +448,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.emailAlreadyInUse()';
+  return 'AppFailure.emailAlreadyInUse()';
 }
 
 
@@ -460,7 +460,7 @@ String toString() {
 /// @nodoc
 
 
-class _InvalidEmail implements AuthFailure {
+class _InvalidEmail implements AppFailure {
   const _InvalidEmail();
   
 
@@ -480,7 +480,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.invalidEmail()';
+  return 'AppFailure.invalidEmail()';
 }
 
 
@@ -492,7 +492,7 @@ String toString() {
 /// @nodoc
 
 
-class _FillForm implements AuthFailure {
+class _FillForm implements AppFailure {
   const _FillForm();
   
 
@@ -512,7 +512,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.fillForm()';
+  return 'AppFailure.fillForm()';
 }
 
 
@@ -524,7 +524,7 @@ String toString() {
 /// @nodoc
 
 
-class _FillAuth implements AuthFailure {
+class _FillAuth implements AppFailure {
   const _FillAuth();
   
 
@@ -544,7 +544,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.fillAuth()';
+  return 'AppFailure.fillAuth()';
 }
 
 
@@ -556,7 +556,7 @@ String toString() {
 /// @nodoc
 
 
-class _FillEmail implements AuthFailure {
+class _FillEmail implements AppFailure {
   const _FillEmail();
   
 
@@ -576,7 +576,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.fillEmail()';
+  return 'AppFailure.fillEmail()';
 }
 
 
@@ -588,7 +588,7 @@ String toString() {
 /// @nodoc
 
 
-class _FillPassword implements AuthFailure {
+class _FillPassword implements AppFailure {
   const _FillPassword();
   
 
@@ -608,7 +608,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.fillPassword()';
+  return 'AppFailure.fillPassword()';
 }
 
 
@@ -620,7 +620,7 @@ String toString() {
 /// @nodoc
 
 
-class _InvalidNameFormat implements AuthFailure {
+class _InvalidNameFormat implements AppFailure {
   const _InvalidNameFormat();
   
 
@@ -640,7 +640,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.invalidNameFormat()';
+  return 'AppFailure.invalidNameFormat()';
 }
 
 

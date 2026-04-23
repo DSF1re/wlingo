@@ -5,19 +5,21 @@ import 'package:wlingo/core/global_variables/services.dart';
 class LocaleNotifier extends Notifier<Locale> {
   @override
   Locale build() {
-    final locale = shared.getString('app_language') == 'ru'
+    final prefs = ref.read(sharedPrefsProvider);
+    final locale = prefs.getString('app_language') == 'ru'
         ? Locale('ru')
         : Locale('en');
     return locale;
   }
 
   void toggleLocale() {
+    final prefs = ref.read(sharedPrefsProvider);
     if (state == Locale('ru')) {
       state = Locale('en');
-      shared.setString('app_language', 'en');
+      prefs.setString('app_language', 'en');
     } else {
       state = Locale('ru');
-      shared.setString('app_language', 'ru');
+      prefs.setString('app_language', 'ru');
     }
   }
 }

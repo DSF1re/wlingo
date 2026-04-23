@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
+import 'package:wlingo/features/word_practice/presentation/providers/tts/tts_provider.dart';
+import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/speech/speech_provider.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/words/words_notifier.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/action_button.dart';
@@ -25,10 +27,18 @@ class PronunciationGameScreen extends HookConsumerWidget {
 
     final wordsState = ref.watch(wordsProvider);
     final speechState = ref.watch(speechNotifierProvider);
+    final ttsNotifier = ref.watch(ttsNotifierProvider.notifier);
 
     final currentWord = useState<WordEntity?>(null);
     final isCorrect = useState<bool?>(null);
     final correctCount = useState<int>(0);
+
+    void playWord() {
+      if (currentWord.value != null) {
+        final langCode = getTtsLanguageCode(currentWord.value!.languageId);
+        ttsNotifier.speak(currentWord.value!.word, langCode);
+      }
+    }
 
     void pickWord() {
       isCorrect.value = null;
@@ -81,7 +91,7 @@ class PronunciationGameScreen extends HookConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () => context.go(Routes.home),
-                  child: Icon(Icons.arrow_back_rounded),
+                  child: const Icon(Icons.arrow_back_rounded),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -117,6 +127,12 @@ class PronunciationGameScreen extends HookConsumerWidget {
                       child: Column(
                         children: [
                           WordDisplay(word: currentWord.value!, isDark: isDark),
+                          const SizedBox(height: 16),
+                          IconButton(
+                            onPressed: playWord,
+                            icon: const Icon(Icons.volume_up_rounded, size: 32),
+                            color: AppColors.primaryBlue,
+                          ),
                           const Spacer(),
                           if (speechState.value?.isNotEmpty == true &&
                               !speechState.isLoading)

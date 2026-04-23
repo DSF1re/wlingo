@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wlingo/core/failure/auth_failure.dart';
+import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
 
@@ -16,7 +16,7 @@ class GetUsersWithRatingsUseCase {
 
   GetUsersWithRatingsUseCase(this._repository);
 
-  Future<Either<AuthFailure, List<Map<String, dynamic>>>> call() {
+  Future<Either<AppFailure, List<Map<String, dynamic>>>> call() {
     return _repository.getUsersWithRatings();
   }
 }
