@@ -42,14 +42,17 @@ class PronunciationGameScreen extends HookConsumerWidget {
 
     void pickWord() {
       isCorrect.value = null;
-      ref.invalidate(speechNotifierProvider);
+      final notifier = ref.read(speechNotifierProvider.notifier);
+      notifier.stop();
+      notifier.reset();
       currentWord.value = ref.read(wordsProvider.notifier).getRandomWord();
     }
 
     useEffect(() {
       if (wordsState.value?.isNotEmpty == true && currentWord.value == null) {
-        pickWord();
+        Future.microtask(() => pickWord());
       }
+
       final notifier = ref.read(speechNotifierProvider.notifier);
       return () {
         notifier.stop();

@@ -9,6 +9,7 @@ class SpeechNotifier extends AsyncNotifier<String> {
   final SpeechToText _speech = SpeechToText();
   bool _isInitialized = false;
   Completer<String>? _currentCompleter;
+  int _sessionId = 0;
 
   @override
   FutureOr<String> build() {
@@ -39,28 +40,42 @@ class SpeechNotifier extends AsyncNotifier<String> {
     if (state.isLoading) return;
 
     state = const AsyncLoading();
+    final sessionId = ++_sessionId;
 
     if (!_isInitialized) {
       _isInitialized = await _speech.initialize(
         onError: (error) => debugPrint('Speech Error: $error'),
+        onStatus: (status) {
+          debugPrint('Speech Status: $status');
+          if (status == 'done' || status == 'notListening') {
+            if (_currentCompleter != null && !_currentCompleter!.isCompleted) {
+              _currentCompleter!.complete(state.value ?? '');
+            }
+          }
+        },
       );
     }
 
     if (!_isInitialized) {
-      state = AsyncError('Speech initialization failed', StackTrace.current);
+      if (_sessionId == sessionId) {
+        state = AsyncError('Speech initialization failed', StackTrace.current);
+      }
       return;
     }
 
-    _currentCompleter = Completer<String>();
+    final completer = Completer<String>();
+    _currentCompleter = completer;
     String recognizedText = '';
 
     await _speech.listen(
       onResult: (result) {
+        if (_sessionId != sessionId) return;
+        
         recognizedText = result.recognizedWords;
         state = AsyncData(recognizedText);
 
-        if (result.finalResult && _currentCompleter?.isCompleted == false) {
-          _currentCompleter?.complete(recognizedText);
+        if (result.finalResult && !completer.isCompleted) {
+          completer.complete(recognizedText);
         }
       },
       localeId: _getLocaleId(),
@@ -69,32 +84,49 @@ class SpeechNotifier extends AsyncNotifier<String> {
     );
 
     try {
-      final finalResult = await _currentCompleter!.future.timeout(
+      final finalResult = await completer.future.timeout(
         const Duration(seconds: 11),
         onTimeout: () => recognizedText,
       );
-      state = AsyncData(finalResult);
+      
+      if (_sessionId == sessionId) {
+        state = AsyncData(finalResult);
 
-      if (finalResult.isNotEmpty) {
-        Future.delayed(const Duration(seconds: 5), () {
-          if (state.value == finalResult) {
-            // Ensure it wasn't changed by a new recording
-            state = const AsyncData('');
-          }
-        });
+        if (finalResult.isNotEmpty) {
+          Future.delayed(const Duration(seconds: 5), () {
+            if (_sessionId == sessionId && state.value == finalResult) {
+              state = const AsyncData('');
+            }
+          });
+        }
       }
     } catch (e, st) {
-      state = AsyncError(e, st);
+      if (_sessionId == sessionId) {
+        state = AsyncError(e, st);
+      }
     } finally {
-      _currentCompleter = null;
-      await _speech.stop();
+      if (_sessionId == sessionId) {
+        _currentCompleter = null;
+        await _speech.stop();
+      }
     }
   }
 
   Future<void> stop() async {
+    _sessionId++;
     await _speech.stop();
     if (_currentCompleter != null && !_currentCompleter!.isCompleted) {
-      _currentCompleter?.complete(state.value ?? '');
+      _currentCompleter!.complete(state.value ?? '');
     }
+    _currentCompleter = null;
+    if (state.isLoading) {
+      state = AsyncData(state.value ?? '');
+    }
+  }
+
+  void reset() {
+    _sessionId++;
+    state = const AsyncData('');
+    _currentCompleter = null;
   }
 }
