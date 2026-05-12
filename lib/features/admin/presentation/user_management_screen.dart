@@ -49,7 +49,7 @@ class AdminUsersScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.users,
-                    style: ThemeTextStyles.title1ExtraBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                   ),
                 ),
                 IconButton(

@@ -49,7 +49,7 @@
   "ask_somethink": "Поиск",
   "ai_chat": "ИИ Ассистент",
   "add_study_materials": "Добавить учебные материалы",
-  "issue_found": "Произошла ошибка!",
+  "issue_found": "Произошла ошибка",
   "book_name": "Название",
   "author": "Автор",
   "description": "Описание",
@@ -110,5 +110,12 @@
   "translation": "Перевод",
   "image_url": "URL картинки",
   "no_internet": "Отсутствует интернет соединение",
-  "internet_restored": "Интернет соединение восстановлено"
+  "internet_restored": "Интернет соединение восстановлено",
+  "level": "Уровень",
+  "level_completed": "Уровень завершен",
+  "level_completed_desc": "Отличная работа! Вы завершили все 5 заданий.",
+  "ok": "ОК",
+  "play_level": "Пройти уровень",
+  "skip": "Пропустить",
+  "next": "Далее"
 }

@@ -56,33 +56,27 @@ class BottomNavBar extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOutCubic,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isSelected ? 18 : 14,
-                    vertical: 6,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 22, vertical: 6),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.blue.withValues(alpha: 0.15)
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(22),
                   ),
-                  child: Row(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         isSelected ? item.activeIcon : item.icon,
-                        size: isSelected ? 22 : 20,
+                        size: 28,
                         color: isSelected
                             ? AppColors.blue
                             : (isDark ? Colors.white54 : Colors.black38),
                       ),
-                      if (isSelected && item.label != null) ...[
-                        const SizedBox(width: 6),
-                        Text(
-                          item.label!,
-                          style: ThemeTextStyles.regular(isDark: isDark),
-                        ),
-                      ],
+                      Text(
+                        item.label!,
+                        style: ThemeTextStyles.caption(isDark: isDark),
+                      ),
                     ],
                   ),
                 ),

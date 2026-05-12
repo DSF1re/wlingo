@@ -81,7 +81,7 @@ class PdfViewerScreen extends HookConsumerWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: ThemeTextStyles.title3SemiBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

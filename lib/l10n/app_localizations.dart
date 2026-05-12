@@ -398,7 +398,7 @@ abstract class AppLocalizations {
   /// No description provided for @issue_found.
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong!'**
+  /// **'Something went wrong'**
   String get issue_found;
 
   /// No description provided for @book_name.
@@ -688,6 +688,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Internet connection restored'**
   String get internet_restored;
+
+  /// No description provided for @level.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get level;
+
+  /// No description provided for @level_completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Level Completed'**
+  String get level_completed;
+
+  /// No description provided for @level_completed_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job! You have completed all 5 tasks.'**
+  String get level_completed_desc;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @play_level.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Level'**
+  String get play_level;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

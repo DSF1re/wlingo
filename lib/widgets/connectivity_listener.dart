@@ -13,11 +13,7 @@ class ConnectivityListener extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(connectivityProvider, (previous, next) {
       next.whenData((status) {
-        final l10n = AppLocalizations.of(context);
-        if (l10n == null) {
-          talker.error('L10n is null in ConnectivityListener');
-          return;
-        }
+        final l10n = AppLocalizations.of(context)!;
 
         if (status == ConnectivityStatus.disconnected) {
           scaffoldMessengerKey.currentState?.showSnackBar(

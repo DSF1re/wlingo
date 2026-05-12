@@ -6,6 +6,7 @@ import 'package:wlingo/core/router/router.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/splash/domain/providers/splash_state.dart';
 import 'package:wlingo/core/global_variables/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashAsyncNotifier extends AsyncNotifier<SplashState> {
   late final GoRouter router;
@@ -17,11 +18,12 @@ class SplashAsyncNotifier extends AsyncNotifier<SplashState> {
     router = ref.read(routerProvider);
     final shared = ref.read(sharedPrefsProvider);
 
-    final bool isFirstLaunch = shared.getBool('isFirstLaunch') ?? true;
+    final bool onboardingCompleted = shared.getBool('onboarding_completed') ?? false;
+    final session = Supabase.instance.client.auth.currentSession;
 
-    final String initialRoute = isFirstLaunch
+    final String initialRoute = !onboardingCompleted
         ? Routes.onboarding
-        : Routes.login;
+        : (session != null ? Routes.home : Routes.login);
 
     Future.delayed(
       const Duration(seconds: 2),

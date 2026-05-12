@@ -9,6 +9,8 @@ abstract class Routes {
   static const String profile = '/profile';
   static const String pronounceGame = '/pronounce';
   static const String auditionGame = '/audition';
+  static const String levelGame = '/level';
   static const String addBook = '/add-book';
   static const String adminUsers = '/admin/users';
+  static const String aiChat = '/ai-chat';
 }

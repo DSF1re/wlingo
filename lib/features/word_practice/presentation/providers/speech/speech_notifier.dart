@@ -70,7 +70,7 @@ class SpeechNotifier extends AsyncNotifier<String> {
     await _speech.listen(
       onResult: (result) {
         if (_sessionId != sessionId) return;
-        
+
         recognizedText = result.recognizedWords;
         state = AsyncData(recognizedText);
 
@@ -88,7 +88,7 @@ class SpeechNotifier extends AsyncNotifier<String> {
         const Duration(seconds: 11),
         onTimeout: () => recognizedText,
       );
-      
+
       if (_sessionId == sessionId) {
         state = AsyncData(finalResult);
 

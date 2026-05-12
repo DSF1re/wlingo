@@ -16,7 +16,8 @@ class UserEditSheet extends HookConsumerWidget {
     String firstName,
     String lastName,
     String middleName,
-  ) onSave;
+  )
+  onSave;
 
   const UserEditSheet({
     super.key,
@@ -138,7 +139,7 @@ class UserEditSheet extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                   ),
                 ),
                 GestureDetector(
@@ -192,7 +193,7 @@ class UserEditSheet extends HookConsumerWidget {
                       isDark: isDark,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
                   Bounceable(
                     onTap: isLoading.value ? null : submit,
                     child: Container(
@@ -205,15 +206,6 @@ class UserEditSheet extends HookConsumerWidget {
                           ],
                         ),
                         borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryBlueLight.withValues(
-                              alpha: 0.3,
-                            ),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
                       ),
                       alignment: Alignment.center,
                       child: isLoading.value

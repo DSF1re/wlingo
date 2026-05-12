@@ -163,7 +163,7 @@ class AddBookScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.add_study_materials,
-                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                   ),
                 ),
                 GestureDetector(
@@ -341,14 +341,6 @@ class AddBookScreen extends HookConsumerWidget {
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(18),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primaryBlueLight
-                                        .withValues(alpha: 0.3),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
                               ),
                               alignment: Alignment.center,
                               child: Text(

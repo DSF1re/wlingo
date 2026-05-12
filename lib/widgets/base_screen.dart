@@ -27,7 +27,10 @@ class BaseScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: GradientBackground(isDark: isDark, child: const SizedBox.expand()),
+            child: GradientBackground(
+              isDark: isDark,
+              child: const SizedBox.expand(),
+            ),
           ),
           SafeArea(
             top: safeAreaTop,

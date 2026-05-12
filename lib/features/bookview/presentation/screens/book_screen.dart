@@ -33,7 +33,7 @@ class BooksScreen extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     loc.study_materials,
-                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                   ),
                 ),
                 AppbarActions(isDark: isDark, padding: 0),

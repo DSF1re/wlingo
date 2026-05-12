@@ -14,11 +14,11 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
 
+  FlutterNativeSplash.remove();
+
   final prefs = await SharedPreferences.getInstance();
   await supabaseInitialize();
   Intl.defaultLocale = 'ru_RU';
-
-  FlutterNativeSplash.remove();
 
   runApp(
     ProviderScope(

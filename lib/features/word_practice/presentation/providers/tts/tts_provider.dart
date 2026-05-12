@@ -34,7 +34,7 @@ class TtsNotifier extends _$TtsNotifier {
   FutureOr<void> build() async {
     final tts = ref.watch(ttsProvider);
     ref.onDispose(() => tts.stop());
-    
+
     await tts.setLanguage("en-US");
     if (!ref.mounted) return;
     await tts.setSpeechRate(0.5);

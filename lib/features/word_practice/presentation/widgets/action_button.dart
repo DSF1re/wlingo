@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wlingo/theme/app_colors.dart';
 
 class ActionButton extends StatelessWidget {
   final String label;
@@ -12,6 +13,8 @@ class ActionButton extends StatelessWidget {
       height: 56,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryBlue,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

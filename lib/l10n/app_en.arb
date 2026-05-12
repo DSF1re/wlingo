@@ -49,7 +49,7 @@
   "ask_somethink": "Search",
   "ai_chat": "AI Chat",
   "add_study_materials": "Add study materials",
-  "issue_found": "Something went wrong!",
+  "issue_found": "Something went wrong",
   "book_name": "Name",
   "author": "Author",
   "description": "Description",
@@ -110,5 +110,12 @@
   "translation": "Translation",
   "image_url": "Image URL",
   "no_internet": "No internet connection",
-  "internet_restored": "Internet connection restored"
+  "internet_restored": "Internet connection restored",
+  "level": "Level",
+  "level_completed": "Level Completed",
+  "level_completed_desc": "Great job! You have completed all 5 tasks.",
+  "ok": "OK",
+  "play_level": "Play Level",
+  "skip": "Skip",
+  "next": "Next"
 }

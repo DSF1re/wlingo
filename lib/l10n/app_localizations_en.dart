@@ -159,7 +159,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_study_materials => 'Add study materials';
 
   @override
-  String get issue_found => 'Something went wrong!';
+  String get issue_found => 'Something went wrong';
 
   @override
   String get book_name => 'Name';
@@ -306,4 +306,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get internet_restored => 'Internet connection restored';
+
+  @override
+  String get level => 'Level';
+
+  @override
+  String get level_completed => 'Level Completed';
+
+  @override
+  String get level_completed_desc => 'Great job! You have completed all 5 tasks.';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get play_level => 'Play Level';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get next => 'Next';
 }

@@ -29,7 +29,7 @@ class MenuTile extends StatelessWidget {
         onTap: onTap,
         child: GlassBox(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          opacity: isDark ? 0.08 : 0.35,
+          opacity: isDark ? 0.04 : 0.35,
           blur: 10,
           borderRadius: BorderRadius.circular(20),
           color: isDark ? Colors.white : Colors.white,

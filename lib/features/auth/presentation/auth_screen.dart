@@ -99,15 +99,12 @@ class AuthScreen extends HookConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 28),
-                          Input(
-                            controller: emailController,
-                            labelText: loc.email,
-                          ),
+                          Input(controller: emailController, hint: loc.email),
                           const SizedBox(height: 14),
                           Input(
                             controller: passwordController,
                             isObscured: !showPassword.value,
-                            labelText: loc.password,
+                            hint: loc.password,
                             suffixIcon: IconButton(
                               onPressed: () =>
                                   showPassword.value = !showPassword.value,

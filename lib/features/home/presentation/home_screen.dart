@@ -61,7 +61,7 @@ class HomeScreen extends HookConsumerWidget {
                 children: [
                   Text(
                     loc.home,
-                    style: ThemeTextStyles.title1ExtraBold(isDark: isDark),
+                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
                   ),
                   Row(
                     children: [
@@ -88,6 +88,13 @@ class HomeScreen extends HookConsumerWidget {
                 const SizedBox(height: 24),
                 if (!isAdmin)
                   MenuTile(
+                    icon: Icons.layers_rounded,
+                    title: loc.play_level,
+                    iconColor: AppColors.successGreen,
+                    onTap: () => context.go(Routes.levelGame),
+                  ),
+                if (!isAdmin)
+                  MenuTile(
                     icon: Icons.mic_rounded,
                     title: loc.ex_pronunce,
                     iconColor: AppColors.errorRed,
@@ -105,6 +112,12 @@ class HomeScreen extends HookConsumerWidget {
                   title: loc.study_materials,
                   iconColor: AppColors.primaryBlue,
                   onTap: () => context.go(Routes.books),
+                ),
+                MenuTile(
+                  icon: Icons.smart_toy_rounded,
+                  title: loc.ai_chat,
+                  iconColor: AppColors.blue,
+                  onTap: () => context.push(Routes.aiChat),
                 ),
                 if (isAdmin) ...[
                   MenuTile(

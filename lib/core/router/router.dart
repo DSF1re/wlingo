@@ -13,15 +13,46 @@ import 'package:wlingo/features/auth/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/features/word_practice/presentation/audition_game.dart';
 import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
+import 'package:wlingo/features/word_practice/presentation/screens/level_game_screen.dart';
 import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/widgets/navigation_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wlingo/features/ai_chat/presentation/screens/ai_chat_screen.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   final prefs = ref.read(sharedPrefsProvider);
   return GoRouter(
     initialLocation: prefs.getBool('onboarding_completed') == true
-        ? Routes.login
+        ? (Supabase.instance.client.auth.currentSession != null
+              ? Routes.home
+              : Routes.login)
         : Routes.splash,
+    redirect: (context, state) {
+      final session = Supabase.instance.client.auth.currentSession;
+      final onboardingCompleted =
+          prefs.getBool('onboarding_completed') ?? false;
+
+      if (!onboardingCompleted &&
+          state.uri.path != Routes.splash &&
+          state.uri.path != Routes.onboarding) {
+        return Routes.splash;
+      }
+
+      final loggedIn = session != null;
+      final isLoggingIn =
+          state.uri.path == Routes.login || state.uri.path == Routes.register;
+
+      if (!loggedIn &&
+          !isLoggingIn &&
+          state.uri.path != Routes.splash &&
+          state.uri.path != Routes.onboarding) {
+        return Routes.login;
+      }
+      if (loggedIn && isLoggingIn) {
+        return Routes.home;
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -48,6 +79,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const PronunciationGameScreen(),
       ),
       GoRoute(
+        path: Routes.levelGame,
+        builder: (context, state) => const LevelGameScreen(),
+      ),
+      GoRoute(
         path: Routes.pdf,
         builder: (context, state) {
           final url = state.uri.queryParameters['url'] ?? '';
@@ -56,6 +91,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
 
           return PdfViewerScreen(url: url, title: title, bookId: bookId);
         },
+      ),
+      GoRoute(
+        path: Routes.aiChat,
+        builder: (context, state) => const AiChatScreen(),
       ),
       ShellRoute(
         builder: (context, state, child) => MainLayout(

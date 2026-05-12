@@ -159,7 +159,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get add_study_materials => 'Добавить учебные материалы';
 
   @override
-  String get issue_found => 'Произошла ошибка!';
+  String get issue_found => 'Произошла ошибка';
 
   @override
   String get book_name => 'Название';
@@ -306,4 +306,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get internet_restored => 'Интернет соединение восстановлено';
+
+  @override
+  String get level => 'Уровень';
+
+  @override
+  String get level_completed => 'Уровень завершен';
+
+  @override
+  String get level_completed_desc => 'Отличная работа! Вы завершили все 5 заданий.';
+
+  @override
+  String get ok => 'ОК';
+
+  @override
+  String get play_level => 'Пройти уровень';
+
+  @override
+  String get skip => 'Пропустить';
+
+  @override
+  String get next => 'Далее';
 }

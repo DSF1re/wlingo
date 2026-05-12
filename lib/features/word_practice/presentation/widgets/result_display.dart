@@ -56,8 +56,9 @@ class ResultDisplay extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: (isDark ? Colors.white : Colors.black)
-                        .withValues(alpha: 0.4),
+                    color: (isDark ? Colors.white : Colors.black).withValues(
+                      alpha: 0.4,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 2),
