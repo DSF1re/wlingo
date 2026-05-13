@@ -16,9 +16,7 @@ class HistoryTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wordAsync = ref.watch(wordProvider(record.correctWordId));
     final isCorrect = record.isCorrect;
-    final statusColor = isCorrect
-        ? AppColors.successGreen
-        : AppColors.errorRed;
+    final statusColor = isCorrect ? AppColors.successGreen : AppColors.errorRed;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),

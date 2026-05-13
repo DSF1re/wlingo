@@ -49,7 +49,7 @@ class BooksScreen extends HookConsumerWidget {
                 return RefreshIndicator(
                   onRefresh: () => ref.read(booksProvider.notifier).refresh(),
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
                     itemCount: books.length,
                     itemBuilder: (context, i) {
                       final book = books[i];

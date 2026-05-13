@@ -91,11 +91,15 @@ class ProfileCard extends HookConsumerWidget {
           if (user.isAdmin) ...[_buildAdminBadge(), const SizedBox(height: 12)],
           Row(
             children: [
+              _buildStreakBadge(),
+              const SizedBox(width: 8),
               _buildRatingBadge(),
               const SizedBox(width: 8),
               ratingAsync.when(
                 data: (points) {
-                  if (points <= 100 || user.isAdmin) return const SizedBox.shrink();
+                  if (points <= 100 || user.isAdmin) {
+                    return const SizedBox.shrink();
+                  }
                   return IconButton.filledTonal(
                     onPressed: () => CertificateService.generateAndDownload(
                       userName: '${user.firstName} ${user.lastName}',
@@ -150,7 +154,7 @@ class ProfileCard extends HookConsumerWidget {
   Widget _buildRatingBadge() {
     return ratingAsync.when(
       data: (points) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.amber.withValues(alpha: isDark ? 0.15 : 0.12),
           borderRadius: BorderRadius.circular(12),
@@ -158,7 +162,7 @@ class ProfileCard extends HookConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
+            const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
             const SizedBox(width: 4),
             Text(
               '$points',
@@ -173,6 +177,31 @@ class ProfileCard extends HookConsumerWidget {
         child: CircularProgressIndicator(strokeWidth: 2),
       ),
       error: (_, _) => const Text('—'),
+    );
+  }
+
+  Widget _buildStreakBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: isDark ? 0.15 : 0.12),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.local_fire_department_rounded,
+            color: Colors.orange,
+            size: 16,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '${user.streak}',
+            style: ThemeTextStyles.regular(color: Colors.orange),
+          ),
+        ],
+      ),
     );
   }
 

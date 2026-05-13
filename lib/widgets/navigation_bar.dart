@@ -28,7 +28,7 @@ class BottomNavBar extends ConsumerWidget {
     final items = navBarItems(context, isAdmin: isAdmin);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
@@ -65,8 +65,8 @@ class BottomNavBar extends ConsumerWidget {
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOutCubic,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: 11,
+                    vertical: 5,
                   ),
                   decoration: BoxDecoration(
                     color: isSelected

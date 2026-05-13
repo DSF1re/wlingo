@@ -55,7 +55,7 @@ class HomeScreen extends HookConsumerWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Column(
                 children: [
                   Row(
@@ -84,34 +84,6 @@ class HomeScreen extends HookConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  if (!isAdmin)
-                    userAsync.maybeWhen(
-                      data: (either) => either.fold(
-                        (_) => const SizedBox.shrink(),
-                        (user) => user == null
-                            ? const SizedBox.shrink()
-                            : Row(
-                                children: [
-                                  _StatChip(
-                                    icon: Icons.local_fire_department_rounded,
-                                    value: '${user.streak}',
-                                    label: loc.days,
-                                    color: Colors.orange,
-                                    isDark: isDark,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  _StatChip(
-                                    icon: Icons.stars_rounded,
-                                    value: '${user.xp}',
-                                    label: loc.xp,
-                                    color: Colors.amber,
-                                    isDark: isDark,
-                                  ),
-                                ],
-                              ),
-                      ),
-                      orElse: () => const SizedBox.shrink(),
-                    ),
                 ],
               ),
             ),
@@ -201,49 +173,7 @@ class HomeScreen extends HookConsumerWidget {
               ]),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatChip extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-  final Color color;
-  final bool isDark;
-
-  const _StatChip({
-    required this.icon,
-    required this.value,
-    required this.label,
-    required this.color,
-    required this.isDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 6),
-          Text(
-            value,
-            style: ThemeTextStyles.title2Heavy(isDark: isDark, color: color),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: ThemeTextStyles.caption(isDark: isDark, color: color),
-          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 120)),
         ],
       ),
     );
