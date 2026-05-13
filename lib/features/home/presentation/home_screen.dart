@@ -56,26 +56,62 @@ class HomeScreen extends HookConsumerWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  Text(
-                    loc.home,
-                    style: ThemeTextStyles.custom(isDark: isDark, fontSize: 20),
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AppbarActions(isDark: isDark),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        onPressed: () async {
-                          ref.read(signOutUseCaseProvider).call();
-                          context.go(Routes.login);
-                        },
-                        icon: Icon(Icons.logout_rounded),
+                      Text(
+                        loc.home,
+                        style: ThemeTextStyles.custom(
+                          isDark: isDark,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          AppbarActions(isDark: isDark),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            onPressed: () async {
+                              ref.read(signOutUseCaseProvider).call();
+                              context.go(Routes.login);
+                            },
+                            icon: Icon(Icons.logout_rounded),
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  const SizedBox(height: 16),
+                  if (!isAdmin)
+                    userAsync.maybeWhen(
+                      data: (either) => either.fold(
+                        (_) => const SizedBox.shrink(),
+                        (user) => user == null
+                            ? const SizedBox.shrink()
+                            : Row(
+                                children: [
+                                  _StatChip(
+                                    icon: Icons.local_fire_department_rounded,
+                                    value: '${user.streak}',
+                                    label: loc.days,
+                                    color: Colors.orange,
+                                    isDark: isDark,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  _StatChip(
+                                    icon: Icons.stars_rounded,
+                                    value: '${user.xp}',
+                                    label: loc.xp,
+                                    color: Colors.amber,
+                                    isDark: isDark,
+                                  ),
+                                ],
+                              ),
+                      ),
+                      orElse: () => const SizedBox.shrink(),
+                    ),
                 ],
               ),
             ),
@@ -113,6 +149,13 @@ class HomeScreen extends HookConsumerWidget {
                   iconColor: AppColors.primaryBlue,
                   onTap: () => context.go(Routes.books),
                 ),
+                if (!isAdmin)
+                  MenuTile(
+                    icon: Icons.collections_bookmark_rounded,
+                    title: loc.my_vocabulary,
+                    iconColor: AppColors.auditionPurple,
+                    onTap: () => context.go(Routes.vocabulary),
+                  ),
                 MenuTile(
                   icon: Icons.smart_toy_rounded,
                   title: loc.ai_chat,
@@ -157,6 +200,49 @@ class HomeScreen extends HookConsumerWidget {
                 ],
               ]),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
+  final bool isDark;
+
+  const _StatChip({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(width: 6),
+          Text(
+            value,
+            style: ThemeTextStyles.title2Heavy(isDark: isDark, color: color),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: ThemeTextStyles.caption(isDark: isDark, color: color),
           ),
         ],
       ),

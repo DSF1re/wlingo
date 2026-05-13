@@ -13,4 +13,6 @@ abstract class Routes {
   static const String addBook = '/add-book';
   static const String adminUsers = '/admin/users';
   static const String aiChat = '/ai-chat';
+  static const String vocabulary = '/vocabulary';
+  static const String vocabularyPractice = '/vocabulary/practice';
 }

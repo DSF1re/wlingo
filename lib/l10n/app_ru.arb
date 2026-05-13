@@ -117,5 +117,25 @@
   "ok": "ОК",
   "play_level": "Пройти уровень",
   "skip": "Пропустить",
-  "next": "Далее"
+  "next": "Далее",
+  "my_vocabulary": "Мой словарь",
+  "ready_for_review": "Готово к повторению",
+  "ready_words_desc": "{count} слов(а) требуют внимания",
+  "@ready_words_desc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "start": "Начать",
+  "empty_list": "Ваш список пуст",
+  "all_caught_up": "Все повторено!",
+  "back": "Назад",
+  "show_translation": "Показать перевод",
+  "hard": "Сложно",
+  "good": "Хорошо",
+  "easy": "Легко",
+  "days": "Дней",
+  "xp": "XP"
 }

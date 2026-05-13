@@ -11,6 +11,7 @@ import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
   SupabaseClient get _client => Supabase.instance.client;
+  static const _profileSelect = '*, rating(points)';
 
   AppFailure _handleException(Object e) {
     if (e is AppFailure) return e;
@@ -65,7 +66,7 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<UserEntity> _getProfileAndToEntity(String userId) async {
     final response = await _client
         .from('profiles')
-        .select()
+        .select(_profileSelect)
         .eq('id', userId)
         .single();
     return model.User.fromJson(response).toEntity();
@@ -79,7 +80,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
       final response = await _client
           .from('profiles')
-          .select()
+          .select(_profileSelect)
           .eq('id', supaUser.id)
           .maybeSingle();
 
@@ -122,6 +123,8 @@ class SupabaseAuthRepository implements AuthRepository {
             'mid_name': middleName,
             'mother_language': nativeLang,
             'isAdmin': false,
+            'xp': 0,
+            'streak': 0,
           })
           .select()
           .single();
@@ -240,7 +243,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
         final response = await _client
             .from('profiles')
-            .select()
+            .select(_profileSelect)
             .eq('id', supaUser.id)
             .maybeSingle();
 
@@ -249,6 +252,74 @@ class SupabaseAuthRepository implements AuthRepository {
         return Right(model.User.fromJson(response).toEntity());
       } catch (e) {
         return Left(_handleException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<AppFailure, void>> addXP(int amount) async {
+    return _safeCall(() async {
+      final userId = _client.auth.currentUser?.id;
+      if (userId == null) throw const AppFailure.nullUser();
+
+      // We use increment in SQL for atomicity
+      await _client.rpc(
+        'add_user_points',
+        params: {'target_user_id': userId, 'amount': amount},
+      );
+    });
+  }
+
+  @override
+  Future<Either<AppFailure, void>> updateStreak() async {
+    return _safeCall(() async {
+      final userId = _client.auth.currentUser?.id;
+      if (userId == null) throw const AppFailure.nullUser();
+
+      final response = await _client
+          .from('profiles')
+          .select('streak, streak_last_date')
+          .eq('id', userId)
+          .single();
+
+      final lastDateStr = response['streak_last_date'] as String?;
+      final currentStreak = response['streak'] as int? ?? 0;
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      if (lastDateStr != null) {
+        final lastDate = DateTime.parse(lastDateStr);
+        final lastDay = DateTime(lastDate.year, lastDate.month, lastDate.day);
+
+        if (today.isAtSameMomentAs(lastDay)) {
+          return; // Already updated today
+        }
+
+        if (today.difference(lastDay).inDays == 1) {
+          // Increment streak
+          await _client
+              .from('profiles')
+              .update({
+                'streak': currentStreak + 1,
+                'streak_last_date': today.toIso8601String(),
+              })
+              .eq('id', userId);
+        } else {
+          // Reset streak
+          await _client
+              .from('profiles')
+              .update({
+                'streak': 1,
+                'streak_last_date': today.toIso8601String(),
+              })
+              .eq('id', userId);
+        }
+      } else {
+        // First streak
+        await _client
+            .from('profiles')
+            .update({'streak': 1, 'streak_last_date': today.toIso8601String()})
+            .eq('id', userId);
       }
     });
   }

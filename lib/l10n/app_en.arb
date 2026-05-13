@@ -117,5 +117,25 @@
   "ok": "OK",
   "play_level": "Play Level",
   "skip": "Skip",
-  "next": "Next"
+  "next": "Next",
+  "my_vocabulary": "My Vocabulary",
+  "ready_for_review": "Ready for Review",
+  "ready_words_desc": "{count} words need your attention",
+  "@ready_words_desc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "start": "Start",
+  "empty_list": "Your list is empty",
+  "all_caught_up": "All caught up!",
+  "back": "Back",
+  "show_translation": "Show Translation",
+  "hard": "Hard",
+  "good": "Good",
+  "easy": "Easy",
+  "days": "Days",
+  "xp": "XP"
 }

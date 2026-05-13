@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends ConsumerWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
@@ -15,9 +17,15 @@ class BottomNavBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final items = navBarItems(context);
+    final userAsync = ref.watch(currentUserProvider);
+    final isAdmin = userAsync.maybeWhen(
+      data: (result) => result.fold((_) => false, (u) => u?.isAdmin ?? false),
+      orElse: () => false,
+    );
+
+    final items = navBarItems(context, isAdmin: isAdmin);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -37,7 +45,7 @@ class BottomNavBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
           opacity: isDark ? 0.35 : 0.75,
           blur: 20,
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(32),
           color: isDark ? Colors.black : Colors.white,
           border: Border.all(
             color: AppColors.blue.withValues(alpha: isDark ? 0.15 : 0.1),
@@ -56,12 +64,15 @@ class BottomNavBar extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOutCubic,
-                  padding: EdgeInsets.symmetric(horizontal: 22, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.blue.withValues(alpha: 0.15)
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(32),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -97,7 +108,7 @@ class NavBarItem {
   NavBarItem({required this.icon, required this.activeIcon, this.label});
 }
 
-List<NavBarItem> navBarItems(BuildContext context) => [
+List<NavBarItem> navBarItems(BuildContext context, {bool isAdmin = false}) => [
   NavBarItem(
     icon: Icons.home_outlined,
     activeIcon: Icons.home_rounded,
@@ -108,6 +119,12 @@ List<NavBarItem> navBarItems(BuildContext context) => [
     activeIcon: Icons.menu_book_rounded,
     label: AppLocalizations.of(context)!.materials,
   ),
+  if (!isAdmin)
+    NavBarItem(
+      icon: Icons.collections_bookmark_outlined,
+      activeIcon: Icons.collections_bookmark_rounded,
+      label: AppLocalizations.of(context)!.my_vocabulary,
+    ),
   NavBarItem(
     icon: Icons.person_outline_rounded,
     activeIcon: Icons.person_rounded,

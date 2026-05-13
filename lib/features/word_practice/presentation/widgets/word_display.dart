@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
+import 'package:wlingo/features/word_practice/presentation/widgets/favorite_word_button.dart';
 import 'package:wlingo/theme/app_colors.dart';
 
 class WordDisplay extends StatelessWidget {
@@ -13,14 +14,27 @@ class WordDisplay extends StatelessWidget {
       padding: const EdgeInsets.only(top: 24),
       child: Column(
         children: [
-          Text(
-            word.word,
-            style: const TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w800,
-              color: AppColors.successGreen,
-              letterSpacing: -1,
-            ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    word.word,
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.successGreen,
+                      letterSpacing: -1,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Positioned(right: 0, child: FavoriteWordButton(word: word)),
+            ],
           ),
           const SizedBox(height: 6),
           Text(

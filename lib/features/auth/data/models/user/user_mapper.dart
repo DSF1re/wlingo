@@ -10,6 +10,9 @@ extension UserModelX on User {
       middleName: middleName,
       nativeLang: nativeLang,
       isAdmin: isAdmin,
+      xp: xp,
+      streak: streak,
+      streakLastDate: streakLastDate,
       createdAt: createdAt,
     );
   }

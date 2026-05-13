@@ -327,4 +327,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
+
+  @override
+  String get my_vocabulary => 'My Vocabulary';
+
+  @override
+  String get ready_for_review => 'Ready for Review';
+
+  @override
+  String ready_words_desc(int count) {
+    return '$count words need your attention';
+  }
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get empty_list => 'Your list is empty';
+
+  @override
+  String get all_caught_up => 'All caught up!';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get show_translation => 'Show Translation';
+
+  @override
+  String get hard => 'Hard';
+
+  @override
+  String get good => 'Good';
+
+  @override
+  String get easy => 'Easy';
+
+  @override
+  String get days => 'Days';
+
+  @override
+  String get xp => 'XP';
 }

@@ -9,6 +9,7 @@ import 'package:wlingo/features/word_practice/presentation/widgets/action_button
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/input.dart';
+import 'package:wlingo/features/word_practice/presentation/widgets/favorite_word_button.dart';
 
 class AuditionTaskView extends HookConsumerWidget {
   final VoidCallback onNext;
@@ -70,70 +71,84 @@ class AuditionTaskView extends HookConsumerWidget {
       error: (err, _) => Center(child: Text('${loc.error}: $err')),
       data: (words) => words.isEmpty || currentWord.value == null
           ? Center(child: Text(loc.error))
-          : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  const SizedBox(height: 48),
-                  GestureDetector(
-                    onTap: playWord,
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBlue.withValues(alpha: 0.1),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primaryBlue.withValues(alpha: 0.2),
-                          width: 2,
+          : Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 48),
+                      GestureDetector(
+                        onTap: playWord,
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryBlue.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primaryBlue.withValues(
+                                alpha: 0.2,
+                              ),
+                              width: 2,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.volume_up_rounded,
+                            size: 48,
+                            color: AppColors.primaryBlue,
+                          ),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.volume_up_rounded,
-                        size: 48,
-                        color: AppColors.primaryBlue,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Text(
-                    loc.listen_and_type,
-                    style: ThemeTextStyles.regular(isDark: isDark).copyWith(
-                      color: (isDark ? Colors.white : Colors.black).withValues(
-                        alpha: 0.5,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Input(controller: controller, hint: loc.word),
-                  const SizedBox(height: 32),
-                  if (isChecked.value) ...[
-                    Text(
-                      isCorrect.value == true ? loc.correct : loc.error,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: isCorrect.value == true
-                            ? AppColors.successGreen
-                            : AppColors.errorRed,
-                      ),
-                    ),
-                    if (isCorrect.value == false) ...[
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 32),
                       Text(
-                        '${loc.correct_is}: ${currentWord.value!.word}',
-                        style: ThemeTextStyles.regular(isDark: isDark),
+                        loc.listen_and_type,
+                        style: ThemeTextStyles.regular(isDark: isDark).copyWith(
+                          color: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.5),
+                        ),
                       ),
+                      const SizedBox(height: 24),
+                      Input(controller: controller, hint: loc.word),
+                      const SizedBox(height: 32),
+                      if (isChecked.value) ...[
+                        Text(
+                          isCorrect.value == true ? loc.correct : loc.error,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: isCorrect.value == true
+                                ? AppColors.successGreen
+                                : AppColors.errorRed,
+                          ),
+                        ),
+                        if (isCorrect.value == false) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            '${loc.correct_is}: ${currentWord.value!.word}',
+                            style: ThemeTextStyles.regular(isDark: isDark),
+                          ),
+                        ],
+                        const SizedBox(height: 24),
+                      ],
+                      ActionButton(
+                        label: isChecked.value ? loc.next : loc.check,
+                        onPressed: isChecked.value ? onNext : onCheck,
+                      ),
+                      const SizedBox(height: 48),
                     ],
-                    const SizedBox(height: 24),
-                  ],
-                  ActionButton(
-                    label: isChecked.value ? loc.next : loc.check,
-                    onPressed: isChecked.value ? onNext : onCheck,
                   ),
-                  const SizedBox(height: 48),
-                ],
-              ),
+                ),
+                if (currentWord.value != null)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: FavoriteWordButton(
+                      word: currentWord.value!,
+                      size: 32,
+                    ),
+                  ),
+              ],
             ),
     );
   }

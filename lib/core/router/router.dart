@@ -7,17 +7,19 @@ import 'package:wlingo/features/bookview/presentation/screens/book_screen.dart';
 import 'package:wlingo/features/bookview/presentation/screens/pdf_view.dart';
 import 'package:wlingo/features/home/presentation/home_screen.dart';
 import 'package:wlingo/features/main/presentation/main_layout.dart';
-import 'package:wlingo/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:wlingo/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:wlingo/features/profile/presentation/profile_screen.dart';
 import 'package:wlingo/features/auth/presentation/reg_screen.dart';
 import 'package:wlingo/features/splash/presentation/splash_screen.dart';
 import 'package:wlingo/features/word_practice/presentation/audition_game.dart';
-import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
 import 'package:wlingo/features/word_practice/presentation/screens/level_game_screen.dart';
 import 'package:wlingo/core/global_variables/services.dart';
+import 'package:wlingo/features/word_practice/presentation/pronounce_game.dart';
 import 'package:wlingo/widgets/navigation_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/features/ai_chat/presentation/screens/ai_chat_screen.dart';
+import 'package:wlingo/features/vocabulary/presentation/screens/vocabulary_list_screen.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   final prefs = ref.read(sharedPrefsProvider);
@@ -51,6 +53,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
       if (loggedIn && isLoggingIn) {
         return Routes.home;
       }
+
       return null;
     },
     routes: [
@@ -96,25 +99,38 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
         path: Routes.aiChat,
         builder: (context, state) => const AiChatScreen(),
       ),
+      GoRoute(
+        path: Routes.adminUsers,
+        builder: (context, state) => const AdminUsersScreen(),
+      ),
       ShellRoute(
-        builder: (context, state, child) => MainLayout(
-          bnb: BottomNavBar(
-            currentIndex: _calculateSelectedIndex(state.uri.path),
-            onTap: (index) {
-              switch (index) {
-                case 0:
-                  context.go(Routes.home);
-                  break;
-                case 1:
-                  context.go(Routes.books);
-                  break;
-                case 2:
-                  context.go(Routes.profile);
-                  break;
-              }
-            },
-          ),
-          child: child,
+        builder: (context, state, child) => Consumer(
+          builder: (context, ref, _) {
+            final userAsync = ref.watch(currentUserProvider);
+            final isAdmin = userAsync.maybeWhen(
+              data: (result) =>
+                  result.fold((_) => false, (u) => u?.isAdmin ?? false),
+              orElse: () => false,
+            );
+
+            return MainLayout(
+              bnb: BottomNavBar(
+                currentIndex: _calculateSelectedIndex(state.uri.path, isAdmin),
+                onTap: (index) {
+                  final paths = [
+                    Routes.home,
+                    Routes.books,
+                    if (!isAdmin) Routes.vocabulary,
+                    Routes.profile,
+                  ];
+                  if (index < paths.length) {
+                    context.go(paths[index]);
+                  }
+                },
+              ),
+              child: child,
+            );
+          },
         ),
         routes: [
           GoRoute(
@@ -126,12 +142,24 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const BooksScreen(),
           ),
           GoRoute(
-            path: Routes.profile,
-            builder: (context, state) => const ProfileScreen(),
+            path: Routes.vocabulary,
+            redirect: (context, state) async {
+              final container = ProviderScope.containerOf(context);
+              final userResult = await container.read(
+                currentUserProvider.future,
+              );
+              final isAdmin = userResult.fold(
+                (_) => false,
+                (u) => u?.isAdmin ?? false,
+              );
+              if (isAdmin) return Routes.home;
+              return null;
+            },
+            builder: (context, state) => const VocabularyListScreen(),
           ),
           GoRoute(
-            path: Routes.adminUsers,
-            builder: (context, state) => const AdminUsersScreen(),
+            path: Routes.profile,
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),
@@ -139,8 +167,9 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-int _calculateSelectedIndex(String location) {
+int _calculateSelectedIndex(String location, bool isAdmin) {
   if (location.startsWith(Routes.books)) return 1;
-  if (location.startsWith(Routes.profile)) return 2;
+  if (location.startsWith(Routes.vocabulary)) return isAdmin ? 0 : 2;
+  if (location.startsWith(Routes.profile)) return isAdmin ? 2 : 3;
   return 0;
 }

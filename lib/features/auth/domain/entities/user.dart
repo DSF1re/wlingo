@@ -11,6 +11,9 @@ sealed class UserEntity with _$UserEntity {
     String? middleName,
     required int nativeLang,
     required bool isAdmin,
+    @Default(0) int xp,
+    @Default(0) int streak,
+    DateTime? streakLastDate,
     DateTime? createdAt,
   }) = _UserEntity;
 }

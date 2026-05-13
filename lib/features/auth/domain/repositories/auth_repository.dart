@@ -39,4 +39,6 @@ abstract class AuthRepository {
   });
 
   Stream<Either<AppFailure, UserEntity?>> authStateChanges();
+  Future<Either<AppFailure, void>> addXP(int amount);
+  Future<Either<AppFailure, void>> updateStreak();
 }

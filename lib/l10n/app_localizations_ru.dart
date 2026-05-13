@@ -327,4 +327,45 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get next => 'Далее';
+
+  @override
+  String get my_vocabulary => 'Мой словарь';
+
+  @override
+  String get ready_for_review => 'Готово к повторению';
+
+  @override
+  String ready_words_desc(int count) {
+    return '$count слов(а) требуют внимания';
+  }
+
+  @override
+  String get start => 'Начать';
+
+  @override
+  String get empty_list => 'Ваш список пуст';
+
+  @override
+  String get all_caught_up => 'Все повторено!';
+
+  @override
+  String get back => 'Назад';
+
+  @override
+  String get show_translation => 'Показать перевод';
+
+  @override
+  String get hard => 'Сложно';
+
+  @override
+  String get good => 'Хорошо';
+
+  @override
+  String get easy => 'Легко';
+
+  @override
+  String get days => 'Дней';
+
+  @override
+  String get xp => 'XP';
 }

@@ -730,6 +730,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
+
+  /// No description provided for @my_vocabulary.
+  ///
+  /// In en, this message translates to:
+  /// **'My Vocabulary'**
+  String get my_vocabulary;
+
+  /// No description provided for @ready_for_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for Review'**
+  String get ready_for_review;
+
+  /// No description provided for @ready_words_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} words need your attention'**
+  String ready_words_desc(int count);
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @empty_list.
+  ///
+  /// In en, this message translates to:
+  /// **'Your list is empty'**
+  String get empty_list;
+
+  /// No description provided for @all_caught_up.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up!'**
+  String get all_caught_up;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @show_translation.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Translation'**
+  String get show_translation;
+
+  /// No description provided for @hard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get hard;
+
+  /// No description provided for @good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get good;
+
+  /// No description provided for @easy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get easy;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get days;
+
+  /// No description provided for @xp.
+  ///
+  /// In en, this message translates to:
+  /// **'XP'**
+  String get xp;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

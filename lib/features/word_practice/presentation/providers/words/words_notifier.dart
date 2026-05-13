@@ -7,6 +7,7 @@ import 'package:wlingo/features/word_practice/presentation/providers/lang_state/
 import 'package:wlingo/features/word_practice/domain/usecases/get_words_usecase.dart';
 import 'package:wlingo/features/word_practice/domain/usecases/save_word_practice_usecase.dart';
 import 'package:wlingo/core/global_variables/services.dart';
+import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
 
 part 'words_notifier.g.dart';
 
@@ -44,6 +45,12 @@ class WordsNotifier extends _$WordsNotifier {
       userAnswer: recognizedText,
       isCorrect: isCorrect,
     );
+
+    if (isCorrect) {
+      final authRepo = ref.read(authRepositoryProvider);
+      await authRepo.addXP(15);
+      await authRepo.updateStreak();
+    }
 
     return isCorrect;
   }

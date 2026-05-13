@@ -9,6 +9,7 @@ import 'package:wlingo/features/word_practice/presentation/providers/lang_state/
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/features/profile/domain/providers/history_provider.dart';
 import 'package:wlingo/core/global_variables/services.dart';
+import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
 
 part 'audition_notifier.g.dart';
 
@@ -41,6 +42,12 @@ class AuditionNotifier extends _$AuditionNotifier {
     final isCorrect = target == typed;
 
     await saveAuditionRecord(correctWordId: word.id, isCorrect: isCorrect);
+
+    if (isCorrect) {
+      final authRepo = ref.read(authRepositoryProvider);
+      await authRepo.addXP(10); // Reward 10 XP for correct answer
+      await authRepo.updateStreak();
+    }
 
     return isCorrect;
   }

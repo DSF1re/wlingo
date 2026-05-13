@@ -9,18 +9,22 @@ import 'package:wlingo/features/word_practice/presentation/providers/add_word_no
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
+import 'package:wlingo/features/vocabulary/presentation/providers/vocabulary_provider.dart';
+import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 
 class AddWordScreen extends HookConsumerWidget {
-  const AddWordScreen({super.key});
+  final String? initialWord;
+  final String? initialTranslation;
+  const AddWordScreen({super.key, this.initialWord, this.initialTranslation});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loc = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final wordController = useTextEditingController();
+    final wordController = useTextEditingController(text: initialWord);
     final transcriptionController = useTextEditingController();
-    final russianController = useTextEditingController();
+    final russianController = useTextEditingController(text: initialTranslation);
 
     final selectedLangId = useState<int>(
       ref.read(preferencesServiceProvider).getCourseLanguage(),
@@ -49,14 +53,28 @@ class AddWordScreen extends HookConsumerWidget {
         return;
       }
 
-      ref
-          .read(addWordProvider.notifier)
-          .addWord(
-            word: wordController.text,
-            transcription: transcriptionController.text,
-            russian: russianController.text,
-            languageId: selectedLangId.value,
+      final isAdmin = ref.read(currentUserProvider).maybeWhen(
+            data: (either) => either.fold((_) => false, (u) => u?.isAdmin ?? false),
+            orElse: () => false,
           );
+
+      if (isAdmin) {
+        ref.read(addWordProvider.notifier).addWord(
+              word: wordController.text,
+              transcription: transcriptionController.text,
+              russian: russianController.text,
+              languageId: selectedLangId.value,
+            );
+      } else {
+        // Add to personal dictionary
+        ref.read(vocabularyListProvider.notifier).addWord(
+              word: wordController.text,
+              translation: russianController.text,
+              transcription: transcriptionController.text,
+              languageId: selectedLangId.value,
+            );
+        context.pop();
+      }
     }
 
     InputDecoration premiumDecoration({
