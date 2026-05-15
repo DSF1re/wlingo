@@ -6,11 +6,11 @@ import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
-import 'package:wlingo/features/bookview/presentation/screens/add_book_screen.dart';
+import 'package:wlingo/features/bookview/presentation/add_book_screen.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/home/presentation/widgets/lang_dropdown.dart';
 import 'package:wlingo/features/home/presentation/widgets/menu_tile.dart';
-import 'package:wlingo/features/word_practice/presentation/screens/add_word_screen.dart'
+import 'package:wlingo/features/word_practice/presentation/add_word_screen.dart'
     as w;
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
