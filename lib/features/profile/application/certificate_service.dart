@@ -4,11 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 
 class CertificateService {
   static Future<void> generateAndDownload({
+    required String userId,
     required String userName,
+    required int languageId,
+    required String languageName,
     required AppLocalizations loc,
   }) async {
     final pdf = pw.Document();
@@ -19,12 +23,41 @@ class CertificateService {
       (await rootBundle.load('assets/images/icon.png')).buffer.asUint8List(),
     );
 
-    final random = Random();
-    final certNumber = List.generate(10, (_) => random.nextInt(10)).join();
+    final client = Supabase.instance.client;
+    String certNumber;
+    DateTime issueDate;
 
-    final now = DateTime.now();
+    try {
+      final existing = await client
+          .from('certificates')
+          .select('certificate_number, created_at')
+          .eq('user_id', userId)
+          .eq('language_id', languageId)
+          .maybeSingle();
+
+      if (existing != null) {
+        certNumber = existing['certificate_number'] as String;
+        issueDate = DateTime.parse(existing['created_at'] as String);
+      } else {
+        final random = Random();
+        certNumber = List.generate(10, (_) => random.nextInt(10)).join();
+        issueDate = DateTime.now();
+
+        await client.from('certificates').insert({
+          'user_id': userId,
+          'language_id': languageId,
+          'certificate_number': certNumber,
+        });
+      }
+    } catch (e) {
+      // Fallback in case of database or connection issues
+      final random = Random();
+      certNumber = List.generate(10, (_) => random.nextInt(10)).join();
+      issueDate = DateTime.now();
+    }
+
     final dateString =
-        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+        '${issueDate.day.toString().padLeft(2, '0')}.${issueDate.month.toString().padLeft(2, '0')}.${issueDate.year}';
 
     pdf.addPage(
       pw.Page(
@@ -52,7 +85,7 @@ class CertificateService {
                   pw.Image(logoImage, width: 150, height: 150),
                   pw.SizedBox(height: 10),
                   pw.Text(
-                    loc.certificateSubtitle,
+                    '${loc.certificateSubtitle} ($languageName)',
                     style: const pw.TextStyle(
                       fontSize: 20,
                       color: PdfColors.grey700,
@@ -101,7 +134,7 @@ class CertificateService {
 
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf.save(),
-      name: 'certificate.pdf',
+      name: 'certificate_${languageName.toLowerCase()}.pdf',
     );
   }
 }
