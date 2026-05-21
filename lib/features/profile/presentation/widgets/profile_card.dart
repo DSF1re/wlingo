@@ -125,7 +125,10 @@ class ProfileCard extends HookConsumerWidget {
                           languageName: selectedLang.name,
                           loc: loc,
                         ),
-                        icon: const Icon(Icons.workspace_premium_rounded, size: 20),
+                        icon: const Icon(
+                          Icons.workspace_premium_rounded,
+                          size: 20,
+                        ),
                         tooltip: loc.downloadCertificate,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.blue.withValues(
@@ -139,7 +142,7 @@ class ProfileCard extends HookConsumerWidget {
                       );
                     },
                     loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   );
                 },
                 loading: () => const SizedBox.shrink(),
