@@ -16,12 +16,22 @@ class SupabaseWordRepository implements WordRepository {
   SupabaseClient get _client => Supabase.instance.client;
 
   @override
-  Future<List<WordEntity>> getWords(int languageId) async {
-    final response = await _client
+  Future<List<WordEntity>> getWords(int languageId, {int? levelId, int? maxLevelId, int? categoryId}) async {
+    var query = _client
         .from('words')
         .select()
         .eq('language_id', languageId);
 
+    if (levelId != null) {
+      query = query.eq('level_id', levelId);
+    } else if (maxLevelId != null) {
+      query = query.lte('level_id', maxLevelId);
+    }
+    if (categoryId != null) {
+      query = query.eq('category_id', categoryId);
+    }
+
+    final response = await query;
     final data = response as List<dynamic>;
 
     return data
@@ -103,6 +113,8 @@ class SupabaseWordRepository implements WordRepository {
       'transcription': transcription,
       'russian': russian,
       'language_id': languageId,
+      'level_id': 1,
+      'category_id': 6,
     });
   }
 }

@@ -560,7 +560,7 @@ abstract class AppLocalizations {
   /// No description provided for @pdf_files_only.
   ///
   /// In en, this message translates to:
-  /// **'PDF files only'**
+  /// **'PDF and MD files only'**
   String get pdf_files_only;
 
   /// No description provided for @user_management.
@@ -808,6 +808,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'XP'**
   String get xp;
+
+  /// No description provided for @streakOnFire.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on fire!'**
+  String get streakOnFire;
+
+  /// No description provided for @continueText.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

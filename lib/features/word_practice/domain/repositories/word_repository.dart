@@ -1,7 +1,7 @@
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
 
 abstract class WordRepository {
-  Future<List<WordEntity>> getWords(int languageId);
+  Future<List<WordEntity>> getWords(int languageId, {int? levelId, int? maxLevelId, int? categoryId});
   Future<void> saveWordPractice({
     required int correctWordId,
     String? userAnswer,

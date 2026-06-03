@@ -24,7 +24,9 @@ class AddWordScreen extends HookConsumerWidget {
 
     final wordController = useTextEditingController(text: initialWord);
     final transcriptionController = useTextEditingController();
-    final russianController = useTextEditingController(text: initialTranslation);
+    final russianController = useTextEditingController(
+      text: initialTranslation,
+    );
 
     final selectedLangId = useState<int>(
       ref.read(preferencesServiceProvider).getCourseLanguage(),
@@ -53,13 +55,18 @@ class AddWordScreen extends HookConsumerWidget {
         return;
       }
 
-      final isAdmin = ref.read(currentUserProvider).maybeWhen(
-            data: (either) => either.fold((_) => false, (u) => u?.isAdmin ?? false),
+      final isAdmin = ref
+          .read(currentUserProvider)
+          .maybeWhen(
+            data: (either) =>
+                either.fold((_) => false, (u) => u?.isAdmin ?? false),
             orElse: () => false,
           );
 
       if (isAdmin) {
-        ref.read(addWordProvider.notifier).addWord(
+        ref
+            .read(addWordProvider.notifier)
+            .addWord(
               word: wordController.text,
               transcription: transcriptionController.text,
               russian: russianController.text,
@@ -67,7 +74,9 @@ class AddWordScreen extends HookConsumerWidget {
             );
       } else {
         // Add to personal dictionary
-        ref.read(vocabularyListProvider.notifier).addWord(
+        ref
+            .read(vocabularyListProvider.notifier)
+            .addWord(
               word: wordController.text,
               translation: russianController.text,
               transcription: transcriptionController.text,

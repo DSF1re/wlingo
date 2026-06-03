@@ -11,6 +11,7 @@ import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/base_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class PdfViewerScreen extends HookConsumerWidget {
   const PdfViewerScreen({
@@ -30,6 +31,7 @@ class PdfViewerScreen extends HookConsumerWidget {
 
     final controller = useMemoized(() => PdfViewerController());
     final pdfFile = useState<File?>(null);
+    final markdownContent = useState<String?>(null);
     final totalPages = useState(0);
 
     final currentPage = useRef<int>(1);
@@ -37,15 +39,21 @@ class PdfViewerScreen extends HookConsumerWidget {
 
     final prefs = ref.watch(preferencesServiceProvider);
 
+    final isMarkdown = url.toLowerCase().endsWith('.md');
+
     final loadPdf = useCallback(({bool forceRefresh = false}) async {
       try {
         if (forceRefresh) {
           await DefaultCacheManager().removeFile(url);
         }
         final file = await DefaultCacheManager().getSingleFile(url);
-        pdfFile.value = file;
+        if (isMarkdown) {
+          markdownContent.value = await file.readAsString();
+        } else {
+          pdfFile.value = file;
+        }
       } catch (e) {
-        talker.error('Error loading PDF: $e');
+        talker.error('Error loading file: $e');
       }
     }, [url]);
 
@@ -94,37 +102,58 @@ class PdfViewerScreen extends HookConsumerWidget {
             ),
           ),
           Expanded(
-            child: kIsWeb
-                ? SfPdfViewer.network(
-                    url,
-                    controller: controller,
-                    onDocumentLoaded: (details) {
-                      totalPages.value = details.document.pages.count;
-                      final saved = prefs.getBookPage(bookId);
-                      if (saved > 1) {
-                        Future.microtask(() => controller.jumpToPage(saved));
-                        currentPage.value = saved;
-                      }
-                    },
-                    onPageChanged: (details) =>
-                        handlePageChange(details.newPageNumber),
-                  )
-                : pdfFile.value == null
-                ? const Center(child: CircularProgressIndicator())
-                : SfPdfViewer.file(
-                    pdfFile.value!,
-                    controller: controller,
-                    onDocumentLoaded: (details) {
-                      totalPages.value = details.document.pages.count;
-                      final saved = prefs.getBookPage(bookId);
-                      if (saved > 1) {
-                        Future.microtask(() => controller.jumpToPage(saved));
-                        currentPage.value = saved;
-                      }
-                    },
-                    onPageChanged: (details) =>
-                        handlePageChange(details.newPageNumber),
-                  ),
+            child: isMarkdown
+                ? (markdownContent.value == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Markdown(
+                          data: markdownContent.value!,
+                          styleSheet:
+                              MarkdownStyleSheet.fromTheme(
+                                Theme.of(context),
+                              ).copyWith(
+                                p: ThemeTextStyles.regular(isDark: isDark),
+                                h1: ThemeTextStyles.title1Heavy(isDark: isDark),
+                                h2: ThemeTextStyles.title2Heavy(isDark: isDark),
+                                h3: ThemeTextStyles.title3SemiBold(
+                                  isDark: isDark,
+                                ),
+                              ),
+                        ))
+                : (kIsWeb
+                      ? SfPdfViewer.network(
+                          url,
+                          controller: controller,
+                          onDocumentLoaded: (details) {
+                            totalPages.value = details.document.pages.count;
+                            final saved = prefs.getBookPage(bookId);
+                            if (saved > 1) {
+                              Future.microtask(
+                                () => controller.jumpToPage(saved),
+                              );
+                              currentPage.value = saved;
+                            }
+                          },
+                          onPageChanged: (details) =>
+                              handlePageChange(details.newPageNumber),
+                        )
+                      : pdfFile.value == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : SfPdfViewer.file(
+                          pdfFile.value!,
+                          controller: controller,
+                          onDocumentLoaded: (details) {
+                            totalPages.value = details.document.pages.count;
+                            final saved = prefs.getBookPage(bookId);
+                            if (saved > 1) {
+                              Future.microtask(
+                                () => controller.jumpToPage(saved),
+                              );
+                              currentPage.value = saved;
+                            }
+                          },
+                          onPageChanged: (details) =>
+                              handlePageChange(details.newPageNumber),
+                        )),
           ),
         ],
       ),

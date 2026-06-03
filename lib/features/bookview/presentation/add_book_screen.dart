@@ -50,7 +50,7 @@ class AddBookScreen extends HookConsumerWidget {
     Future<void> pickFile() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf'],
+        allowedExtensions: ['pdf', 'md'],
       );
 
       if (result != null) {

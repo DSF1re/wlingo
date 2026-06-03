@@ -88,12 +88,12 @@ class BooksScreen extends HookConsumerWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: AppColors.errorRed.withValues(alpha: 0.15),
+                                    color: (book.url.toLowerCase().endsWith('.md') ? AppColors.primaryBlue : AppColors.errorRed).withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Icon(
-                                    Icons.picture_as_pdf_rounded,
-                                    color: AppColors.errorRed,
+                                  child: Icon(
+                                    book.url.toLowerCase().endsWith('.md') ? Icons.description_rounded : Icons.picture_as_pdf_rounded,
+                                    color: book.url.toLowerCase().endsWith('.md') ? AppColors.primaryBlue : AppColors.errorRed,
                                     size: 22,
                                   ),
                                 ),

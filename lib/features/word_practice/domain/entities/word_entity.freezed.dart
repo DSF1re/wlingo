@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WordEntity {
 
- int get id; String get word; String get transcription; String get russian; int get languageId; String? get image;
+ int get id; String get word; String get transcription; String get russian; int get languageId; int get levelId; int get categoryId; String? get image;
 /// Create a copy of WordEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $WordEntityCopyWith<WordEntity> get copyWith => _$WordEntityCopyWithImpl<WordEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.levelId, levelId) || other.levelId == levelId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.image, image) || other.image == image));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,image);
+int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,levelId,categoryId,image);
 
 @override
 String toString() {
-  return 'WordEntity(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, image: $image)';
+  return 'WordEntity(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, levelId: $levelId, categoryId: $categoryId, image: $image)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $WordEntityCopyWith<$Res>  {
   factory $WordEntityCopyWith(WordEntity value, $Res Function(WordEntity) _then) = _$WordEntityCopyWithImpl;
 @useResult
 $Res call({
- int id, String word, String transcription, String russian, int languageId, String? image
+ int id, String word, String transcription, String russian, int languageId, int levelId, int categoryId, String? image
 });
 
 
@@ -62,13 +62,15 @@ class _$WordEntityCopyWithImpl<$Res>
 
 /// Create a copy of WordEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? image = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? levelId = null,Object? categoryId = null,Object? image = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,word: null == word ? _self.word : word // ignore: cast_nullable_to_non_nullable
 as String,transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
 as String,russian: null == russian ? _self.russian : russian // ignore: cast_nullable_to_non_nullable
 as String,languageId: null == languageId ? _self.languageId : languageId // ignore: cast_nullable_to_non_nullable
+as int,levelId: null == levelId ? _self.levelId : levelId // ignore: cast_nullable_to_non_nullable
+as int,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as int,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian,  int languageId,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian,  int languageId,  int levelId,  int categoryId,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WordEntity() when $default != null:
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.image);case _:
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId,_that.image);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian,  int languageId,  String? image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian,  int languageId,  int levelId,  int categoryId,  String? image)  $default,) {final _that = this;
 switch (_that) {
 case _WordEntity():
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.image);}
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId,_that.image);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +192,10 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String word,  String transcription,  String russian,  int languageId,  String? image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String word,  String transcription,  String russian,  int languageId,  int levelId,  int categoryId,  String? image)?  $default,) {final _that = this;
 switch (_that) {
 case _WordEntity() when $default != null:
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.image);case _:
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId,_that.image);case _:
   return null;
 
 }
@@ -205,7 +207,7 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 
 
 class _WordEntity implements WordEntity {
-  const _WordEntity({required this.id, required this.word, required this.transcription, required this.russian, required this.languageId, this.image});
+  const _WordEntity({required this.id, required this.word, required this.transcription, required this.russian, required this.languageId, required this.levelId, required this.categoryId, this.image});
   
 
 @override final  int id;
@@ -213,6 +215,8 @@ class _WordEntity implements WordEntity {
 @override final  String transcription;
 @override final  String russian;
 @override final  int languageId;
+@override final  int levelId;
+@override final  int categoryId;
 @override final  String? image;
 
 /// Create a copy of WordEntity
@@ -225,16 +229,16 @@ _$WordEntityCopyWith<_WordEntity> get copyWith => __$WordEntityCopyWithImpl<_Wor
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.levelId, levelId) || other.levelId == levelId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.image, image) || other.image == image));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,image);
+int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,levelId,categoryId,image);
 
 @override
 String toString() {
-  return 'WordEntity(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, image: $image)';
+  return 'WordEntity(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, levelId: $levelId, categoryId: $categoryId, image: $image)';
 }
 
 
@@ -245,7 +249,7 @@ abstract mixin class _$WordEntityCopyWith<$Res> implements $WordEntityCopyWith<$
   factory _$WordEntityCopyWith(_WordEntity value, $Res Function(_WordEntity) _then) = __$WordEntityCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String word, String transcription, String russian, int languageId, String? image
+ int id, String word, String transcription, String russian, int languageId, int levelId, int categoryId, String? image
 });
 
 
@@ -262,13 +266,15 @@ class __$WordEntityCopyWithImpl<$Res>
 
 /// Create a copy of WordEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? image = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? levelId = null,Object? categoryId = null,Object? image = freezed,}) {
   return _then(_WordEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,word: null == word ? _self.word : word // ignore: cast_nullable_to_non_nullable
 as String,transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
 as String,russian: null == russian ? _self.russian : russian // ignore: cast_nullable_to_non_nullable
 as String,languageId: null == languageId ? _self.languageId : languageId // ignore: cast_nullable_to_non_nullable
+as int,levelId: null == levelId ? _self.levelId : levelId // ignore: cast_nullable_to_non_nullable
+as int,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as int,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

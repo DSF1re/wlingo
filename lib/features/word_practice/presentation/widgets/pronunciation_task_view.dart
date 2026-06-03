@@ -10,6 +10,7 @@ import 'package:wlingo/features/word_practice/presentation/widgets/action_button
 import 'package:wlingo/features/word_practice/presentation/widgets/mic_indicator.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/result_display.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/word_display.dart';
+import 'package:wlingo/features/word_practice/presentation/streak_animation_screen.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 
 class PronunciationTaskView extends HookConsumerWidget {
@@ -71,7 +72,16 @@ class PronunciationTaskView extends HookConsumerWidget {
             );
 
         if (context.mounted) {
-          isCorrect.value = result;
+          isCorrect.value = result.isCorrect;
+          final streakRes = result.streakResult;
+          if (streakRes != null && streakRes.didUpdate) {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => StreakAnimationScreen(
+                oldStreak: streakRes.oldStreak,
+                newStreak: streakRes.newStreak,
+              ),
+            ));
+          }
         }
       }
       return recognized;

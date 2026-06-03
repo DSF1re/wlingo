@@ -4,6 +4,8 @@ class Word {
   final String transcription;
   final String russian;
   final int languageId;
+  final int levelId;
+  final int categoryId;
   final String? image;
 
   Word({
@@ -12,6 +14,8 @@ class Word {
     required this.transcription,
     required this.russian,
     required this.languageId,
+    required this.levelId,
+    required this.categoryId,
     this.image,
   });
 
@@ -24,6 +28,8 @@ class Word {
       languageId: json['language_id'] is int
           ? json['language_id']
           : int.parse(json['language_id'].toString()),
+      levelId: json['level_id'] is int ? json['level_id'] : int.parse(json['level_id'].toString()),
+      categoryId: json['category_id'] is int ? json['category_id'] : int.parse(json['category_id'].toString()),
       image: json['image'],
     );
   }

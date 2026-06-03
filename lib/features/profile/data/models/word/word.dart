@@ -11,6 +11,8 @@ sealed class Word with _$Word {
     required String transcription,
     required String russian,
     @JsonKey(name: 'language_id') required int languageId,
+    @JsonKey(name: 'level_id') required int levelId,
+    @JsonKey(name: 'category_id') required int categoryId,
   }) = _Word;
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 }

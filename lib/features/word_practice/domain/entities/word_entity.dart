@@ -10,6 +10,8 @@ sealed class WordEntity with _$WordEntity {
     required String transcription,
     required String russian,
     required int languageId,
+    required int levelId,
+    required int categoryId,
     String? image,
   }) = _WordEntity;
 }

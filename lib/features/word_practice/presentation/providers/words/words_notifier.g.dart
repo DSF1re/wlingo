@@ -33,7 +33,7 @@ final class WordsNotifierProvider
   WordsNotifier create() => WordsNotifier();
 }
 
-String _$wordsNotifierHash() => r'15330934d500fb5aca63ad4a839f39b133dd5f39';
+String _$wordsNotifierHash() => r'4e1db98a0b20333053ca31d9e508109e7ff377bd';
 
 abstract class _$WordsNotifier extends $AsyncNotifier<List<WordEntity>> {
   FutureOr<List<WordEntity>> build();

@@ -7,6 +7,7 @@ import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart' as model;
 import 'package:wlingo/features/auth/data/models/user/user_mapper.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
+import 'package:wlingo/features/auth/domain/entities/streak_update_result.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
@@ -271,7 +272,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<AppFailure, void>> updateStreak() async {
+  Future<Either<AppFailure, StreakUpdateResult?>> updateStreak() async {
     return _safeCall(() async {
       final userId = _client.auth.currentUser?.id;
       if (userId == null) throw const AppFailure.nullUser();
@@ -284,18 +285,20 @@ class SupabaseAuthRepository implements AuthRepository {
 
       final lastDateStr = response['streak_last_date'] as String?;
       final currentStreak = response['streak'] as int? ?? 0;
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
+      final now = DateTime.now().toUtc();
+      final today = DateTime.utc(now.year, now.month, now.day);
 
       if (lastDateStr != null) {
-        final lastDate = DateTime.parse(lastDateStr);
-        final lastDay = DateTime(lastDate.year, lastDate.month, lastDate.day);
+        final lastDate = DateTime.parse(lastDateStr).toUtc();
+        final lastDay = DateTime.utc(lastDate.year, lastDate.month, lastDate.day);
 
         if (today.isAtSameMomentAs(lastDay)) {
-          return; // Already updated today
+          return null; // Already updated today
         }
 
-        if (today.difference(lastDay).inDays == 1) {
+        final diffDays = today.difference(lastDay).inDays;
+
+        if (diffDays == 1) {
           // Increment streak
           await _client
               .from('profiles')
@@ -304,6 +307,13 @@ class SupabaseAuthRepository implements AuthRepository {
                 'streak_last_date': today.toIso8601String(),
               })
               .eq('id', userId);
+              
+          return StreakUpdateResult(
+            didUpdate: true,
+            oldStreak: currentStreak,
+            newStreak: currentStreak + 1,
+            isReset: false,
+          );
         } else {
           // Reset streak
           await _client
@@ -313,6 +323,13 @@ class SupabaseAuthRepository implements AuthRepository {
                 'streak_last_date': today.toIso8601String(),
               })
               .eq('id', userId);
+              
+          return StreakUpdateResult(
+            didUpdate: true,
+            oldStreak: currentStreak,
+            newStreak: 1,
+            isReset: true,
+          );
         }
       } else {
         // First streak
@@ -320,6 +337,13 @@ class SupabaseAuthRepository implements AuthRepository {
             .from('profiles')
             .update({'streak': 1, 'streak_last_date': today.toIso8601String()})
             .eq('id', userId);
+            
+        return const StreakUpdateResult(
+          didUpdate: true,
+          oldStreak: 0,
+          newStreak: 1,
+          isReset: false,
+        );
       }
     });
   }

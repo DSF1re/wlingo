@@ -10,6 +10,7 @@ import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/input.dart';
 import 'package:wlingo/features/word_practice/presentation/widgets/favorite_word_button.dart';
+import 'package:wlingo/features/word_practice/presentation/streak_animation_screen.dart';
 
 class AuditionTaskView extends HookConsumerWidget {
   final VoidCallback onNext;
@@ -61,8 +62,18 @@ class AuditionTaskView extends HookConsumerWidget {
               word: currentWord.value!,
               typedText: controller.text,
             );
-        isCorrect.value = result;
+        isCorrect.value = result.isCorrect;
         isChecked.value = true;
+        
+        final streakRes = result.streakResult;
+        if (streakRes != null && streakRes.didUpdate && context.mounted) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => StreakAnimationScreen(
+              oldStreak: streakRes.oldStreak,
+              newStreak: streakRes.newStreak,
+            ),
+          ));
+        }
       }
     }
 

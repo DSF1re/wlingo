@@ -79,7 +79,7 @@
   "certificateTitle": "Certificate of Completion",
   "certificateSubtitle": "Introductory Language Course",
   "dateLabel": "Date",
-  "pdf_files_only": "PDF files only",
+  "pdf_files_only": "PDF and MD files only",
   "user_management": "User Management",
   "users": "Users",
   "statistics": "Statistics",
@@ -137,5 +137,7 @@
   "good": "Good",
   "easy": "Easy",
   "days": "Days",
-  "xp": "XP"
+  "xp": "XP",
+  "streakOnFire": "You're on fire!",
+  "continueText": "Continue"
 }

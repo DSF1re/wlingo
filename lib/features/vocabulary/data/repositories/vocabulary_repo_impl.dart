@@ -76,6 +76,8 @@ class SupabaseVocabularyRepository implements VocabularyRepository {
               'russian': translation,
               'transcription': transcription ?? '',
               'language_id': languageId,
+              'level_id': 1,
+              'category_id': 6,
             })
             .select('id')
             .single();

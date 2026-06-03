@@ -79,7 +79,7 @@
   "certificateTitle": "Сертификат об окончании",
   "certificateSubtitle": "Вводный языковой курс",
   "dateLabel": "Дата",
-  "pdf_files_only": "Только PDF файлы",
+  "pdf_files_only": "Только PDF и MD файлы",
   "user_management": "Управление пользователями",
   "users": "Пользователи",
   "statistics": "Статистика",
@@ -137,5 +137,7 @@
   "good": "Хорошо",
   "easy": "Легко",
   "days": "Дней",
-  "xp": "XP"
+  "xp": "XP",
+  "streakOnFire": "Вы в ударе!",
+  "continueText": "Продолжить"
 }

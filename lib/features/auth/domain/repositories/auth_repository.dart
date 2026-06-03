@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
+import 'package:wlingo/features/auth/domain/entities/streak_update_result.dart';
 
 abstract class AuthRepository {
   Future<Either<AppFailure, UserEntity?>> getCurrentUser();
@@ -40,5 +41,5 @@ abstract class AuthRepository {
 
   Stream<Either<AppFailure, UserEntity?>> authStateChanges();
   Future<Either<AppFailure, void>> addXP(int amount);
-  Future<Either<AppFailure, void>> updateStreak();
+  Future<Either<AppFailure, StreakUpdateResult?>> updateStreak();
 }

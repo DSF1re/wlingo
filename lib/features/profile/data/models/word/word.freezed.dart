@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Word {
 
- int get id; String get word; String get transcription; String get russian;@JsonKey(name: 'language_id') int get languageId;
+ int get id; String get word; String get transcription; String get russian;@JsonKey(name: 'language_id') int get languageId;@JsonKey(name: 'level_id') int get levelId;@JsonKey(name: 'category_id') int get categoryId;
 /// Create a copy of Word
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $WordCopyWith<Word> get copyWith => _$WordCopyWithImpl<Word>(this as Word, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Word&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Word&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.levelId, levelId) || other.levelId == levelId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId);
+int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,levelId,categoryId);
 
 @override
 String toString() {
-  return 'Word(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId)';
+  return 'Word(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, levelId: $levelId, categoryId: $categoryId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $WordCopyWith<$Res>  {
   factory $WordCopyWith(Word value, $Res Function(Word) _then) = _$WordCopyWithImpl;
 @useResult
 $Res call({
- int id, String word, String transcription, String russian,@JsonKey(name: 'language_id') int languageId
+ int id, String word, String transcription, String russian,@JsonKey(name: 'language_id') int languageId,@JsonKey(name: 'level_id') int levelId,@JsonKey(name: 'category_id') int categoryId
 });
 
 
@@ -65,13 +65,15 @@ class _$WordCopyWithImpl<$Res>
 
 /// Create a copy of Word
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? levelId = null,Object? categoryId = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,word: null == word ? _self.word : word // ignore: cast_nullable_to_non_nullable
 as String,transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
 as String,russian: null == russian ? _self.russian : russian // ignore: cast_nullable_to_non_nullable
 as String,languageId: null == languageId ? _self.languageId : languageId // ignore: cast_nullable_to_non_nullable
+as int,levelId: null == levelId ? _self.levelId : levelId // ignore: cast_nullable_to_non_nullable
+as int,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId, @JsonKey(name: 'level_id')  int levelId, @JsonKey(name: 'category_id')  int categoryId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Word() when $default != null:
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId);case _:
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId, @JsonKey(name: 'level_id')  int levelId, @JsonKey(name: 'category_id')  int categoryId)  $default,) {final _that = this;
 switch (_that) {
 case _Word():
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId);}
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +194,10 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String word,  String transcription,  String russian, @JsonKey(name: 'language_id')  int languageId, @JsonKey(name: 'level_id')  int levelId, @JsonKey(name: 'category_id')  int categoryId)?  $default,) {final _that = this;
 switch (_that) {
 case _Word() when $default != null:
-return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId);case _:
+return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.languageId,_that.levelId,_that.categoryId);case _:
   return null;
 
 }
@@ -207,7 +209,7 @@ return $default(_that.id,_that.word,_that.transcription,_that.russian,_that.lang
 @JsonSerializable()
 
 class _Word implements Word {
-  const _Word({required this.id, required this.word, required this.transcription, required this.russian, @JsonKey(name: 'language_id') required this.languageId});
+  const _Word({required this.id, required this.word, required this.transcription, required this.russian, @JsonKey(name: 'language_id') required this.languageId, @JsonKey(name: 'level_id') required this.levelId, @JsonKey(name: 'category_id') required this.categoryId});
   factory _Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
 @override final  int id;
@@ -215,6 +217,8 @@ class _Word implements Word {
 @override final  String transcription;
 @override final  String russian;
 @override@JsonKey(name: 'language_id') final  int languageId;
+@override@JsonKey(name: 'level_id') final  int levelId;
+@override@JsonKey(name: 'category_id') final  int categoryId;
 
 /// Create a copy of Word
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Word&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Word&&(identical(other.id, id) || other.id == id)&&(identical(other.word, word) || other.word == word)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.russian, russian) || other.russian == russian)&&(identical(other.languageId, languageId) || other.languageId == languageId)&&(identical(other.levelId, levelId) || other.levelId == levelId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId);
+int get hashCode => Object.hash(runtimeType,id,word,transcription,russian,languageId,levelId,categoryId);
 
 @override
 String toString() {
-  return 'Word(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId)';
+  return 'Word(id: $id, word: $word, transcription: $transcription, russian: $russian, languageId: $languageId, levelId: $levelId, categoryId: $categoryId)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$WordCopyWith<$Res> implements $WordCopyWith<$Res> {
   factory _$WordCopyWith(_Word value, $Res Function(_Word) _then) = __$WordCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String word, String transcription, String russian,@JsonKey(name: 'language_id') int languageId
+ int id, String word, String transcription, String russian,@JsonKey(name: 'language_id') int languageId,@JsonKey(name: 'level_id') int levelId,@JsonKey(name: 'category_id') int categoryId
 });
 
 
@@ -266,13 +270,15 @@ class __$WordCopyWithImpl<$Res>
 
 /// Create a copy of Word
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? word = null,Object? transcription = null,Object? russian = null,Object? languageId = null,Object? levelId = null,Object? categoryId = null,}) {
   return _then(_Word(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,word: null == word ? _self.word : word // ignore: cast_nullable_to_non_nullable
 as String,transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
 as String,russian: null == russian ? _self.russian : russian // ignore: cast_nullable_to_non_nullable
 as String,languageId: null == languageId ? _self.languageId : languageId // ignore: cast_nullable_to_non_nullable
+as int,levelId: null == levelId ? _self.levelId : levelId // ignore: cast_nullable_to_non_nullable
+as int,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

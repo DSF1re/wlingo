@@ -33,7 +33,7 @@ final class AuditionNotifierProvider
   AuditionNotifier create() => AuditionNotifier();
 }
 
-String _$auditionNotifierHash() => r'45185501ff378346af13a2dc9432905f16dd804d';
+String _$auditionNotifierHash() => r'0c8caedbdf5a7a5c28a67bae0a4dbaaf6c5280da';
 
 abstract class _$AuditionNotifier extends $AsyncNotifier<List<WordEntity>> {
   FutureOr<List<WordEntity>> build();

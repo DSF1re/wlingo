@@ -240,7 +240,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateLabel => 'Date';
 
   @override
-  String get pdf_files_only => 'PDF files only';
+  String get pdf_files_only => 'PDF and MD files only';
 
   @override
   String get user_management => 'User Management';
@@ -368,4 +368,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get xp => 'XP';
+
+  @override
+  String get streakOnFire => 'You\'re on fire!';
+
+  @override
+  String get continueText => 'Continue';
 }

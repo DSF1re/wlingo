@@ -9,6 +9,8 @@ extension WordMapper on Word {
       transcription: transcription,
       russian: russian,
       languageId: languageId,
+      levelId: levelId,
+      categoryId: categoryId,
       image: image,
     );
   }

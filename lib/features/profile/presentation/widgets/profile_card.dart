@@ -92,64 +92,65 @@ class ProfileCard extends HookConsumerWidget {
           ),
           const SizedBox(height: 12),
           if (user.isAdmin) ...[_buildAdminBadge(), const SizedBox(height: 12)],
-          Row(
-            children: [
-              _buildStreakBadge(),
-              const SizedBox(width: 8),
-              _buildRatingBadge(),
-              const SizedBox(width: 8),
-              ratingAsync.when(
-                data: (points) {
-                  if (points <= 100 || user.isAdmin) {
-                    return const SizedBox.shrink();
-                  }
-                  final selectedLangId = ref.watch(langStateProvider);
-                  final languagesAsync = ref.watch(languagesProvider);
+          if (!user.isAdmin)
+            Row(
+              children: [
+                _buildStreakBadge(),
+                const SizedBox(width: 8),
+                _buildRatingBadge(),
+                const SizedBox(width: 8),
+                ratingAsync.when(
+                  data: (points) {
+                    if (points <= 100 || user.isAdmin) {
+                      return const SizedBox.shrink();
+                    }
+                    final selectedLangId = ref.watch(langStateProvider);
+                    final languagesAsync = ref.watch(languagesProvider);
 
-                  return languagesAsync.when(
-                    data: (languages) {
-                      final selectedLang = languages.firstWhere(
-                        (lang) => lang.id == selectedLangId,
-                        orElse: () => Language(id: 0, name: ''),
-                      );
+                    return languagesAsync.when(
+                      data: (languages) {
+                        final selectedLang = languages.firstWhere(
+                          (lang) => lang.id == selectedLangId,
+                          orElse: () => Language(id: 0, name: ''),
+                        );
 
-                      if (selectedLang.id == 0) {
-                        return const SizedBox.shrink();
-                      }
+                        if (selectedLang.id == 0) {
+                          return const SizedBox.shrink();
+                        }
 
-                      return IconButton.filledTonal(
-                        onPressed: () => CertificateService.generateAndDownload(
-                          userId: user.id,
-                          userName: '${user.firstName} ${user.lastName}',
-                          languageId: selectedLang.id,
-                          languageName: selectedLang.name,
-                          loc: loc,
-                        ),
-                        icon: const Icon(
-                          Icons.workspace_premium_rounded,
-                          size: 20,
-                        ),
-                        tooltip: loc.downloadCertificate,
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.blue.withValues(
-                            alpha: isDark ? 0.15 : 0.12,
+                        return IconButton.filledTonal(
+                          onPressed: () => CertificateService.generateAndDownload(
+                            userId: user.id,
+                            userName: '${user.firstName} ${user.lastName}',
+                            languageId: selectedLang.id,
+                            languageName: selectedLang.name,
+                            loc: loc,
                           ),
-                          foregroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                          icon: const Icon(
+                            Icons.workspace_premium_rounded,
+                            size: 20,
                           ),
-                        ),
-                      );
-                    },
-                    loading: () => const SizedBox.shrink(),
-                    error: (_, _) => const SizedBox.shrink(),
-                  );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (_, _) => const SizedBox.shrink(),
-              ),
-            ],
-          ),
+                          tooltip: loc.downloadCertificate,
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.blue.withValues(
+                              alpha: isDark ? 0.15 : 0.12,
+                            ),
+                            foregroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
+                ),
+              ],
+            ),
         ],
       ),
     );

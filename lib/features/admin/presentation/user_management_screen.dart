@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/admin/application/admin_report_service.dart';
-import 'package:wlingo/features/admin/presentation/widgets/admin_edit_user_sheet.dart';
+// import 'package:wlingo/features/admin/presentation/widgets/admin_edit_user_sheet.dart';
 import 'package:wlingo/features/auth/domain/usecases/get_all_users_usecase.dart';
 import 'package:wlingo/features/auth/domain/usecases/get_users_with_ratings_usecase.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
@@ -171,31 +171,35 @@ class AdminUsersScreen extends HookConsumerWidget {
                                   user.isAdmin ? loc.admin : loc.user,
                                   style: ThemeTextStyles.caption(
                                     isDark: isDark,
-                                    color: (isDark ? Colors.white : Colors.black)
-                                        .withValues(alpha: 0.5),
+                                    color:
+                                        (isDark ? Colors.white : Colors.black)
+                                            .withValues(alpha: 0.5),
                                   ),
                                 ),
                                 if (user.createdAt != null)
                                   Text(
-                                    DateFormat('dd.MM.yyyy').format(user.createdAt!),
+                                    DateFormat(
+                                      'dd.MM.yyyy',
+                                    ).format(user.createdAt!),
                                     style: ThemeTextStyles.caption(
                                       isDark: isDark,
-                                      color: (isDark ? Colors.white : Colors.black)
-                                          .withValues(alpha: 0.35),
+                                      color:
+                                          (isDark ? Colors.white : Colors.black)
+                                              .withValues(alpha: 0.35),
                                     ),
                                   ),
                               ],
                             ),
-                            trailing: const Icon(Icons.edit_note_rounded),
+                            // trailing: const Icon(Icons.edit_note_rounded),
                             onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) =>
-                                    AdminEditUserSheet(user: user, loc: loc),
-                              );
+                              // showModalBottomSheet(
+                              //   context: context,
+                              //   useRootNavigator: true,
+                              //   isScrollControlled: true,
+                              //   backgroundColor: Colors.transparent,
+                              //   builder: (context) =>
+                              //       AdminEditUserSheet(user: user, loc: loc),
+                              // );
                             },
                           ),
                         );
