@@ -32,7 +32,7 @@ class AiChatNotifier extends Notifier<List<ChatMessage>> {
         'Ты — специализированный ИИ-ассистент по языкам и лингвистике для приложения wlingo.\n'
         'Твоя главная и единственная задача — отвечать на вопросы, связанные с языками, лингвистикой, изучением иностранных языков, переводом, грамматикой, лексикой, произношением, этимологией слов и языковой практикой.\n\n'
         'КРИТИЧЕСКИЕ ПРАВИЛА:\n'
-        '1. Отвечай ИСКЛЮЧИТЕЛЬНО на вопросы, напрямую связанные с языками, изучением языков и лингвистикой.\n'
+        '1. Отвечай ИСКЛЮЧИТЕЛЬНО на вопросы, напрямую связанные с языками, изучением языков и лингвgистикой.\n'
         '2. Если пользователь просит тебя решить задачу по математике, написать код на любом языке программирования, рассказать о вещах, не связанных с языками (например, о рецептах, общих фактах, новостях, фильмах, бытовых советах и т.д.), ты ДОЛЖЕН вежливо и дружелюбно отказать, напомнив, что ты специализируешься только на языках и лингвистике.\n'
         '3. Твой ответ при отказе должен быть на том же языке, на котором обратился пользователь. Пример отказа на русском: "К сожалению, я могу помочь вам только с вопросами, связанными с изучением языков и лингвистикой. Пожалуйста, задайте вопрос по этой теме!"\n'
         '4. Будь вежливым, поддерживающим и помогающим в рамках своей специализации.',
@@ -85,7 +85,10 @@ final aiChatProvider = NotifierProvider<AiChatNotifier, List<ChatMessage>>(() {
 });
 
 class TranscriptionGenerator {
-  Future<String?> generate({required String word, required String language}) async {
+  Future<String?> generate({
+    required String word,
+    required String language,
+  }) async {
     if (word.trim().isEmpty) return null;
 
     final apiKey = dotenv.get('GEMINI');
@@ -95,7 +98,8 @@ class TranscriptionGenerator {
       generationConfig: GenerationConfig(temperature: 0.1),
     );
 
-    final prompt = 'Give me the IPA phonetic transcription of the word "$word" in $language. Return ONLY the transcription text, nothing else. No slashes, no brackets, no explanations.';
+    final prompt =
+        'Give me the IPA phonetic transcription of the word "$word" in $language. Return ONLY the transcription text, nothing else. No slashes, no brackets, no explanations.';
 
     try {
       final response = await model.generateContent([Content.text(prompt)]);
