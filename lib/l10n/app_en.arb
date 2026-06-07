@@ -139,5 +139,9 @@
   "days": "Days",
   "xp": "XP",
   "streakOnFire": "You're on fire!",
-  "continueText": "Continue"
+  "continueText": "Continue",
+  "course_popularity": "Course Popularity",
+  "course_statistics": "Course Statistics",
+  "course": "Course",
+  "users_count": "Users"
 }

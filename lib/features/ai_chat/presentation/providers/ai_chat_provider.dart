@@ -83,3 +83,29 @@ class AiChatNotifier extends Notifier<List<ChatMessage>> {
 final aiChatProvider = NotifierProvider<AiChatNotifier, List<ChatMessage>>(() {
   return AiChatNotifier();
 });
+
+class TranscriptionGenerator {
+  Future<String?> generate({required String word, required String language}) async {
+    if (word.trim().isEmpty) return null;
+
+    final apiKey = dotenv.get('GEMINI');
+    final model = GenerativeModel(
+      model: 'gemini-2.5-flash',
+      apiKey: apiKey,
+      generationConfig: GenerationConfig(temperature: 0.1),
+    );
+
+    final prompt = 'Give me the IPA phonetic transcription of the word "$word" in $language. Return ONLY the transcription text, nothing else. No slashes, no brackets, no explanations.';
+
+    try {
+      final response = await model.generateContent([Content.text(prompt)]);
+      return response.text?.trim();
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+final transcriptionGeneratorProvider = Provider<TranscriptionGenerator>((ref) {
+  return TranscriptionGenerator();
+});

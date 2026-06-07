@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/shared/shared_provider.dart';
+import 'package:wlingo/features/ai_chat/presentation/providers/ai_chat_provider.dart';
+import 'package:wlingo/features/home/data/models/language.dart';
 import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/add_word_notifier.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
@@ -37,6 +40,34 @@ class AddWordScreen extends HookConsumerWidget {
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final errorMessage = useState<String?>(null);
+    final isTranscribing = useState(false);
+
+    useEffect(() {
+      final word = wordController.text.trim();
+      if (word.isEmpty) return null;
+
+      final timer = Timer(const Duration(milliseconds: 600), () {
+        isTranscribing.value = true;
+
+        final langs = languagesAsync.asData?.value ?? [];
+        final langName = langs.firstWhere(
+          (l) => l.id == selectedLangId.value,
+          orElse: () => Language(id: 1, name: 'English'),
+        ).name;
+
+        ref.read(transcriptionGeneratorProvider).generate(
+          word: word,
+          language: langName,
+        ).then((result) {
+          if (result != null && result.isNotEmpty) {
+            transcriptionController.text = result;
+          }
+          isTranscribing.value = false;
+        });
+      });
+
+      return timer.cancel;
+    }, [wordController.text, selectedLangId.value, languagesAsync]);
 
     ref.listen<AsyncValue>(addWordProvider, (_, state) {
       if (state.hasError) {
@@ -205,15 +236,27 @@ class AddWordScreen extends HookConsumerWidget {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: transcriptionController,
+                            readOnly: true,
                             style: ThemeTextStyles.regular(isDark: isDark),
                             decoration: premiumDecoration(
                               label: loc.transcription,
                               icon: Icons.record_voice_over_rounded,
                               isDark: isDark,
+                            ).copyWith(
+                              suffixIcon: isTranscribing.value
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(14),
+                                      child: SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: AppColors.primaryBlueLight,
+                                        ),
+                                      ),
+                                    )
+                                  : null,
                             ),
-                            validator: (value) => value == null || value.isEmpty
-                                ? loc.fill_field
-                                : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(

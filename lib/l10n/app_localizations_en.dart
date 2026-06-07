@@ -374,4 +374,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get continueText => 'Continue';
+
+  @override
+  String get course_popularity => 'Course Popularity';
+
+  @override
+  String get course_statistics => 'Course Statistics';
+
+  @override
+  String get course => 'Course';
+
+  @override
+  String get users_count => 'Users';
 }

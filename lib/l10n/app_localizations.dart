@@ -820,6 +820,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get continueText;
+
+  /// No description provided for @course_popularity.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Popularity'**
+  String get course_popularity;
+
+  /// No description provided for @course_statistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Statistics'**
+  String get course_statistics;
+
+  /// No description provided for @course.
+  ///
+  /// In en, this message translates to:
+  /// **'Course'**
+  String get course;
+
+  /// No description provided for @users_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Users'**
+  String get users_count;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

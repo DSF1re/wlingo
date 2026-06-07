@@ -374,4 +374,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get continueText => 'Продолжить';
+
+  @override
+  String get course_popularity => 'Популярность курсов';
+
+  @override
+  String get course_statistics => 'Статистика курсов';
+
+  @override
+  String get course => 'Курс';
+
+  @override
+  String get users_count => 'Пользователи';
 }

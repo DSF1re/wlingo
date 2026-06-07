@@ -139,5 +139,9 @@
   "days": "Дней",
   "xp": "XP",
   "streakOnFire": "Вы в ударе!",
-  "continueText": "Продолжить"
+  "continueText": "Продолжить",
+  "course_popularity": "Популярность курсов",
+  "course_statistics": "Статистика курсов",
+  "course": "Курс",
+  "users_count": "Пользователи"
 }
