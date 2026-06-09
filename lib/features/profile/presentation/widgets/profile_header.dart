@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
+import 'package:wlingo/theme/spacing.dart';
 
 class ProfileHeaderSection extends ConsumerWidget {
   final dynamic user;
@@ -27,7 +28,7 @@ class ProfileHeaderSection extends ConsumerWidget {
               isDark: isDark,
               loc: loc,
             ),
-            const SizedBox(height: 24),
+            Spacing.hXxl,
             Text(
               (user.isAdmin
                       ? (loc.registration as String)
@@ -42,7 +43,7 @@ class ProfileHeaderSection extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            Spacing.hMd,
           ],
         ),
       ),

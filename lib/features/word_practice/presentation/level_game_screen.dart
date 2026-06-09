@@ -9,6 +9,7 @@ import 'package:wlingo/features/word_practice/presentation/widgets/audition_task
 import 'package:wlingo/features/word_practice/presentation/widgets/pronunciation_task_view.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/base_screen.dart';
 
@@ -39,18 +40,47 @@ class LevelGameScreen extends HookConsumerWidget {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text(loc.level_completed),
-            content: Text(loc.level_completed_desc),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.go(Routes.home);
-                },
-                child: Text(loc.ok),
+          builder: (ctx) => Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(Spacing.xxl),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkSurface : Colors.white,
+                borderRadius: BorderRadius.circular(28),
               ),
-            ],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    loc.level_completed,
+                    style: ThemeTextStyles.title1SemiBold(isDark: isDark),
+                  ),
+                  Spacing.hMd,
+                  Text(
+                    loc.level_completed_desc,
+                    textAlign: TextAlign.center,
+                    style: ThemeTextStyles.regular(
+                      isDark: isDark,
+                      color: (isDark ? Colors.white : Colors.black)
+                          .withValues(alpha: 0.7),
+                    ),
+                  ),
+                  Spacing.hXxl,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      context.go(Routes.home);
+                    },
+                    child: Text(
+                      loc.ok,
+                      style: ThemeTextStyles.title2Heavy(
+                        color: AppColors.primaryBlue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       }
@@ -68,7 +98,7 @@ class LevelGameScreen extends HookConsumerWidget {
                   onTap: () => context.go(Routes.home),
                   child: const Icon(Icons.arrow_back_rounded),
                 ),
-                const SizedBox(width: 12),
+                Spacing.wMd,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +110,7 @@ class LevelGameScreen extends HookConsumerWidget {
                           fontSize: 20,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      Spacing.hSm,
                       LinearProgressIndicator(
                         value: (currentTaskIndex.value + 1) / tasks.length,
                         backgroundColor: AppColors.primaryBlue.withValues(

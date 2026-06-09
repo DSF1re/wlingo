@@ -4,6 +4,7 @@ import 'package:wlingo/features/vocabulary/presentation/providers/vocabulary_pro
 import 'package:wlingo/features/word_practice/presentation/providers/tts/tts_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/base_screen.dart';
 import 'package:wlingo/widgets/glass_box.dart';
@@ -44,7 +45,7 @@ class VocabularyListScreen extends HookConsumerWidget {
                       itemBuilder: (context, index) {
                         final word = words[index];
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.only(bottom: Spacing.md),
                           child: GlassBox(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -99,7 +100,7 @@ class VocabularyListScreen extends HookConsumerWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 14),
+                                Spacing.w14,
                                 Bounceable(
                                   onTap: () {
                                     final langCode = getTtsLanguageCode(

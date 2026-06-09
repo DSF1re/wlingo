@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 
@@ -13,7 +14,7 @@ class StreakBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.sm + 2, vertical: Spacing.sm),
       decoration: BoxDecoration(
         color: Colors.orange.withValues(alpha: isDark ? 0.15 : 0.12),
         borderRadius: BorderRadius.circular(12),
@@ -39,7 +40,7 @@ class RatingBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.sm + 2, vertical: Spacing.sm),
       decoration: BoxDecoration(
         color: Colors.amber.withValues(alpha: isDark ? 0.15 : 0.12),
         borderRadius: BorderRadius.circular(12),

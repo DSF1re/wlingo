@@ -399,4 +399,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdf_title => 'PDF Document';
+
+  @override
+  String get generate => 'Generate';
 }

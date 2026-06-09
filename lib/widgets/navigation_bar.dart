@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
@@ -26,15 +27,16 @@ class BottomNavBar extends ConsumerWidget {
     );
 
     final items = navBarItems(context, isAdmin: isAdmin);
+    final blueDim = AppColors.primaryBlue.withValues(alpha: 0.15);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      padding: const EdgeInsets.fromLTRB(Spacing.xl, 0, Spacing.xl, Spacing.xl),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: AppColors.blue.withValues(alpha: 0.15),
+              color: blueDim,
               blurRadius: 24,
               spreadRadius: 2,
               offset: const Offset(0, 4),
@@ -42,13 +44,13 @@ class BottomNavBar extends ConsumerWidget {
           ],
         ),
         child: GlassBox(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: Spacing.xs, horizontal: Spacing.xs),
           opacity: isDark ? 0.35 : 0.75,
           blur: 20,
           borderRadius: BorderRadius.circular(32),
           color: isDark ? Colors.black : Colors.white,
           border: Border.all(
-            color: AppColors.blue.withValues(alpha: isDark ? 0.15 : 0.1),
+            color: AppColors.primaryBlue.withValues(alpha: isDark ? 0.15 : 0.1),
             width: 1.5,
           ),
           child: Row(
@@ -70,7 +72,7 @@ class BottomNavBar extends ConsumerWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.blue.withValues(alpha: 0.15)
+                        ? blueDim
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(32),
                   ),
@@ -81,7 +83,7 @@ class BottomNavBar extends ConsumerWidget {
                         isSelected ? item.activeIcon : item.icon,
                         size: 28,
                         color: isSelected
-                            ? AppColors.blue
+                            ? AppColors.primaryBlue
                             : (isDark ? Colors.white54 : Colors.black38),
                       ),
                       Text(

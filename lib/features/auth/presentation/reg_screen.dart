@@ -6,6 +6,7 @@ import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/core/router/routes.dart';
 import 'package:wlingo/features/auth/presentation/providers/register_controller.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -87,18 +88,18 @@ class RegisterScreen extends HookConsumerWidget {
                               isDark: isDark,
                             ).copyWith(fontSize: 26, letterSpacing: -0.5),
                           ),
-                          const SizedBox(height: 24),
+                          Spacing.hXxl,
                           Input(controller: lastName, labelText: loc.last_name),
-                          const SizedBox(height: 12),
+                          Spacing.hMd,
                           Input(
                             controller: firstName,
                             labelText: loc.first_name,
                           ),
-                          const SizedBox(height: 12),
+                          Spacing.hMd,
                           Input(controller: midName, labelText: loc.mid_name),
-                          const SizedBox(height: 12),
+                          Spacing.hMd,
                           Input(controller: email, labelText: loc.email),
-                          const SizedBox(height: 12),
+                          Spacing.hMd,
                           Input(
                             controller: password,
                             labelText: loc.password,
@@ -116,7 +117,7 @@ class RegisterScreen extends HookConsumerWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          Spacing.hXxl,
                           Button(
                             isLoading: isLoading,
                             text: loc.sign_up,

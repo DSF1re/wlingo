@@ -113,3 +113,33 @@ class TranscriptionGenerator {
 final transcriptionGeneratorProvider = Provider<TranscriptionGenerator>((ref) {
   return TranscriptionGenerator();
 });
+
+class TranslationGenerator {
+  Future<String?> generate({
+    required String word,
+    required String language,
+  }) async {
+    if (word.trim().isEmpty) return null;
+
+    final apiKey = dotenv.get('GEMINI');
+    final model = GenerativeModel(
+      model: 'gemini-2.5-flash',
+      apiKey: apiKey,
+      generationConfig: GenerationConfig(temperature: 0.1),
+    );
+
+    final prompt =
+        'Translate the word "$word" from $language to Russian. Return ONLY the translation (one word or short phrase), nothing else.';
+
+    try {
+      final response = await model.generateContent([Content.text(prompt)]);
+      return response.text?.trim();
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+final translationGeneratorProvider = Provider<TranslationGenerator>((ref) {
+  return TranslationGenerator();
+});

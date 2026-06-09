@@ -12,6 +12,7 @@ class Input extends StatelessWidget {
   final double width;
   final bool isObscured;
   final Widget? suffixIcon;
+  final String? Function(String?)? validator;
   const Input({
     super.key,
     this.style,
@@ -23,6 +24,7 @@ class Input extends StatelessWidget {
     this.width = double.infinity,
     this.isObscured = false,
     this.suffixIcon,
+    this.validator,
   });
 
   @override
@@ -40,10 +42,11 @@ class Input extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: isObscured,
         style: style ?? ThemeTextStyles.regular(isDark: isDark),
+        validator: validator,
         decoration: InputDecoration(
           filled: true,
           fillColor: isDark ? AppColors.inputDark : AppColors.inputLight,

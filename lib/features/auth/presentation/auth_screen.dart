@@ -9,6 +9,7 @@ import 'package:wlingo/features/auth/presentation/providers/auth_controller.dart
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/images.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -89,7 +90,7 @@ class AuthScreen extends HookConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset(AppImages.icon, width: 140),
-                          const SizedBox(height: 20),
+                          Spacing.hXl,
                           Text(
                             loc.promo_auth,
                             textAlign: TextAlign.center,
@@ -98,9 +99,9 @@ class AuthScreen extends HookConsumerWidget {
                               isDark: isDark,
                             ),
                           ),
-                          const SizedBox(height: 28),
+                          Spacing.h28,
                           Input(controller: emailController, hint: loc.email),
-                          const SizedBox(height: 14),
+                          Spacing.h14,
                           Input(
                             controller: passwordController,
                             isObscured: !showPassword.value,

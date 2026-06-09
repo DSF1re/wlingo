@@ -154,5 +154,6 @@
     }
   },
   "retry_error": "Ошибка: {message}",
-  "pdf_title": "PDF Документ"
+  "pdf_title": "PDF Документ",
+  "generate": "Сгенерировать"
 }

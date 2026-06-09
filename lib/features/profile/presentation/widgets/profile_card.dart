@@ -5,6 +5,7 @@ import 'package:wlingo/features/profile/presentation/widgets/edit_profile.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_badges.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
@@ -54,7 +55,7 @@ class ProfileCard extends StatelessWidget {
           Row(
             children: [
               _Avatar(initials: _initials()),
-              const SizedBox(width: 14),
+              Spacing.w14,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,15 +85,15 @@ class ProfileCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          if (user.isAdmin) ...[AdminBadge(isDark: isDark, loc: loc), const SizedBox(height: 12)],
+          Spacing.hMd,
+          if (user.isAdmin) ...[AdminBadge(isDark: isDark, loc: loc), Spacing.hMd],
           if (!user.isAdmin)
             Row(
               children: [
                 StreakBadge(user: user, isDark: isDark),
-                const SizedBox(width: 8),
+                Spacing.wSm,
                 RatingBadge(points: user.xp, isDark: isDark),
-                const SizedBox(width: 8),
+                Spacing.wSm,
                 CertificateDownloadButton(user: user, isDark: isDark, loc: loc),
               ],
             ),

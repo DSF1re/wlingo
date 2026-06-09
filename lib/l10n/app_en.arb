@@ -154,5 +154,6 @@
     }
   },
   "retry_error": "Error: {message}",
-  "pdf_title": "PDF Document"
+  "pdf_title": "PDF Document",
+  "generate": "Generate"
 }

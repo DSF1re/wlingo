@@ -10,6 +10,7 @@ import 'package:wlingo/features/onboarding/presentation/widgets/bottom_onboardin
 import 'package:wlingo/features/onboarding/presentation/widgets/dots.dart';
 import 'package:wlingo/features/onboarding/presentation/widgets/onboarding_pageview.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -60,7 +61,7 @@ class OnboardingScreen extends HookConsumerWidget {
                     currentPage: currentPage,
                     items: onboardingData,
                   ),
-                  const SizedBox(height: 24),
+                  Spacing.hXxl,
                   Column(
                     spacing: 8,
                     children: [

@@ -14,6 +14,7 @@ import 'package:wlingo/features/word_practice/presentation/add_word_screen.dart'
     as w;
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
+import 'package:wlingo/theme/spacing.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/appbar_actions.dart';
 import 'package:wlingo/widgets/base_screen.dart';
@@ -71,7 +72,7 @@ class HomeScreen extends HookConsumerWidget {
                       Row(
                         children: [
                           AppbarActions(isDark: isDark),
-                          const SizedBox(width: 8),
+                          Spacing.wSm,
                           IconButton(
                             onPressed: () async {
                               ref.read(signOutUseCaseProvider).call();
@@ -83,17 +84,17 @@ class HomeScreen extends HookConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  Spacing.hLg,
                 ],
               ),
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: Spacing.xl),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 langList,
-                const SizedBox(height: 24),
+                Spacing.hXxl,
                 if (!isAdmin)
                   MenuTile(
                     icon: Icons.layers_rounded,
@@ -131,7 +132,7 @@ class HomeScreen extends HookConsumerWidget {
                 MenuTile(
                   icon: Icons.smart_toy_rounded,
                   title: loc.ai_chat,
-                  iconColor: AppColors.blue,
+                  iconColor: AppColors.primaryBlue,
                   onTap: () => context.push(Routes.aiChat),
                 ),
                 if (isAdmin) ...[
