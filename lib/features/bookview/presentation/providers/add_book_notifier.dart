@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wlingo/features/bookview/domain/usecases/add_book_usecase.dart';
+import 'package:wlingo/features/bookview/presentation/providers/usecase_providers.dart';
 
 part 'add_book_notifier.g.dart';
 

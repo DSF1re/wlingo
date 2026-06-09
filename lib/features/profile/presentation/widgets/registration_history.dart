@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:wlingo/features/auth/domain/usecases/get_all_users_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/usecase_providers.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/text_styles.dart';
 

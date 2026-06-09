@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
+import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/features/admin/presentation/user_management_screen.dart';
 import 'package:wlingo/features/auth/presentation/auth_screen.dart';
 import 'package:wlingo/features/bookview/presentation/book_screen.dart';
@@ -89,7 +90,8 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((ref) {
         path: Routes.pdf,
         builder: (context, state) {
           final url = state.uri.queryParameters['url'] ?? '';
-          final title = state.uri.queryParameters['title'] ?? 'PDF';
+          final loc = AppLocalizations.of(context)!;
+          final title = state.uri.queryParameters['title'] ?? loc.pdf_title;
           final bookId = state.uri.queryParameters['bookId'] ?? '0';
 
           return PdfViewerScreen(url: url, title: title, bookId: bookId);

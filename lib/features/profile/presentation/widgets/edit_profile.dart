@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/auth/domain/usecases/update_profile_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/usecase_providers.dart';
 import 'package:wlingo/features/auth/presentation/providers/current_user_provider.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/widgets/user_edit_sheet.dart';
@@ -23,6 +23,7 @@ class EditProfileSheet extends ConsumerWidget {
       onSave: (first, last, middle) async {
         final updateProfile = ref.read(updateProfileUseCaseProvider);
         final result = await updateProfile(
+          userId: user.id,
           firstName: first,
           lastName: last,
           middleName: middle,

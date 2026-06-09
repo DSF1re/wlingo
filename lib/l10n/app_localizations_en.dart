@@ -386,4 +386,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get users_count => 'Users';
+
+  @override
+  String level_task_progress(String label, int current, int total) {
+    return '$label - $current/$total';
+  }
+
+  @override
+  String retry_error(Object message) {
+    return 'Error: $message';
+  }
+
+  @override
+  String get pdf_title => 'PDF Document';
 }

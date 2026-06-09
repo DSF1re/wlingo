@@ -1,19 +1,10 @@
 import 'package:either_dart/either.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
-import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
-
-part 'update_user_admin_usecase.g.dart';
-
-@riverpod
-UpdateUserAdminUseCase updateUserAdminUseCase(Ref ref) {
-  return UpdateUserAdminUseCase(ref.watch(authRepositoryProvider));
-}
+import 'package:wlingo/features/auth/domain/repositories/user_repository.dart';
 
 class UpdateUserAdminUseCase {
-  final AuthRepository _repository;
+  final UserRepository _repository;
 
   UpdateUserAdminUseCase(this._repository);
 

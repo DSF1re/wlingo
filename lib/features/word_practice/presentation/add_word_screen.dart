@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/features/ai_chat/presentation/providers/ai_chat_provider.dart';
 import 'package:wlingo/features/home/data/models/language.dart';
-import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
+import 'package:wlingo/features/home/presentation/providers/langlist_provider.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/add_word_notifier.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';

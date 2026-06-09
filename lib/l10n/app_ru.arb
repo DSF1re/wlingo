@@ -143,5 +143,16 @@
   "course_popularity": "Популярность курсов",
   "course_statistics": "Статистика курсов",
   "course": "Курс",
-  "users_count": "Пользователи"
+  "users_count": "Пользователи",
+  "level_task_progress": "{label} - {current}/{total}",
+  "@level_task_progress": {
+    "description": "Индикатор прогресса в окне уровня",
+    "placeholders": {
+      "label": { "type": "String" },
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "retry_error": "Ошибка: {message}",
+  "pdf_title": "PDF Документ"
 }

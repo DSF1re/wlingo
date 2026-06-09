@@ -1,16 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
-import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
-
-part 'sign_in_usecase.g.dart';
-
-@riverpod
-SignInUseCase signInUseCase(Ref ref) {
-  return SignInUseCase(ref.watch(authRepositoryProvider));
-}
 
 class SignInUseCase {
   final AuthRepository _repository;

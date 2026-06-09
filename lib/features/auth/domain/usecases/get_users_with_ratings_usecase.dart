@@ -1,18 +1,9 @@
 import 'package:either_dart/either.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
-import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
-import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
-
-part 'get_users_with_ratings_usecase.g.dart';
-
-@riverpod
-GetUsersWithRatingsUseCase getUsersWithRatingsUseCase(Ref ref) {
-  return GetUsersWithRatingsUseCase(ref.watch(authRepositoryProvider));
-}
+import 'package:wlingo/features/auth/domain/repositories/user_repository.dart';
 
 class GetUsersWithRatingsUseCase {
-  final AuthRepository _repository;
+  final UserRepository _repository;
 
   GetUsersWithRatingsUseCase(this._repository);
 

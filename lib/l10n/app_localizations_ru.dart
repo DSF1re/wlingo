@@ -386,4 +386,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get users_count => 'Пользователи';
+
+  @override
+  String level_task_progress(String label, int current, int total) {
+    return '$label - $current/$total';
+  }
+
+  @override
+  String retry_error(Object message) {
+    return 'Ошибка: $message';
+  }
+
+  @override
+  String get pdf_title => 'PDF Документ';
 }

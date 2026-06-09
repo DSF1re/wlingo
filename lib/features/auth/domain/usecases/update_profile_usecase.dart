@@ -1,23 +1,15 @@
 import 'package:either_dart/either.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/core/failure/app_failure.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
-import 'package:wlingo/features/auth/presentation/providers/auth_provider.dart';
-
-part 'update_profile_usecase.g.dart';
-
-@riverpod
-UpdateProfileUseCase updateProfileUseCase(Ref ref) {
-  return UpdateProfileUseCase(ref.watch(authRepositoryProvider));
-}
+import 'package:wlingo/features/auth/domain/repositories/user_repository.dart';
 
 class UpdateProfileUseCase {
-  final AuthRepository _repository;
+  final UserRepository _repository;
 
   UpdateProfileUseCase(this._repository);
 
   Future<Either<AppFailure, UserEntity>> call({
+    required String userId,
     required String firstName,
     required String lastName,
     String? middleName,
@@ -57,6 +49,7 @@ class UpdateProfileUseCase {
     final formattedMiddleName = mName.isNotEmpty ? capitalizeWord(mName) : null;
 
     return _repository.updateProfile(
+      userId: userId,
       firstName: formattedFirstName,
       lastName: formattedLastName,
       middleName: formattedMiddleName,

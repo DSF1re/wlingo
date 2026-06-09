@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/routes.dart';
-import 'package:wlingo/features/onboarding/domain/providers/page/page_provider.dart';
+import 'package:wlingo/features/onboarding/presentation/providers/page/page_provider.dart';
 import 'package:wlingo/core/shared/shared_provider.dart';
 
 void onNextPressed(

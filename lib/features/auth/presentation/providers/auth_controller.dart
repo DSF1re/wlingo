@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/usecase_providers.dart';
 
 part 'auth_controller.g.dart';
 

@@ -7,7 +7,6 @@ import 'package:wlingo/core/global_variables/services.dart';
 import 'package:wlingo/features/auth/data/models/user/user.dart' as model;
 import 'package:wlingo/features/auth/data/models/user/user_mapper.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/auth/domain/entities/streak_update_result.dart';
 import 'package:wlingo/features/auth/domain/repositories/auth_repository.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
@@ -62,15 +61,6 @@ class SupabaseAuthRepository implements AuthRepository {
       talker.handle(e, st, 'SupabaseAuthRepository Error');
       return Left(_handleException(e));
     }
-  }
-
-  Future<UserEntity> _getProfileAndToEntity(String userId) async {
-    final response = await _client
-        .from('profiles')
-        .select(_profileSelect)
-        .eq('id', userId)
-        .single();
-    return model.User.fromJson(response).toEntity();
   }
 
   @override
@@ -152,29 +142,10 @@ class SupabaseAuthRepository implements AuthRepository {
       final supaUser = authResponse.user;
       if (supaUser == null) throw const AppFailure.nullUser();
 
-      return _getProfileAndToEntity(supaUser.id);
-    });
-  }
-
-  @override
-  Future<Either<AppFailure, UserEntity>> updateProfile({
-    required String firstName,
-    required String lastName,
-    String? middleName,
-  }) async {
-    return _safeCall(() async {
-      final userId = _client.auth.currentUser?.id;
-      if (userId == null) throw const AppFailure.nullUser();
-
       final response = await _client
           .from('profiles')
-          .update({
-            'first_name': firstName,
-            'last_name': lastName,
-            'mid_name': middleName,
-          })
-          .eq('id', userId)
-          .select()
+          .select(_profileSelect)
+          .eq('id', supaUser.id)
           .single();
 
       return model.User.fromJson(response).toEntity();
@@ -184,54 +155,6 @@ class SupabaseAuthRepository implements AuthRepository {
   @override
   Future<Either<AppFailure, void>> signOut() async {
     return _safeCall(() => _client.auth.signOut());
-  }
-
-  @override
-  Future<Either<AppFailure, List<UserEntity>>> getAllUsers() async {
-    return _safeCall(() async {
-      final response = await _client
-          .from('profiles')
-          .select()
-          .order('created_at', ascending: false)
-          .limit(50);
-      final List<dynamic> data = response as List<dynamic>;
-      return data.map((json) => model.User.fromJson(json).toEntity()).toList();
-    });
-  }
-
-  @override
-  Future<Either<AppFailure, List<Map<String, dynamic>>>>
-  getUsersWithRatings() async {
-    return _safeCall(() async {
-      final response = await _client
-          .from('profiles')
-          .select('*, rating(points)');
-      final List<dynamic> data = response as List<dynamic>;
-      return data.cast<Map<String, dynamic>>();
-    });
-  }
-
-  @override
-  Future<Either<AppFailure, UserEntity>> updateProfileById({
-    required String userId,
-    required String firstName,
-    required String lastName,
-    String? middleName,
-  }) async {
-    return _safeCall(() async {
-      final response = await _client
-          .from('profiles')
-          .update({
-            'first_name': firstName,
-            'last_name': lastName,
-            'mid_name': middleName,
-          })
-          .eq('id', userId)
-          .select()
-          .single();
-
-      return model.User.fromJson(response).toEntity();
-    });
   }
 
   @override
@@ -253,97 +176,6 @@ class SupabaseAuthRepository implements AuthRepository {
         return Right(model.User.fromJson(response).toEntity());
       } catch (e) {
         return Left(_handleException(e));
-      }
-    });
-  }
-
-  @override
-  Future<Either<AppFailure, void>> addXP(int amount) async {
-    return _safeCall(() async {
-      final userId = _client.auth.currentUser?.id;
-      if (userId == null) throw const AppFailure.nullUser();
-
-      // We use increment in SQL for atomicity
-      await _client.rpc(
-        'add_user_points',
-        params: {'target_user_id': userId, 'amount': amount},
-      );
-    });
-  }
-
-  @override
-  Future<Either<AppFailure, StreakUpdateResult?>> updateStreak() async {
-    return _safeCall(() async {
-      final userId = _client.auth.currentUser?.id;
-      if (userId == null) throw const AppFailure.nullUser();
-
-      final response = await _client
-          .from('profiles')
-          .select('streak, streak_last_date')
-          .eq('id', userId)
-          .single();
-
-      final lastDateStr = response['streak_last_date'] as String?;
-      final currentStreak = response['streak'] as int? ?? 0;
-      final now = DateTime.now().toUtc();
-      final today = DateTime.utc(now.year, now.month, now.day);
-
-      if (lastDateStr != null) {
-        final lastDate = DateTime.parse(lastDateStr).toUtc();
-        final lastDay = DateTime.utc(lastDate.year, lastDate.month, lastDate.day);
-
-        if (today.isAtSameMomentAs(lastDay)) {
-          return null; // Already updated today
-        }
-
-        final diffDays = today.difference(lastDay).inDays;
-
-        if (diffDays == 1) {
-          // Increment streak
-          await _client
-              .from('profiles')
-              .update({
-                'streak': currentStreak + 1,
-                'streak_last_date': today.toIso8601String(),
-              })
-              .eq('id', userId);
-              
-          return StreakUpdateResult(
-            didUpdate: true,
-            oldStreak: currentStreak,
-            newStreak: currentStreak + 1,
-            isReset: false,
-          );
-        } else {
-          // Reset streak
-          await _client
-              .from('profiles')
-              .update({
-                'streak': 1,
-                'streak_last_date': today.toIso8601String(),
-              })
-              .eq('id', userId);
-              
-          return StreakUpdateResult(
-            didUpdate: true,
-            oldStreak: currentStreak,
-            newStreak: 1,
-            isReset: true,
-          );
-        }
-      } else {
-        // First streak
-        await _client
-            .from('profiles')
-            .update({'streak': 1, 'streak_last_date': today.toIso8601String()})
-            .eq('id', userId);
-            
-        return const StreakUpdateResult(
-          didUpdate: true,
-          oldStreak: 0,
-          newStreak: 1,
-          isReset: false,
-        );
       }
     });
   }

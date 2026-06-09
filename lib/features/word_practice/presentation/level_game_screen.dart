@@ -74,7 +74,7 @@ class LevelGameScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${loc.level} - ${currentTaskIndex.value + 1}/5',
+                        loc.level_task_progress(loc.level, currentTaskIndex.value + 1, tasks.length),
                         style: ThemeTextStyles.custom(
                           isDark: isDark,
                           fontSize: 20,

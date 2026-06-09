@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/auth/domain/entities/user.dart';
-import 'package:wlingo/features/home/data/models/language.dart';
-import 'package:wlingo/features/home/domain/providers/langlist_provider.dart';
-import 'package:wlingo/features/profile/application/certificate_service.dart';
+import 'package:wlingo/features/profile/presentation/widgets/certificate_button.dart';
 import 'package:wlingo/features/profile/presentation/widgets/edit_profile.dart';
-import 'package:wlingo/features/word_practice/presentation/providers/lang_state/lang_state_provider.dart';
+import 'package:wlingo/features/profile/presentation/widgets/profile_badges.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
 
-class ProfileCard extends HookConsumerWidget {
+class ProfileCard extends StatelessWidget {
   final UserEntity user;
-  final AsyncValue<int> ratingAsync;
   final bool isDark;
   final AppLocalizations loc;
 
   const ProfileCard({
     super.key,
     required this.user,
-    required this.ratingAsync,
     required this.isDark,
     required this.loc,
   });
@@ -35,12 +30,14 @@ class ProfileCard extends HookConsumerWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final initials =
-        '${user.firstName.isNotEmpty ? user.firstName[0] : ''}${user.lastName.isNotEmpty ? user.lastName[0] : ''}'
-            .toUpperCase();
+  String _initials() {
+    final first = user.firstName.isNotEmpty ? user.firstName[0] : '';
+    final last = user.lastName.isNotEmpty ? user.lastName[0] : '';
+    return '$first$last'.toUpperCase();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GlassBox(
       padding: const EdgeInsets.all(16),
       opacity: isDark ? 0.08 : 0.35,
@@ -56,7 +53,7 @@ class ProfileCard extends HookConsumerWidget {
         children: [
           Row(
             children: [
-              _buildAvatar(initials),
+              _Avatar(initials: _initials()),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -64,17 +61,14 @@ class ProfileCard extends HookConsumerWidget {
                   children: [
                     Text(
                       '${user.firstName} ${user.lastName}',
-                      style: ThemeTextStyles.title1SemiBold(
-                        isDark: isDark,
-                      ).copyWith(fontSize: 18),
+                      style: ThemeTextStyles.title1SemiBold(isDark: isDark).copyWith(fontSize: 18),
                     ),
                     if (user.middleName != null && user.middleName!.isNotEmpty)
                       Text(
                         user.middleName!,
                         style: TextStyle(
                           fontSize: 13,
-                          color: (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0.45),
+                          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.45),
                         ),
                       ),
                   ],
@@ -91,161 +85,42 @@ class ProfileCard extends HookConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          if (user.isAdmin) ...[_buildAdminBadge(), const SizedBox(height: 12)],
+          if (user.isAdmin) ...[AdminBadge(isDark: isDark, loc: loc), const SizedBox(height: 12)],
           if (!user.isAdmin)
             Row(
               children: [
-                _buildStreakBadge(),
+                StreakBadge(user: user, isDark: isDark),
                 const SizedBox(width: 8),
-                _buildRatingBadge(),
+                RatingBadge(points: user.xp, isDark: isDark),
                 const SizedBox(width: 8),
-                ratingAsync.when(
-                  data: (points) {
-                    if (points <= 100 || user.isAdmin) {
-                      return const SizedBox.shrink();
-                    }
-                    final selectedLangId = ref.watch(langStateProvider);
-                    final languagesAsync = ref.watch(languagesProvider);
-
-                    return languagesAsync.when(
-                      data: (languages) {
-                        final selectedLang = languages.firstWhere(
-                          (lang) => lang.id == selectedLangId,
-                          orElse: () => Language(id: 0, name: ''),
-                        );
-
-                        if (selectedLang.id == 0) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return IconButton.filledTonal(
-                          onPressed: () => CertificateService.generateAndDownload(
-                            userId: user.id,
-                            userName: '${user.firstName} ${user.lastName}',
-                            languageId: selectedLang.id,
-                            languageName: selectedLang.name,
-                            loc: loc,
-                          ),
-                          icon: const Icon(
-                            Icons.workspace_premium_rounded,
-                            size: 20,
-                          ),
-                          tooltip: loc.downloadCertificate,
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.blue.withValues(
-                              alpha: isDark ? 0.15 : 0.12,
-                            ),
-                            foregroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-                      },
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, _) => const SizedBox.shrink(),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, _) => const SizedBox.shrink(),
-                ),
+                CertificateDownloadButton(user: user, isDark: isDark, loc: loc),
               ],
             ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildAvatar(String initials) {
+class _Avatar extends StatelessWidget {
+  final String initials;
+
+  const _Avatar({required this.initials});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryBlue, AppColors.auditionPurple],
-        ),
+        gradient: const LinearGradient(colors: [AppColors.primaryBlue, AppColors.auditionPurple]),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Center(
         child: Text(
           initials,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
         ),
-      ),
-    );
-  }
-
-  Widget _buildRatingBadge() {
-    return ratingAsync.when(
-      data: (points) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.amber.withValues(alpha: isDark ? 0.15 : 0.12),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-            const SizedBox(width: 4),
-            Text(
-              '$points',
-              style: ThemeTextStyles.regular(color: Colors.amber),
-            ),
-          ],
-        ),
-      ),
-      loading: () => const SizedBox(
-        height: 18,
-        width: 18,
-        child: CircularProgressIndicator(strokeWidth: 2),
-      ),
-      error: (_, _) => const Text('—'),
-    );
-  }
-
-  Widget _buildStreakBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.orange.withValues(alpha: isDark ? 0.15 : 0.12),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.local_fire_department_rounded,
-            color: Colors.orange,
-            size: 16,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '${user.streak}',
-            style: ThemeTextStyles.regular(color: Colors.orange),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAdminBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.successGreen.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        loc.admin,
-        style: ThemeTextStyles.regular(
-          color: AppColors.successGreen,
-        ).copyWith(fontSize: 12),
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wlingo/features/profile/domain/providers/rating_provider.dart';
 import 'package:wlingo/features/profile/presentation/widgets/profile_card.dart';
 
 class ProfileHeaderSection extends ConsumerWidget {
@@ -17,7 +16,6 @@ class ProfileHeaderSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ratingAsync = ref.watch(userRatingProvider(user.id));
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       sliver: SliverToBoxAdapter(
@@ -26,7 +24,6 @@ class ProfileHeaderSection extends ConsumerWidget {
           children: [
             ProfileCard(
               user: user,
-              ratingAsync: ratingAsync,
               isDark: isDark,
               loc: loc,
             ),

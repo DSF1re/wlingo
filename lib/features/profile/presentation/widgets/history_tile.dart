@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/features/profile/data/models/rating_record/rating_record.dart';
-import 'package:wlingo/features/profile/domain/providers/word_provider.dart';
+import 'package:wlingo/features/profile/presentation/providers/word_provider.dart';
 import 'package:wlingo/theme/app_colors.dart';
 import 'package:wlingo/theme/text_styles.dart';
 import 'package:wlingo/widgets/glass_box.dart';
@@ -68,7 +68,7 @@ class HistoryTile extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    error: (_, _) => const Text('Error'),
+                    error: (_, _) => const Text(''),
                   ),
                   if (record.userAnswer != null) ...[
                     const SizedBox(height: 2),

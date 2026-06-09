@@ -1,13 +1,4 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wlingo/features/word_practice/domain/repositories/word_repository.dart';
-import 'package:wlingo/features/word_practice/data/repositories/word_repo_impl.dart';
-
-part 'save_word_practice_usecase.g.dart';
-
-@riverpod
-SaveWordPracticeUseCase saveWordPracticeUseCase(Ref ref) {
-  return SaveWordPracticeUseCase(ref.watch(wordRepositoryProvider));
-}
 
 class SaveWordPracticeUseCase {
   final WordRepository _repository;

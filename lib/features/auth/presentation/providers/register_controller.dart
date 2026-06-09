@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wlingo/features/auth/domain/usecases/sign_up_usecase.dart';
+import 'package:wlingo/features/auth/presentation/providers/usecase_providers.dart';
 
 part 'register_controller.g.dart';
 

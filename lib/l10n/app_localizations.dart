@@ -844,6 +844,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Users'**
   String get users_count;
+
+  /// Progress indicator in level game screen
+  ///
+  /// In en, this message translates to:
+  /// **'{label} - {current}/{total}'**
+  String level_task_progress(String label, int current, int total);
+
+  /// No description provided for @retry_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String retry_error(Object message);
+
+  /// No description provided for @pdf_title.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Document'**
+  String get pdf_title;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -143,5 +143,16 @@
   "course_popularity": "Course Popularity",
   "course_statistics": "Course Statistics",
   "course": "Course",
-  "users_count": "Users"
+  "users_count": "Users",
+  "level_task_progress": "{label} - {current}/{total}",
+  "@level_task_progress": {
+    "description": "Progress indicator in level game screen",
+    "placeholders": {
+      "label": { "type": "String" },
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "retry_error": "Error: {message}",
+  "pdf_title": "PDF Document"
 }

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wlingo/core/router/router.dart';
 import 'package:wlingo/core/router/routes.dart';
-import 'package:wlingo/features/splash/domain/providers/splash_state.dart';
+import 'package:wlingo/features/splash/presentation/providers/splash_state.dart';
 import 'package:wlingo/core/global_variables/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
