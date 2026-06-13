@@ -10,6 +10,8 @@ abstract class VocabularyRepository {
     required String translation,
     String? transcription,
     required int languageId,
+    int? levelId,
+    int? categoryId,
   });
   Future<Either<AppFailure, void>> updateWordAfterReview({
     required String wordId,

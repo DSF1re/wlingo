@@ -13,7 +13,8 @@ class AddWordNotifier extends _$AddWordNotifier {
     required String transcription,
     required String russian,
     required int languageId,
-    String? image,
+    int? levelId,
+    int? categoryId,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
@@ -24,6 +25,8 @@ class AddWordNotifier extends _$AddWordNotifier {
             transcription: transcription,
             russian: russian,
             languageId: languageId,
+            levelId: levelId,
+            categoryId: categoryId,
           ),
     );
   }

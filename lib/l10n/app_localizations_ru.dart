@@ -402,4 +402,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get generate => 'Сгенерировать';
+
+  @override
+  String get category => 'Категория';
 }

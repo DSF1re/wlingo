@@ -155,5 +155,6 @@
   },
   "retry_error": "Error: {message}",
   "pdf_title": "PDF Document",
-  "generate": "Generate"
+  "generate": "Generate",
+  "category": "Category"
 }

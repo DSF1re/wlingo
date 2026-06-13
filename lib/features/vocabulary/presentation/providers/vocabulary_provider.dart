@@ -29,6 +29,8 @@ class VocabularyNotifier extends AsyncNotifier<List<VocabularyWord>> {
     required String translation,
     String? transcription,
     required int languageId,
+    int? levelId,
+    int? categoryId,
   }) async {
     state = const AsyncValue.loading();
     final repo = ref.read(vocabularyRepositoryProvider);
@@ -37,6 +39,8 @@ class VocabularyNotifier extends AsyncNotifier<List<VocabularyWord>> {
       translation: translation,
       transcription: transcription,
       languageId: languageId,
+      levelId: levelId,
+      categoryId: categoryId,
     );
 
     result.fold(

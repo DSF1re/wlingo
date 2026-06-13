@@ -1,8 +1,11 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wlingo/features/word_practice/data/models/word.dart';
 import 'package:wlingo/features/word_practice/data/models/word_mapper.dart';
+import 'package:wlingo/features/word_practice/domain/entities/word_category_entity.dart';
 import 'package:wlingo/features/word_practice/domain/entities/word_entity.dart';
+import 'package:wlingo/features/word_practice/domain/entities/word_level_entity.dart';
 import 'package:wlingo/features/word_practice/domain/repositories/word_repository.dart';
 
 part 'word_repo_impl.g.dart';
@@ -11,6 +14,14 @@ part 'word_repo_impl.g.dart';
 WordRepository wordRepository(Ref ref) {
   return SupabaseWordRepository();
 }
+
+final wordLevelsProvider = FutureProvider<List<WordLevelEntity>>((ref) async {
+  return ref.read(wordRepositoryProvider).getLevels();
+});
+
+final wordCategoriesProvider = FutureProvider<List<WordCategoryEntity>>((ref) async {
+  return ref.read(wordRepositoryProvider).getCategories();
+});
 
 class SupabaseWordRepository implements WordRepository {
   SupabaseClient get _client => Supabase.instance.client;
@@ -107,14 +118,30 @@ class SupabaseWordRepository implements WordRepository {
     required String transcription,
     required String russian,
     required int languageId,
+    int? levelId,
+    int? categoryId,
   }) async {
     await _client.from('words').insert({
       'word': word,
       'transcription': transcription,
       'russian': russian,
       'language_id': languageId,
-      'level_id': 1,
-      'category_id': 6,
+      'level_id': levelId ?? 1,
+      'category_id': categoryId ?? 6,
     });
+  }
+
+  @override
+  Future<List<WordLevelEntity>> getLevels() async {
+    final response = await _client.from('word_levels').select().order('level_order');
+    final data = response as List<dynamic>;
+    return data.map((json) => WordLevelEntity.fromJson(json as Map<String, dynamic>)).toList();
+  }
+
+  @override
+  Future<List<WordCategoryEntity>> getCategories() async {
+    final response = await _client.from('word_categories').select().order('name');
+    final data = response as List<dynamic>;
+    return data.map((json) => WordCategoryEntity.fromJson(json as Map<String, dynamic>)).toList();
   }
 }

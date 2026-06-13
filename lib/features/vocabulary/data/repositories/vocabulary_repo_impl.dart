@@ -54,6 +54,8 @@ class SupabaseVocabularyRepository implements VocabularyRepository {
     required String translation,
     String? transcription,
     required int languageId,
+    int? levelId,
+    int? categoryId,
   }) async {
     try {
       final userId = _client.auth.currentUser?.id;
@@ -68,7 +70,6 @@ class SupabaseVocabularyRepository implements VocabularyRepository {
 
       int wordId;
       if (wordResponse == null) {
-        // Create new word in global dictionary
         final newWord = await _client
             .from('words')
             .insert({
@@ -76,8 +77,8 @@ class SupabaseVocabularyRepository implements VocabularyRepository {
               'russian': translation,
               'transcription': transcription ?? '',
               'language_id': languageId,
-              'level_id': 1,
-              'category_id': 6,
+              'level_id': levelId ?? 1,
+              'category_id': categoryId ?? 6,
             })
             .select('id')
             .single();

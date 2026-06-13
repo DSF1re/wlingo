@@ -6,6 +6,7 @@ import 'package:wlingo/core/shared/shared_provider.dart';
 import 'package:wlingo/features/ai_chat/presentation/providers/ai_chat_provider.dart';
 import 'package:wlingo/features/home/data/models/language.dart';
 import 'package:wlingo/features/home/presentation/providers/langlist_provider.dart';
+import 'package:wlingo/features/word_practice/data/repositories/word_repo_impl.dart';
 import 'package:wlingo/features/word_practice/presentation/providers/add_word_notifier.dart';
 import 'package:wlingo/l10n/app_localizations.dart';
 import 'package:wlingo/theme/input_decoration.dart';
@@ -36,13 +37,23 @@ class AddWordScreen extends HookConsumerWidget {
       ref.read(preferencesServiceProvider).getCourseLanguage(),
     );
 
+    final selectedLevelId = useState<int?>(null);
+    final selectedCategoryId = useState<int?>(null);
+
     final languagesAsync = ref.watch(languagesProvider);
+    final levelsAsync = ref.watch(wordLevelsProvider);
+    final categoriesAsync = ref.watch(wordCategoriesProvider);
     final addState = ref.watch(addWordProvider);
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final errorMessage = useState<String?>(null);
     final isGeneratingTranscription = useState(false);
     final isGeneratingTranslation = useState(false);
+
+    final allCategories = useMemoized(
+      () => categoriesAsync.asData?.value ?? [],
+      [categoriesAsync],
+    );
 
     Future<void> generateTranscription() async {
       final word = wordController.text.trim();
@@ -125,6 +136,8 @@ class AddWordScreen extends HookConsumerWidget {
               transcription: transcriptionController.text,
               russian: russianController.text,
               languageId: selectedLangId.value,
+              levelId: selectedLevelId.value,
+              categoryId: selectedCategoryId.value,
             );
       } else {
         ref
@@ -134,6 +147,8 @@ class AddWordScreen extends HookConsumerWidget {
               translation: russianController.text,
               transcription: transcriptionController.text,
               languageId: selectedLangId.value,
+              levelId: selectedLevelId.value,
+              categoryId: selectedCategoryId.value,
             );
         context.pop();
       }
@@ -251,7 +266,91 @@ class AddWordScreen extends HookConsumerWidget {
                   },
                 );
               },
-              loading: () => const CircularProgressIndicator(),
+              loading: () => const LinearProgressIndicator(),
+              error: (err, _) => Text(err.toString()),
+            ),
+            Spacing.hLg,
+            levelsAsync.when(
+              data: (levels) {
+                return DropdownButtonFormField<int>(
+                  key: ValueKey('level_${levels.length}'),
+                  style: ThemeTextStyles.regular(isDark: isDark),
+                  decoration: formInputDecoration(
+                    label: loc.level,
+                    icon: Icons.bar_chart_rounded,
+                    isDark: isDark,
+                  ),
+                  dropdownColor:
+                      isDark ? const Color(0xFF1A1A2E) : Colors.white,
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.5),
+                  ),
+                  items: levels
+                      .map(
+                        (l) => DropdownMenuItem(
+                          value: l.id,
+                          child: Text(l.name),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (val) {
+                    selectedLevelId.value = val;
+                    selectedCategoryId.value = null;
+                  },
+                );
+              },
+              loading: () => const LinearProgressIndicator(),
+              error: (err, _) => Text(err.toString()),
+            ),
+            Spacing.hLg,
+            categoriesAsync.when(
+              data: (_) {
+                if (allCategories.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      '${loc.category}: нет категорий',
+                      style: ThemeTextStyles.regular(
+                        isDark: isDark,
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withValues(alpha: 0.4),
+                      ),
+                    ),
+                  );
+                }
+                return DropdownButtonFormField<int>(
+                  key: ValueKey('cat_${allCategories.length}'),
+                  style: ThemeTextStyles.regular(isDark: isDark),
+                  decoration: formInputDecoration(
+                    label: loc.category,
+                    icon: Icons.category_rounded,
+                    isDark: isDark,
+                  ),
+                  dropdownColor:
+                      isDark ? const Color(0xFF1A1A2E) : Colors.white,
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.5),
+                  ),
+                  items: allCategories
+                      .map(
+                        (c) => DropdownMenuItem(
+                          value: c.id,
+                          child: Text(c.name),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (val) {
+                    selectedCategoryId.value = val;
+                  },
+                  validator: (value) =>
+                      value == null ? loc.fill_field : null,
+                );
+              },
+              loading: () => const LinearProgressIndicator(),
               error: (err, _) => Text(err.toString()),
             ),
             Spacing.hXxxl,

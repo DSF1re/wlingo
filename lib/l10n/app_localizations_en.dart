@@ -402,4 +402,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get generate => 'Generate';
+
+  @override
+  String get category => 'Category';
 }

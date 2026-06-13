@@ -866,6 +866,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generate'**
   String get generate;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
